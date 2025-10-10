@@ -11,11 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('message_templates', function (Blueprint $table) {
-            $table->id('id_template');
-            $table->string('jenis_template');
-            $table->string('no_telp_tujuan', 40);
-            $table->text('isi');
+        Schema::create('specifications', function (Blueprint $table) {
+            $table->id('id_spesifikasi');
+            $table->foreignId('id_mobil')->constrained('cars', 'id_mobil')->onDelete('cascade');
+            $table->string('jenis_transmisi');
+            $table->integer('kapasitas');
+            $table->string('jenis_bbm');
             $table->timestamps();
         });
     }
@@ -25,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('message_templates');
+        Schema::dropIfExists('specifications');
     }
 };

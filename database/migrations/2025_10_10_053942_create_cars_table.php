@@ -11,11 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('message_templates', function (Blueprint $table) {
-            $table->id('id_template');
-            $table->string('jenis_template');
-            $table->string('no_telp_tujuan', 40);
-            $table->text('isi');
+        Schema::create('cars', function (Blueprint $table) {
+            $table->id('id_mobil');
+            $table->string('nama_mobil');
+            $table->text('url_foto_mobil')->nullable();
+            $table->string('plat_nomor', 20)->unique();
+            $table->integer('ketersediaan');
+            $table->text('deskripsi')->nullable();
             $table->timestamps();
         });
     }
@@ -25,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('message_templates');
+        Schema::dropIfExists('cars');
     }
 };

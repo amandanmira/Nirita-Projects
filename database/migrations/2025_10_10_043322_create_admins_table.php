@@ -11,11 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('message_templates', function (Blueprint $table) {
-            $table->id('id_template');
-            $table->string('jenis_template');
-            $table->string('no_telp_tujuan', 40);
-            $table->text('isi');
+        Schema::create('admins', function (Blueprint $table) {
+            $table->id('id_admin');
+            $table->string('nama_lengkap', 50);
+            $table->string('username', 30)->unique();
+            $table->string('email', 50)->unique();
+            $table->string('password', 30);
             $table->timestamps();
         });
     }
@@ -25,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('message_templates');
+        Schema::dropIfExists('admins');
     }
 };
