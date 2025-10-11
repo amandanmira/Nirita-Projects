@@ -4,7 +4,7 @@
 <div class="container">
     <h2>Tambah Template Baru</h2>
 
-    <form action="{{ route('template_pesan.store') }}" method="POST">
+    <form action="{{ route('admin.template_pesan.store') }}" method="POST">
         @csrf
         
         <div class="mb-3">
@@ -26,7 +26,7 @@
         </div>
 
         <button type="submit" class="btn btn-success">Simpan</button>
-        <a href="{{ route('template_pesan.index') }}" class="btn btn-secondary">Kembali</a>
+        <a href="{{ route('admin.template_pesan.index') }}" class="btn btn-secondary">Kembali</a>
     </form>
 </div>
 @endsection

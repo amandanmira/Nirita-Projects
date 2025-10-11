@@ -4,7 +4,7 @@
 <div class="container">
     <h2>Edit Template: {{ $template->name }}</h2>
 
-    <form action="{{ route('template_pesan.update', $template) }}" method="POST">
+    <form action="{{ route('admin.template_pesan.update', $template) }}" method="POST">
         @csrf
         @method('PUT')
 
@@ -27,7 +27,7 @@
         </div>
 
         <button type="submit" class="btn btn-success">Perbarui</button>
-        <a href="{{ route('template_pesan.index') }}" class="btn btn-secondary">Kembali</a>
+        <a href="{{ route('admin.template_pesan.index') }}" class="btn btn-secondary">Kembali</a>
     </form>
 </div>
 @endsection

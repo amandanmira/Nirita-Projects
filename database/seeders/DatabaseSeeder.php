@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\User;
+use App\Models\Admin;
 use App\Models\Car;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -21,7 +22,13 @@ class DatabaseSeeder extends Seeder
             'email' => 'test@example.com',
         ]);
 
-        \App\Models\Admin::factory(5)->create();
+        Admin::factory()->create([
+            'nama_lengkap' => 'Admin',
+            'username' => 'admin',
+            'email' => 'admin@admin.com',
+            'password' => 'admin',
+        ]);
+        
         \App\Models\Faq::factory(5)->create();
         \App\Models\MessageTemplate::factory(5)->create();
         \App\Models\Testimonial::factory(5)->create();

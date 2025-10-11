@@ -7,7 +7,7 @@
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light mb-4">
         <div class="container">
-            <a class="navbar-brand" href="{{ route('template_pesan.index') }}">Management Template Pesan WA</a>
+            <a class="navbar-brand" href="/admin">Admin Dashboard</a>
         </div>
     </nav>
 
