@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container">
-    <h2>Tambah Template Baru</h2>
+    <h2>Tambah FAQ Baru</h2>
 
     <form action="{{ route('admin.faq.store') }}" method="POST">
         @csrf

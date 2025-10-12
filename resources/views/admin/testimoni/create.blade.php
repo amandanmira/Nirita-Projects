@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container">
-    <h2>Tambah Template Baru</h2>
+    <h2>Tambah Testimoni Baru</h2>
 
     <form action="{{ route('admin.testimoni.store') }}" method="POST" enctype="multipart/form-data">
         @csrf

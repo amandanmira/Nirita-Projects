@@ -14,6 +14,9 @@
             <a href="{{ route('admin.testimoni.index') }}" class="link-underline link-underline-opacity-0">
                 <button type="button" class="list-group-item list-group-item-action">Manage Testimoni</button>
             </a>
+            <a href="{{ route('admin.mobil.index') }}" class="link-underline link-underline-opacity-0">
+                <button type="button" class="list-group-item list-group-item-action">Manage Mobil</button>
+            </a>
         </div>
     </div>
 @endsection

@@ -44,7 +44,7 @@ class MessageTemplateController extends Controller
     {
         $template = MessageTemplate::findOrFail($id);
         $pesan = $template->isi;
-        $nomor = $template->no_telp_tujuan;
+        $nomor = preg_replace('/[^0-9]/', '', $template->no_telp_tujuan);
         $pesanEncoded = urlencode($pesan);
         $waLink = "https://wa.me/{$nomor}?text={$pesanEncoded}";
 

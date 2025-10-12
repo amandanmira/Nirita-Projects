@@ -21,8 +21,8 @@
         <tbody>
             @foreach ($faqs as $f)
             <tr>
-                <td>{{ $f->pertanyaan }}</td>
-                <td>{{ $f->jawaban }}</td>
+                <td>{!! nl2br(e($f->pertanyaan)) !!}</td>
+                <td>{!! nl2br(e($f->jawaban)) !!}</td>
                 <td>
                     <a href="{{ route('admin.faq.edit', $f) }}" class="btn btn-warning btn-sm">Edit</a>
                     <form action="{{ route('admin.faq.destroy', $f) }}" method="POST" style="display:inline-block;">

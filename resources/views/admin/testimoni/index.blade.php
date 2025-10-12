@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container">
-    <h2>Daftar FAQ</h2>
+    <h2>Daftar Testimoni</h2>
     <a href="{{ route('admin.testimoni.create') }}" class="btn btn-primary mb-3">Tambah FAQ</a>
 
     @if (session('success'))
@@ -22,7 +22,7 @@
             @foreach ($testimonials as $t)
             <tr>
                 <td><img src="{{ asset('storage/' . $t->url_gambar) }}" width="300"></td>
-                <td>{{ $t->desk_testimoni }}</td>
+                <td>{!! nl2br(e($t->desk_testimoni)) !!}</td>
                 <td>
                     <a href="{{ route('admin.testimoni.edit', $t) }}" class="btn btn-warning btn-sm">Edit</a>
                     <form action="{{ route('admin.testimoni.destroy', $t) }}" method="POST" style="display:inline-block;">

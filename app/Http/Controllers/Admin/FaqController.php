@@ -62,7 +62,7 @@ class FaqController extends Controller
         ]);
 
         $faq->update($request->only('pertanyaan', 'jawaban'));
-        return redirect()->route('admin.faq.index')->with('success', 'Template berhasil diperbarui.');
+        return redirect()->route('admin.faq.index')->with('success', 'FAQ berhasil diperbarui.');
     }
 
     /**
@@ -73,6 +73,6 @@ class FaqController extends Controller
         $faq = Faq::findOrFail($id);
 
         $faq->delete();
-        return redirect()->route('admin.faq.index')->with('success', 'Template berhasil dihapus.');
+        return redirect()->route('admin.faq.index')->with('success', 'FAQ berhasil dihapus.');
     }
 }

@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container">
-    <h2>Edit Template: {{ $template->name }}</h2>
+    <h2>Edit Template</h2>
 
     <form action="{{ route('admin.template_pesan.update', $template) }}" method="POST">
         @csrf

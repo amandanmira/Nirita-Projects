@@ -24,7 +24,7 @@
             <tr>
                 <td>{{ $t->jenis_template }}</td>
                 <td>{{ $t->no_telp_tujuan }}</td>
-                <td>{{ $t->isi }}</td>
+                <td>{!! nl2br(e($t->isi)) !!}</td>
                 <td>
                     <a href="{{ route('admin.template_pesan.show', $t) }}" class="btn btn-primary btn-sm">Show</a>
                     <a href="{{ route('admin.template_pesan.edit', $t) }}" class="btn btn-warning btn-sm">Edit</a>

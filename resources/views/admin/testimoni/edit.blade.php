@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container">
-    <h2>Edit FAQ</h2>
+    <h2>Edit Testimoni</h2>
 
     <form action="{{ route('admin.testimoni.update', $testimoni) }}" method="POST" enctype="multipart/form-data">
         @csrf

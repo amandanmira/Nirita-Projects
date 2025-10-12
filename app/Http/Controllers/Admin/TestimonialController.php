@@ -43,7 +43,7 @@ class TestimonialController extends Controller
             'url_gambar' => $path,
             'desk_testimoni' => $request->desk_testimoni,
         ]);
-        return redirect()->route('admin.testimoni.index')->with('success', 'Template berhasil ditambahkan.');
+        return redirect()->route('admin.testimoni.index')->with('success', 'Testimoni berhasil ditambahkan.');
     }
 
     /**
@@ -85,7 +85,7 @@ class TestimonialController extends Controller
             $testimoni->update($request->only('desk_testimoni'));
         }
 
-        return redirect()->route('admin.testimoni.index')->with('success', 'Template berhasil diperbarui.');
+        return redirect()->route('admin.testimoni.index')->with('success', 'Testimoni berhasil diperbarui.');
     }
 
     /**
