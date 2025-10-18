@@ -17,6 +17,9 @@
             <a href="{{ route('admin.mobil.index') }}" class="link-underline link-underline-opacity-0">
                 <button type="button" class="list-group-item list-group-item-action">Manage Mobil</button>
             </a>
+            <a href="{{ route('admin.invoice.index') }}" class="link-underline link-underline-opacity-0">
+                <button type="button" class="list-group-item list-group-item-action">Manage Invoice</button>
+            </a>
         </div>
     </div>
 @endsection

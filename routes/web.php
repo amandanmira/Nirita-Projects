@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\BillController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 
@@ -14,11 +15,13 @@ Route::get('/mobil/{id_mobil}', [HomeController::class, 'carDetail'])->name('car
 
 // Admin Routes
 Route::prefix('admin')->name('admin.')->group(function () {
-    Route::get('/', function() {
+    Route::get('/', function () {
         return view('admin.index');
     });
     Route::resource('template_pesan', App\Http\Controllers\Admin\MessageTemplateController::class);
     Route::resource('faq', App\Http\Controllers\Admin\FaqController::class);
     Route::resource('testimoni', App\Http\Controllers\Admin\TestimonialController::class);
     Route::resource('mobil', App\Http\Controllers\Admin\CarController::class);
+    Route::resource('invoice', App\Http\Controllers\Admin\BillController::class);
+    Route::get('invoice/cetak/{id_nota}', [BillController::class, 'fillPdf'])->name('invoice.print');
 });
