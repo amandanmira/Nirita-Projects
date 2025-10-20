@@ -13,6 +13,7 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/mobil', [HomeController::class, 'cars'])->name('cars');
 Route::get('/mobil/{id_mobil}', [HomeController::class, 'carDetail'])->name('car.detail');
 
+
 // Admin Routes
 Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/', function () {
