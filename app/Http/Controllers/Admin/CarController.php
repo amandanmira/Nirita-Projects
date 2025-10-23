@@ -14,6 +14,7 @@ class CarController extends Controller
     public function index()
     {
         $cars = Car::all();
+        $cars->load(['specification', 'rentalPrice']);
         return view('admin.mobil.index', compact('cars'));
     }
 
@@ -30,15 +31,15 @@ class CarController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
+        $validated = $request->validate([
             'url_foto_mobil' => 'required|image|mimes:jpg,jpeg,png|max:5120',
             'nama_mobil' => 'required',
-            'deskripsi' => 'nullable',
-            'plat_nomor' => 'required',
+            'plat_nomor' => 'required|unique:plat_nomor',
             'ketersediaan' => 'required|numeric',
             // spesifikasi
             'kapasitas' => 'required|numeric',
-            'jenis_bbm' => 'required',
+            'kategori' => 'required',
+            'fasilitas' => 'required|array',
             'jenis_transmisi' => 'required',
             // harga sewa
             'harga_solo' => 'required|numeric',
@@ -48,19 +49,20 @@ class CarController extends Controller
 
         $image = $request->file('url_foto_mobil');
         $path = $image->storeAs('mobil', $image->hashName());
+        $fasilitas = $validated['fasilitas'];
 
         $mobil = Car::create([
             'nama_mobil' => $request->nama_mobil,
             'url_foto_mobil' => $path,
             'plat_nomor' => $request->plat_nomor,
             'ketersediaan' => $request->ketersediaan,
-            'deskripsi' => $request->deskripsi,
         ]);
 
         $mobil->specification()->create([
             'jenis_transmisi' => $request->jenis_transmisi,
             'kapasitas' => $request->kapasitas,
-            'jenis_bbm' => $request->jenis_bbm,
+            'kategori' => $request->kategori,
+            'fasilitas' => json_encode($fasilitas),
         ]);
 
         $mobil->rentalPrice()->create([
@@ -97,19 +99,19 @@ class CarController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, int $id)
     {
         $mobil = Car::findOrFail($id);
 
-        $request->validate([
+        $validated = $request->validate([
             'url_foto_mobil' => 'nullable|image|mimes:jpg,jpeg,png|max:5120',
             'nama_mobil' => 'required',
-            'deskripsi' => 'nullable',
-            'plat_nomor' => 'required',
+            'plat_nomor' => 'required|unique:cars,plat_nomor,' . $mobil->id_mobil . ',id_mobil',
             'ketersediaan' => 'required|numeric',
             // spesifikasi
             'kapasitas' => 'required|numeric',
-            'jenis_bbm' => 'required',
+            'kategori' => 'required',
+            'fasilitas' => 'required|array',
             'jenis_transmisi' => 'required',
             // harga sewa
             'harga_solo' => 'required|numeric',
@@ -117,12 +119,14 @@ class CarController extends Controller
             'harga_luar_kota' => 'required|numeric',
         ]);
 
+        $fasilitas = $validated['fasilitas'];
+
         if ($request->hasFile('url_foto_mobil')) {
             $imagePath = 'storage/mobil/' . basename($mobil->url_foto_mobil);
 
             if (file_exists($imagePath))
                 unlink($imagePath);
-            
+
             $image = $request->file('url_foto_mobil');
             $path = $image->storeAs('mobil', $image->hashName());
 
@@ -131,13 +135,13 @@ class CarController extends Controller
                 'url_foto_mobil' => $path,
                 'plat_nomor' => $request->plat_nomor,
                 'ketersediaan' => $request->ketersediaan,
-                'deskripsi' => $request->deskripsi,
             ]);
 
             $mobil->specification()->update([
                 'jenis_transmisi' => $request->jenis_transmisi,
                 'kapasitas' => $request->kapasitas,
-                'jenis_bbm' => $request->jenis_bbm,
+                'kategori' => $request->kategori,
+                'fasilitas' => json_encode($fasilitas),
             ]);
 
             $mobil->rentalPrice()->update([
@@ -151,7 +155,8 @@ class CarController extends Controller
             $mobil->specification()->update([
                 'jenis_transmisi' => $request->jenis_transmisi,
                 'kapasitas' => $request->kapasitas,
-                'jenis_bbm' => $request->jenis_bbm,
+                'kategori' => $request->kategori,
+                'fasilitas' => json_encode($fasilitas),
             ]);
 
             $mobil->rentalPrice()->update([

@@ -14,8 +14,8 @@
                 <tr>
                     <th>Gambar</th>
                     <th>Nama Mobil</th>
+                    <th>Kategori</th>
                     <th>Plat Nomor</th>
-                    <th>Deskripsi</th>
                     <th style="width: 185px">Aksi</th>
                 </tr>
             </thead>
@@ -25,8 +25,8 @@
                     <tr>
                         <td><img src="{{ asset('storage/' . $c->url_foto_mobil) }}" width="300"></td>
                         <td>{{ $c->nama_mobil }}</td>
+                        <td>{{ $c->specification->kategori }}</td>
                         <td>{{ $c->plat_nomor }}</td>
-                        <td>{!! nl2br(e($c->deskripsi)) !!}</td>
                         <td>
                             <a href="{{ route('admin.mobil.show', $c) }}" class="btn btn-primary btn-sm">Show</a>
                             <a href="{{ route('admin.mobil.edit', $c) }}" class="btn btn-warning btn-sm">Edit</a>

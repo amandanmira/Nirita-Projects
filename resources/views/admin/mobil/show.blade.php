@@ -19,12 +19,6 @@
                     </tr>
 
                     <tr>
-                        <td><strong>Deskripsi</strong></td>
-                        <td>:</td>
-                        <td>{!! nl2br(e($mobil->deskripsi)) !!}</td>
-                    </tr>
-
-                    <tr>
                         <td><strong>Plat Nomor</strong></td>
                         <td>:</td>
                         <td>{{ $mobil->plat_nomor }}</td>
@@ -43,15 +37,27 @@
                     </tr>
 
                     <tr>
-                        <td><strong>Jenis BBM</strong></td>
+                        <td><strong>Kategori</strong></td>
                         <td>:</td>
-                        <td>{{ $mobil->specification->jenis_bbm }}</td>
+                        <td>{{ $mobil->specification->kategori }}</td>
                     </tr>
 
                     <tr>
                         <td><strong>Jenis Transmisi</strong></td>
                         <td>:</td>
                         <td>{{ $mobil->specification->jenis_transmisi }}</td>
+                    </tr>
+
+                    <tr>
+                        <td><strong>Fasilitas</strong></td>
+                        <td>:</td>
+                        <td>
+                            <ul>
+                                @foreach (json_decode($mobil->specification->fasilitas) as $f)
+                                    <li>{{ $f }}</li>
+                                @endforeach
+                            </ul>
+                        </td>
                     </tr>
 
                     <tr>

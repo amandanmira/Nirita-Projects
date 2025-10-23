@@ -21,7 +21,6 @@ class CarFactory extends Factory
             'url_foto_mobil' => $this->faker->imageUrl(640, 480, 'car', true),
             'plat_nomor' => strtoupper($this->faker->bothify('AD####??')),
             'ketersediaan' => $this->faker->randomNumber(2),
-            'deskripsi' => $this->faker->sentence(10),
             'created_at' => now(),
             'updated_at' => now(),
         ];

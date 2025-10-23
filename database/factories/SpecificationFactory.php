@@ -21,7 +21,8 @@ class SpecificationFactory extends Factory
             'id_mobil' => Car::factory(),
             'jenis_transmisi' => $this->faker->randomElement(['Manual', 'Automatic']),
             'kapasitas' => $this->faker->numberBetween(4, 8),
-            'jenis_bbm' => $this->faker->randomElement(['Pertalite', 'Pertamax', 'Solar']),
+            'kategori' => $this->faker->randomElement(['MPV', 'SUV', 'Large SUV', 'MPV Luxury', 'MiniBus', 'Luxury Minibus']),
+            'fasilitas' => '{}',
             'created_at' => now(),
             'updated_at' => now(),
         ];

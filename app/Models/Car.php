@@ -10,7 +10,7 @@ class Car extends Model
     use HasFactory;
 
     protected $primaryKey = 'id_mobil';
-    protected $fillable = ['nama_mobil', 'url_foto_mobil', 'plat_nomor', 'ketersediaan', 'deskripsi'];
+    protected $fillable = ['nama_mobil', 'url_foto_mobil', 'plat_nomor', 'ketersediaan'];
 
     public function specification()
     {

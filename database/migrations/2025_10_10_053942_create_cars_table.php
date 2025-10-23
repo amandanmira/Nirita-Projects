@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -17,7 +16,6 @@ return new class extends Migration
             $table->text('url_foto_mobil')->nullable();
             $table->string('plat_nomor', 20)->unique();
             $table->integer('ketersediaan');
-            $table->text('deskripsi')->nullable();
             $table->timestamps();
         });
     }

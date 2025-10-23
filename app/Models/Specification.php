@@ -10,7 +10,7 @@ class Specification extends Model
     use HasFactory;
 
     protected $primaryKey = 'id_spesifikasi';
-    protected $fillable = ['id_mobil', 'jenis_transmisi', 'kapasitas', 'jenis_bbm'];
+    protected $fillable = ['id_mobil', 'jenis_transmisi', 'kapasitas', 'kategori', 'fasilitas'];
 
     public function car()
     {

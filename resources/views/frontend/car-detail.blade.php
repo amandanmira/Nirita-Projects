@@ -226,7 +226,8 @@
                 @if($car->url_foto_mobil)
                     <img src="{{ asset('storage/' . $car->url_foto_mobil) }}" alt="{{ $car->nama_mobil }}">
                 @else
-                    <div style="width: 100%; height: 400px; background: #ddd; border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+                    <div
+                        style="width: 100%; height: 400px; background: #ddd; border-radius: 8px; display: flex; align-items: center; justify-content: center;">
                         <p>Foto tidak tersedia</p>
                     </div>
                 @endif
@@ -250,7 +251,7 @@
                         <p style="margin: 10px 0;">
                             <strong>Harga per Hari (Soloraya):</strong>
                             <span style="color: #0066cc; font-size: 16px; font-weight: bold;">
-                                Rp {{ number_format($car->rentalPrice->harga_soloraya ?? 0, 0, ',', '.') }}
+                                Rp {{ number_format($car->rentalPrice->harga_solo_raya ?? 0, 0, ',', '.') }}
                             </span>
                         </p>
                         <p style="margin: 10px 0;">
@@ -271,16 +272,21 @@
 
                     <div class="form-group">
                         <label>Pilih Tarif</label>
-                        <select id="pilihanTarif" style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px;">
-                            <option value="solo">Dalam Kota Solo - Rp {{ number_format($car->rentalPrice->harga_solo ?? 0, 0, ',', '.') }}/hari</option>
-                            <option value="soloraya">Soloraya - Rp {{ number_format($car->rentalPrice->harga_solo_raya ?? 0, 0, ',', '.') }}/hari</option>
-                            <option value="luar_kota">Luar Kota - Rp {{ number_format($car->rentalPrice->harga_luar_kota ?? 0, 0, ',', '.') }}/hari</option>
+                        <select id="pilihanTarif"
+                            style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px;">
+                            <option value="solo">Dalam Kota Solo - Rp
+                                {{ number_format($car->rentalPrice->harga_solo ?? 0, 0, ',', '.') }}/hari</option>
+                            <option value="soloraya">Soloraya - Rp
+                                {{ number_format($car->rentalPrice->harga_solo_raya ?? 0, 0, ',', '.') }}/hari</option>
+                            <option value="luar_kota">Luar Kota - Rp
+                                {{ number_format($car->rentalPrice->harga_luar_kota ?? 0, 0, ',', '.') }}/hari</option>
                         </select>
                     </div>
 
                     <div class="form-group">
                         <label>Harga per Hari</label>
-                        <input type="text" id="hargaPerHari" value="Rp {{ number_format($car->rentalPrice->harga_solo ?? 0, 0, ',', '.') }}" readonly>
+                        <input type="text" id="hargaPerHari"
+                            value="Rp {{ number_format($car->rentalPrice->harga_solo ?? 0, 0, ',', '.') }}" readonly>
                     </div>
 
                     <div class="form-group">
@@ -325,7 +331,7 @@
 
     <script>
         const hargaSolo = {{ $car->rentalPrice->harga_solo ?? 0 }};
-        const hargaSoloraya = {{ $car->rentalPrice->harga_soloraya ?? 0 }};
+        const hargaSoloraya = {{ $car->rentalPrice->harga_solo_raya ?? 0 }};
         const hargaLuarKota = {{ $car->rentalPrice->harga_luar_kota ?? 0 }};
 
         let hargaPerHariValue = hargaSolo;
@@ -364,13 +370,13 @@
 
         pilihanTarifSelect.addEventListener('change', updateHarga);
 
-        btnTambah.addEventListener('click', function() {
+        btnTambah.addEventListener('click', function () {
             let nilai = parseInt(jumlahHariInput.value) || 1;
             jumlahHariInput.value = nilai + 1;
             hitungTotal();
         });
 
-        btnKurang.addEventListener('click', function() {
+        btnKurang.addEventListener('click', function () {
             let nilai = parseInt(jumlahHariInput.value) || 1;
             if (nilai > 1) {
                 jumlahHariInput.value = nilai - 1;
