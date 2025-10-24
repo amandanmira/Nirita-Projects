@@ -34,7 +34,7 @@ class CarController extends Controller
         $validated = $request->validate([
             'url_foto_mobil' => 'required|image|mimes:jpg,jpeg,png|max:5120',
             'nama_mobil' => 'required',
-            'plat_nomor' => 'required|unique:plat_nomor',
+            'plat_nomor' => 'required|unique:cars,plat_nomor',
             'ketersediaan' => 'required|numeric',
             // spesifikasi
             'kapasitas' => 'required|numeric',

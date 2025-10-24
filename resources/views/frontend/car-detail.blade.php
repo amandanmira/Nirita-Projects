@@ -191,6 +191,57 @@
             grid-column: 1 / -1;
         }
 
+        .spek-fasilitas-box {
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: left;
+            margin-top: 20px;
+            border: 1px solid #e0e0e0;
+        }
+
+        .spek-fasilitas-box h3 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 20px;
+            border-bottom: 2px solid #333;
+            padding-bottom: 10px;
+        }
+
+        .spek-item {
+            margin: 12px 0;
+            color: #666;
+            font-size: 15px;
+        }
+
+        .spek-item strong {
+            color: #333;
+            min-width: 150px;
+            display: inline-block;
+        }
+
+        .fasilitas-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .fasilitas-list li {
+            margin: 10px 0;
+            color: #666;
+            padding-left: 25px;
+            position: relative;
+            line-height: 1.6;
+        }
+
+        .fasilitas-list li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #0066cc;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
         footer {
             background: #333;
             color: #fff;
@@ -231,6 +282,45 @@
                         <p>Foto tidak tersedia</p>
                     </div>
                 @endif
+
+                <!-- SECTION SPESIFIKASI & FASILITAS -->
+                <div class="spek-fasilitas-box">
+                    <h3>Spesifikasi Mobil</h3>
+
+                    <div class="spek-item">
+                        <strong>Kapasitas Penumpang:</strong> {{ $car->specification->kapasitas ?? '-' }} orang
+                    </div>
+
+                    <div class="spek-item">
+                        <strong>Kategori:</strong> {{ $car->specification->kategori ?? '-' }}
+                    </div>
+
+                    <div class="spek-item">
+                        <strong>Jenis Transmisi:</strong> {{ $car->specification->jenis_transmisi ?? '-' }}
+                    </div>
+
+                    <h3 style="margin-top: 25px;">Fasilitas</h3>
+
+                    <ul class="fasilitas-list">
+                        @if($car->specification && $car->specification->fasilitas)
+                            @php
+                                $fasilitasList = is_array($car->specification->fasilitas)
+                                    ? $car->specification->fasilitas
+                                    : json_decode($car->specification->fasilitas, true);
+                            @endphp
+
+                            @if($fasilitasList && is_array($fasilitasList))
+                                @foreach($fasilitasList as $fasilitas)
+                                    <li>{{ $fasilitas }}</li>
+                                @endforeach
+                            @else
+                                <li style="color: #999;">Fasilitas tidak tersedia</li>
+                            @endif
+                        @else
+                            <li style="color: #999;">Fasilitas tidak tersedia</li>
+                        @endif
+                    </ul>
+                </div>
             </div>
 
             <div class="detail-info">
