@@ -333,23 +333,10 @@
                 @if($car->rentalPrice)
                     <div style="background: #f0f0f0; padding: 15px; border-radius: 8px; margin: 15px 0;">
                         <p style="margin: 10px 0;">
-                            <strong>Harga per Hari (Dalam Kota Solo):</strong>
+                            <strong>Harga mulai dari:</strong>
                             <span style="color: #0066cc; font-size: 16px; font-weight: bold;">
                                 Rp {{ number_format($car->rentalPrice->harga_solo ?? 0, 0, ',', '.') }}
                             </span>
-                        </p>
-                        <p style="margin: 10px 0;">
-                            <strong>Harga per Hari (Soloraya):</strong>
-                            <span style="color: #0066cc; font-size: 16px; font-weight: bold;">
-                                Rp {{ number_format($car->rentalPrice->harga_solo_raya ?? 0, 0, ',', '.') }}
-                            </span>
-                        </p>
-                        <p style="margin: 10px 0;">
-                            <strong>Harga per Hari (Luar Kota):</strong>
-                            <span style="color: #0066cc; font-size: 16px; font-weight: bold;">
-                                Rp {{ number_format($car->rentalPrice->harga_luar_kota ?? 0, 0, ',', '.') }}
-                            </span>
-                        </p>
                     </div>
                 @endif
 

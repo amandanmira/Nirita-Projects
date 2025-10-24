@@ -30,6 +30,31 @@
             text-align: center;
         }
 
+        nav {
+            background: #444;
+            padding: 0;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            gap: 0;
+        }
+
+        .nav-container a {
+            color: #fff;
+            text-decoration: none;
+            padding: 15px 25px;
+            display: block;
+            transition: background 0.3s;
+        }
+
+        .nav-container a:hover,
+        .nav-container a.active {
+            background: #0066cc;
+        }
+
         .cars-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -86,6 +111,21 @@
             border-radius: 4px;
             margin-top: 10px;
         }
+
+        .btn:hover {
+            background: #0066cc;
+        }
+
+        @media (max-width: 768px) {
+            .nav-container {
+                flex-wrap: wrap;
+            }
+
+            .nav-container a {
+                flex: 1 1 auto;
+                text-align: center;
+            }
+        }
     </style>
 </head>
 
@@ -94,6 +134,17 @@
         <h1>Nirita Rental Mobil</h1>
         <p>Sewa mobil terbaik untuk perjalanan Anda</p>
     </header>
+
+    <nav>
+        <div class="nav-container">
+            <a href="/" class="active">Home</a>
+            <a href="/units">Units</a>
+            <a href="/about">About Us</a>
+            <a href="/review">Review</a>
+            <a href="/faq">FAQ</a>
+            <a href="/contact">Contact</a>
+        </div>
+    </nav>
 
     <div class="container">
         <h2>Mobil Tersedia</h2>

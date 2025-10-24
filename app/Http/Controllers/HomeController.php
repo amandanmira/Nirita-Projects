@@ -29,4 +29,11 @@ class HomeController extends Controller
         $car = Car::with(['rentalPrice', 'specification'])->findOrFail($id);
         return view('frontend.car-detail', compact('car'));
     }
+
+    // TAMBAHKAN METHOD INI
+    public function units()
+    {
+        $cars = Car::with(['rentalPrice', 'specification'])->get();
+        return view('frontend.units', compact('cars'));
+    }
 }
