@@ -11,12 +11,14 @@ class Bill extends Model
 
     protected $primaryKey = 'id_nota';
     protected $fillable = [
-        'id_mobil', 'nama_penyewa', 'no_hp_penyewa', 'tanggal_sewa',
-        'driver', 'deskripsi_kegiatan', 'total_pembayaran'
+        'nama_penyewa',
+        'no_hp_penyewa',
+        'driver',
+        'total_pembayaran'
     ];
 
-    public function car()
+    public function billDetails()
     {
-        return $this->belongsTo(Car::class, 'id_mobil');
+        return $this->hasMany(BillDetail::class, 'id_nota', 'id_nota');
     }
 }

@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -13,12 +12,9 @@ return new class extends Migration
     {
         Schema::create('bills', function (Blueprint $table) {
             $table->id('id_nota');
-            $table->foreignId('id_mobil')->constrained('cars', 'id_mobil')->onDelete('cascade');
             $table->string('nama_penyewa', 50);
             $table->string('no_hp_penyewa', 40);
-            $table->date('tanggal_sewa');
             $table->string('driver', 50)->nullable();
-            $table->text('deskripsi_kegiatan')->nullable();
             $table->decimal('total_pembayaran', 12, 2);
             $table->timestamps();
         });

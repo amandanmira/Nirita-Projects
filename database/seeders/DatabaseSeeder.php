@@ -33,11 +33,12 @@ class DatabaseSeeder extends Seeder
         \App\Models\MessageTemplate::factory(5)->create();
         \App\Models\Testimonial::factory(5)->create(['url_gambar' => '../placeholder_image/placeholder_testimoni.jpg']);
         Car::factory(10)->create(['url_foto_mobil' => '../placeholder_image/placeholder_mobil.png']);
+        \App\Models\Bill::factory(10)->create();
 
         $carIds = Car::orderBy('id_mobil')->pluck('id_mobil')->take(10)->toArray();
 
         foreach ($carIds as $id) {
-            \App\Models\Bill::factory()->create(['id_mobil' => $id]);
+            \App\Models\BillDetail::factory()->create(['id_mobil' => $id, 'id_nota' => $id]);
             \App\Models\RentalPrice::factory()->create(['id_mobil' => $id]);
             \App\Models\Specification::factory()->create(['id_mobil' => $id]);
         }

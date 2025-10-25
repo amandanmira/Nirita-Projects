@@ -24,6 +24,7 @@ class Car extends Model
 
     public function bill()
     {
-        return $this->hasMany(Bill::class, 'id_mobil');
+        return $this->belongsToMany(Bill::class, 'bill_details', 'id_mobil', 'id_nota')
+            ->withTimestamps();
     }
 }

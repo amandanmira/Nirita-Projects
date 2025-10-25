@@ -4,11 +4,12 @@ namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Models\Car;
+use App\Models\Bill;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Bill>
  */
-class BillFactory extends Factory
+class BillDetailFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -18,10 +19,11 @@ class BillFactory extends Factory
     public function definition(): array
     {
         return [
-            'nama_penyewa' => $this->faker->name(),
-            'no_hp_penyewa' => $this->faker->phoneNumber(),
-            'driver' => $this->faker->name(),
-            'total_pembayaran' => $this->faker->numberBetween(500000, 2000000),
+            'id_mobil' => Car::factory(),
+            'id_nota' => Bill::factory(),
+            'tanggal_sewa' => $this->faker->dateTimeBetween('-1 month', 'now'),
+            'lokasi_sewa' => $this->faker->randomElement(['solo', 'solo_raya', 'luar_kota']),
+            'deskripsi_kegiatan' => $this->faker->sentence(10),
             'created_at' => now(),
             'updated_at' => now(),
         ];

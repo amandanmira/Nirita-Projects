@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\Bill;
+use App\Models\BillDetail;
 use App\Models\Car;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use mikehaertl\pdftk\Pdf;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\DB;
 
 class BillController extends Controller
 {
@@ -15,9 +17,8 @@ class BillController extends Controller
      */
     public function index()
     {
-        $bills = Bill::all();
-        $cars = Car::all();
-        return view('admin.invoice.index', compact('bills', 'cars'));
+        $bills = Bill::with('billDetails.cars')->get();
+        return view('admin.invoice.index', compact('bills'));
     }
 
     /**
@@ -35,16 +36,36 @@ class BillController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'id_mobil' => 'required|exists:cars,id_mobil',
             'nama_penyewa' => 'required|string|max:50',
             'no_hp_penyewa' => 'required|string|max:40',
-            'tanggal_sewa' => 'required|date',
             'driver' => 'nullable|string|max:50',
-            'deskripsi_kegiatan' => 'nullable|string',
-            'total_pembayaran' => 'required|numeric|min:0',
+            'total_pembayaran' => 'required|numeric',
+            'detail.*.id_mobil' => 'required|exists:cars,id_mobil',
+            'detail.*.lokasi_sewa' => 'required',
+            'detail.*.tanggal_sewa' => 'required|date',
         ]);
 
-        Bill::create($request->only('id_mobil', 'nama_penyewa', 'no_hp_penyewa', 'tanggal_sewa', 'driver', 'deskripsi_kegiatan', 'total_pembayaran'));
+        $total = 0;
+
+        DB::transaction(function () use ($request) {
+            $bill = Bill::create($request->only([
+                'nama_penyewa',
+                'no_hp_penyewa',
+                'driver',
+                'total_pembayaran'
+            ]));
+
+            foreach ($request->detail as $d) {
+                BillDetail::create([
+                    'id_nota' => $bill->id_nota,
+                    'id_mobil' => $d['id_mobil'],
+                    'tanggal_sewa' => $d['tanggal_sewa'],
+                    'lokasi_sewa' => $d['lokasi_sewa'],
+                    'deskripsi_kegiatan' => $d['deskripsi_kegiatan'] ?? null,
+                ]);
+            }
+        });
+
         return redirect()->route('admin.invoice.index')->with('success', 'Invoice berhasil ditambahkan.');
     }
 
@@ -53,7 +74,7 @@ class BillController extends Controller
      */
     public function show(int $id)
     {
-        $bill = Bill::findOrFail($id);
+        $bill = Bill::with('billDetails.cars.rentalPrice')->findOrFail($id);
 
         return view('admin.invoice.show', compact('bill'));
     }
@@ -63,7 +84,7 @@ class BillController extends Controller
      */
     public function edit(int $id)
     {
-        $bill = Bill::findOrFail($id);
+        $bill = Bill::with('billDetails.cars')->findOrFail($id);
         $cars = Car::all();
 
         return view('admin.invoice.edit', compact('bill', 'cars'));
@@ -77,16 +98,53 @@ class BillController extends Controller
         $bill = Bill::findOrFail($id);
 
         $request->validate([
-            'id_mobil' => 'required|exists:cars,id_mobil',
             'nama_penyewa' => 'required|string|max:50',
             'no_hp_penyewa' => 'required|string|max:40',
-            'tanggal_sewa' => 'required|date',
             'driver' => 'nullable|string|max:50',
-            'deskripsi_kegiatan' => 'nullable|string',
-            'total_pembayaran' => 'required|numeric|min:0',
+            'total_pembayaran' => 'required|numeric',
+            'detail.*.id_mobil' => 'required|exists:cars,id_mobil',
+            'detail.*.lokasi_sewa' => 'required',
+            'detail.*.tanggal_sewa' => 'required|date',
         ]);
 
-        $bill->update($request->only('id_mobil', 'nama_penyewa', 'no_hp_penyewa', 'tanggal_sewa', 'driver', 'deskripsi_kegiatan', 'total_pembayaran'));
+        $oldDetailIds = $bill->billDetails()->pluck('id')->toArray();
+        $newDetailIds = collect($request->detail)->pluck('id')->filter()->toArray();
+        $toDelete = array_diff($oldDetailIds, $newDetailIds);
+
+        if (!empty($toDelete)) {
+            $bill->billDetails()->whereIn('id', $toDelete)->delete();
+        }
+
+        foreach ($request->detail as $d) {
+            if (!empty($d['id'])) {
+                // Jika ada ID → update
+                $detail = $bill->billDetails()->find($d['id']);
+                if ($detail) {
+                    $detail->update([
+                        'id_mobil' => $d['id_mobil'],
+                        'lokasi_sewa' => $d['lokasi_sewa'],
+                        'tanggal_sewa' => $d['tanggal_sewa'],
+                        'deskripsi_kegiatan' => $d['deskripsi_kegiatan'],
+                    ]);
+                }
+            } else {
+                // Jika tidak ada ID → buat baru
+                $bill->billDetails()->create([
+                    'id_mobil' => $d['id_mobil'],
+                    'lokasi_sewa' => $d['lokasi_sewa'],
+                    'tanggal_sewa' => $d['tanggal_sewa'],
+                    'deskripsi_kegiatan' => $d['deskripsi_kegiatan'],
+                ]);
+            }
+        }
+
+        $bill->update($request->only([
+            'nama_penyewa',
+            'no_hp_penyewa',
+            'driver',
+            'total_pembayaran',
+        ]));
+
         return redirect()->route('admin.invoice.index')->with('success', 'Invoice berhasil diperbarui.');
     }
 
@@ -103,46 +161,109 @@ class BillController extends Controller
 
     public function fillPdf(int $id)
     {
-        // Sesuaikan dengan lokasi install PDFtk
-        $pdftkPath = "C:\Program Files (x86)\PDFtk\bin\pdftk.exe";
+        // Ambil data nota + relasi mobil (detail_notas)
+        $bill = Bill::with('billDetails.cars.rentalPrice')->findOrFail($id);
 
-        if (!file_exists($pdftkPath)) {
-            return '<h1>Software PDFtk Tidak Ditemukan !</h1>
-            <p>Silahkan install <a href="https://www.pdflabs.com/tools/pdftk-the-pdf-toolkit/">PDFtk</a> terlebih dahulu</p>';
+        // Hitung total pembayaran (opsional, jika ingin dijumlah dari mobil)
+        $total = 0;
+
+        foreach ($bill->billDetails as $detail) {
+            $harga = match ($detail->lokasi_sewa) {
+                'solo' => $detail->cars->rentalPrice->harga_solo,
+                'solo_raya' => $detail->cars->rentalPrice->harga_solo_raya,
+                'luar_kota' => $detail->cars->rentalPrice->harga_luar_kota,
+            };
+
+            $total += $harga;
         }
 
-        $bill = Bill::findOrFail($id);
-        $data = [
-            'penyewa' => $bill->nama_penyewa,
-            'mobil' => $bill->car->nama_mobil,
-            'tgl_sewa' => $bill->tanggal_sewa,
-            'ket_pelayanan' => $bill->deskripsi_kegiatan,
-            'ket_rute' => $bill->deskripsi_kegiatan,
-            'harga' => $bill->total_pembayaran,
-            'total_harga' => $bill->total_pembayaran,
-            'terbilang' => $bill->total_pembayaran,
+        // Render ke Blade
+        $pdf = Pdf::loadView('admin.invoice.invoice', [
+            'nama' => $bill->nama_penyewa,
+            'items' => $bill->billDetails->map(function ($detail) {
+                $harga = match ($detail->lokasi_sewa) {
+                    'solo' => $detail->cars->rentalPrice->harga_solo,
+                    'solo_raya' => $detail->cars->rentalPrice->harga_solo_raya,
+                    'luar_kota' => $detail->cars->rentalPrice->harga_luar_kota,
+                };
+
+                return [
+                    'nama' => $detail->cars->nama_mobil,
+                    'periode' => self::formatTanggal($detail->tanggal_sewa),
+                    'tujuan' => $detail->deskripsi_kegiatan,
+                    'harga' => $harga,
+                ];
+            }),
+            'total' => $total,
+            'terbilang' => self::terbilang($total) . ' RUPIAH',
             'driver' => $bill->driver,
-            'tgl' => now(),
+            'tanggal' => self::formatTanggal(now()),
+            'penanggungJawab' => 'Hari Suryono',
+            'perusahaan' => 'Nirta Transport'
+        ]);
+
+        return $pdf->stream("invoice_{$bill->id_nota}.pdf");
+        // return $pdf->download("invoice_{$nota->id_nota}.pdf");
+    }
+
+    private function terbilang($angka)
+    {
+        $angka = abs($angka);
+        $baca = array("", "Satu", "Dua", "Tiga", "Empat", "Lima", "Enam", "Tujuh", "Delapan", "Sembilan", "Sepuluh", "Sebelas");
+        $hasil = "";
+
+        if ($angka < 12) {
+            $hasil = " " . $baca[$angka];
+        } else if ($angka < 20) {
+            $hasil = self::terbilang($angka - 10) . " Belas ";
+        } else if ($angka < 100) {
+            $hasil = self::terbilang(intval($angka / 10)) . " Puluh " . self::terbilang($angka % 10);
+        } else if ($angka < 200) {
+            $hasil = " Seratus" . self::terbilang($angka - 100);
+        } else if ($angka < 1000) {
+            $hasil = self::terbilang(intval($angka / 100)) . " Ratus " . self::terbilang($angka % 100);
+        } else if ($angka < 2000) {
+            $hasil = " Seribu" . self::terbilang($angka - 1000);
+        } else if ($angka < 1000000) {
+            $hasil = self::terbilang(intval($angka / 1000)) . " Ribu " . self::terbilang($angka % 1000);
+        } else if ($angka < 1000000000) {
+            $hasil = self::terbilang(intval($angka / 1000000)) . " Juta " . self::terbilang($angka % 1000000);
+        } else if ($angka < 1000000000000) {
+            $hasil = self::terbilang(intval($angka / 1000000000)) . " Milyar " . self::terbilang($angka % 1000000000);
+        } else if ($angka < 1000000000000000) {
+            $hasil = self::terbilang(intval($angka / 1000000000000)) . " Triliun " . self::terbilang($angka % 1000000000000);
+        }
+
+        return strtoupper(trim($hasil));
+    }
+
+    private function formatTanggal($tanggal)
+    {
+        $bulan = [
+            1 => 'Januari',
+            2 => 'Februari',
+            3 => 'Maret',
+            4 => 'April',
+            5 => 'Mei',
+            6 => 'Juni',
+            7 => 'Juli',
+            8 => 'Agustus',
+            9 => 'September',
+            10 => 'Oktober',
+            11 => 'November',
+            12 => 'Desember'
         ];
 
-        $pdfTemplate = storage_path('app/public/template_invoice.pdf');
-        $outputPdf = storage_path('app/public/invoice.pdf');
+        $tanggalObj = date_create($tanggal);
+        if (!$tanggalObj)
+            return $tanggal;
 
-        $pdf = new Pdf($pdfTemplate, [
-            'command' => "C:\Program Files (x86)\PDFtk\bin\pdftk.exe",
-            'useExec' => true,
-        ]);
-        $result = $pdf->fillForm($data)
-            ->needAppearances()
-            ->flatten()
-            ->saveAs($outputPdf);
+        $tgl = date_format($tanggalObj, 'd');
+        $bln = (int) date_format($tanggalObj, 'm');
+        $thn = date_format($tanggalObj, 'Y');
 
-        if ($result === false) {
-            return response()->json([
-                'error' => $pdf->getError()
-            ], 500);
-        }
+        $hasil = $tgl . ' ' . $bulan[$bln] . ' ' . $thn;
 
-        return response()->file($outputPdf);
+        return $hasil;
     }
 }

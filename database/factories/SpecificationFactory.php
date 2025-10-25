@@ -22,7 +22,7 @@ class SpecificationFactory extends Factory
             'jenis_transmisi' => $this->faker->randomElement(['Manual', 'Automatic']),
             'kapasitas' => $this->faker->numberBetween(4, 8),
             'kategori' => $this->faker->randomElement(['MPV', 'SUV', 'Large SUV', 'MPV Luxury', 'MiniBus', 'Luxury Minibus']),
-            'fasilitas' => '{}',
+            'fasilitas' => '["Fasilitas 1","Fasilitas 2","Fasilitas 3"]',
             'created_at' => now(),
             'updated_at' => now(),
         ];

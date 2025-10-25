@@ -12,9 +12,7 @@
         <table class="table table-bordered">
             <thead>
                 <tr>
-                    <th>Mobil Yang Disewa</th>
                     <th>Penyewa</th>
-                    <th>Tanggal Sewa</th>
                     <th>Driver</th>
                     <th>Total Pembayaran</th>
                     <th style="width: 185px">Aksi</th>
@@ -24,9 +22,7 @@
             <tbody>
                 @foreach ($bills as $b)
                     <tr>
-                        <td>{{ $b->car->nama_mobil }}</td>
                         <td>{{ $b->nama_penyewa }}</td>
-                        <td>{{ $b->tanggal_sewa }}</td>
                         <td>{{ $b->driver }}</td>
                         <td>{{ 'Rp. ' . number_format($b->total_pembayaran, 2, ',', '.') }}</td>
                         <td>
