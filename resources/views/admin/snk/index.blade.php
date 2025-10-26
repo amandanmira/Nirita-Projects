@@ -2,8 +2,8 @@
 
 @section('content')
     <div class="container">
-        <h2>Daftar FAQ</h2>
-        <a href="{{ route('admin.faq.create') }}" class="btn btn-primary mb-3">Tambah FAQ</a>
+        <h2>Daftar Standar Dan Ketentuan</h2>
+        <a href="{{ route('admin.snk.create') }}" class="btn btn-primary mb-3">Tambah FAQ</a>
 
         @if (session('success'))
             <div class="alert alert-success">{{ session('success') }}</div>
@@ -12,8 +12,8 @@
         <table class="table table-bordered">
             <thead>
                 <tr>
-                    <th>Pertanyaan</th>
-                    <th>Jawaban</th>
+                    <th>Judul</th>
+                    <th>Deskripsi</th>
                     <th style="width: 130px">Aksi</th>
                 </tr>
             </thead>
@@ -23,13 +23,13 @@
                     use Mews\Purifier\Facades\Purifier;
                 @endphp
 
-                @foreach ($faqs as $f)
+                @foreach ($tncs as $t)
                     <tr>
-                        <td>{!! nl2br(e($f->pertanyaan)) !!}</td>
-                        <td>{!! Purifier::clean($f->jawaban) !!}</td>
+                        <td>{!! nl2br(e($t->judul)) !!}</td>
+                        <td>{!! Purifier::clean($t->deskripsi) !!}</td>
                         <td>
-                            <a href="{{ route('admin.faq.edit', $f) }}" class="btn btn-warning btn-sm">Edit</a>
-                            <form action="{{ route('admin.faq.destroy', $f) }}" method="POST" style="display:inline-block;">
+                            <a href="{{ route('admin.snk.edit', $t) }}" class="btn btn-warning btn-sm">Edit</a>
+                            <form action="{{ route('admin.snk.destroy', $t) }}" method="POST" style="display:inline-block;">
                                 @csrf
                                 @method('DELETE')
                                 <button class="btn btn-danger btn-sm"

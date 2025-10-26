@@ -30,6 +30,7 @@ class DatabaseSeeder extends Seeder
         ]);
 
         \App\Models\Faq::factory(5)->create();
+        \App\Models\Tnc::factory(5)->create();
         \App\Models\MessageTemplate::factory(5)->create();
         \App\Models\Testimonial::factory(5)->create(['url_gambar' => '../placeholder_image/placeholder_testimoni.jpg']);
         Car::factory(10)->create(['url_foto_mobil' => '../placeholder_image/placeholder_mobil.png']);

@@ -2,28 +2,28 @@
 
 @section('content')
     <div class="container">
-        <h2>Edit FAQ</h2>
+        <h2>Edit Standar Dan Ketentuan</h2>
 
-        <form action="{{ route('admin.faq.update', $faq) }}" method="POST">
+        <form action="{{ route('admin.snk.update', $tnc) }}" method="POST">
             @csrf
             @method('PUT')
 
             <div class="mb-3">
-                <label for="pertanyaan" class="form-label">Pertanyaan</label>
-                <textarea name="pertanyaan" id="pertanyaan" rows="4" class="form-control"
-                    required>{{ $faq->pertanyaan }}</textarea>
-                @error('pertanyaan') <small class="text-danger">{{ $message }}</small> @enderror
+                <label for="judul" class="form-label">Judul</label>
+                <textarea name="judul" id="judul" rows="4" class="form-control" required>{{ $tnc->judul }}</textarea>
+                @error('judul') <small class="text-danger">{{ $message }}</small> @enderror
             </div>
 
             <div class="mb-3">
-                <label for="jawaban" class="form-label">Jawaban</label>
-                <textarea name="jawaban" id="jawaban" rows="4" class="form-control" required>{{ $faq->jawaban }}</textarea>
-                @error('jawaban') <small class="text-danger">{{ $message }}</small> @enderror
+                <label for="deskripsi" class="form-label">Deskripsi</label>
+                <textarea name="deskripsi" id="deskripsi" rows="4" class="form-control"
+                    required>{{ $tnc->deskripsi }}</textarea>
+                @error('deskripsi') <small class="text-danger">{{ $message }}</small> @enderror
             </div>
 
             <script src="https://cdn.ckeditor.com/4.22.1/standard/ckeditor.js"></script>
             <script>
-                CKEDITOR.replace('jawaban', {
+                CKEDITOR.replace('deskripsi', {
                     extraPlugins: 'indent,removeformat',
                     toolbar: [
                         { name: 'basicstyles', items: ['RemoveFormat', '-', 'Bold', 'Italic', 'Underline', 'Strike'] },
@@ -34,7 +34,7 @@
                 });
 
                 const observer = new MutationObserver(() => {
-                    const notif = document.getElementById('cke_notifications_area_jawaban');
+                    const notif = document.getElementById('cke_notifications_area_deskripsi');
                     if (notif) notif.remove();
                 });
 
@@ -44,7 +44,7 @@
             </script>
 
             <button type="submit" class="btn btn-success">Perbarui</button>
-            <a href="{{ route('admin.faq.index') }}" class="btn btn-secondary">Kembali</a>
+            <a href="{{ route('admin.snk.index') }}" class="btn btn-secondary">Kembali</a>
         </form>
     </div>
 @endsection

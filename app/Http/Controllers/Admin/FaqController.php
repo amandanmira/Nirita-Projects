@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Faq;
 use Illuminate\Http\Request;
+use Mews\Purifier\Facades\Purifier;
 
 class FaqController extends Controller
 {
@@ -35,7 +36,12 @@ class FaqController extends Controller
             'jawaban' => 'required',
         ]);
 
-        Faq::create($request->only('pertanyaan', 'jawaban'));
+        $jawaban = Purifier::clean($request->jawaban);
+
+        Faq::create([
+            'pertanyaan' => $request->pertanyaan,
+            'jawaban' => $jawaban,
+        ]);
         return redirect()->route('admin.faq.index')->with('success', 'FAQ berhasil ditambahkan.');
     }
 
@@ -61,7 +67,12 @@ class FaqController extends Controller
             'jawaban' => 'required',
         ]);
 
-        $faq->update($request->only('pertanyaan', 'jawaban'));
+        $jawaban = Purifier::clean($request->jawaban);
+
+        $faq->update([
+            'pertanyaan' => $request->pertanyaan,
+            'jawaban' => $jawaban,
+        ]);
         return redirect()->route('admin.faq.index')->with('success', 'FAQ berhasil diperbarui.');
     }
 
