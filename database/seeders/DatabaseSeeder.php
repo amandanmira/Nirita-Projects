@@ -7,6 +7,7 @@ use App\Models\Admin;
 use App\Models\Car;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
 {
@@ -26,7 +27,7 @@ class DatabaseSeeder extends Seeder
             'nama_lengkap' => 'Admin',
             'username' => 'admin',
             'email' => 'admin@admin.com',
-            'password' => 'admin',
+            'password' => Hash::make('admin'),
         ]);
 
         \App\Models\Faq::factory(5)->create();
