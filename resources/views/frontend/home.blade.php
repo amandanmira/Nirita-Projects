@@ -143,6 +143,7 @@
             <a href="/review">Review</a>
             <a href="/faq">FAQ</a>
             <a href="/contact">Contact</a>
+            <a href="/syarat-ketentuan">Syarat & Ketentuan</a>
         </div>
     </nav>
 

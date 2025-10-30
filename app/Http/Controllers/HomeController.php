@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Car;
 use App\Models\Testimonial;
 use App\Models\Faq;
+use App\Models\Tnc;  // ← TAMBAHKAN INI
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -30,10 +31,15 @@ class HomeController extends Controller
         return view('frontend.car-detail', compact('car'));
     }
 
-    // TAMBAHKAN METHOD INI
     public function units()
     {
         $cars = Car::with(['rentalPrice', 'specification'])->get();
         return view('frontend.units', compact('cars'));
+    }
+
+    public function tnc()
+    {
+        $tncs = Tnc::all();
+        return view('frontend.tnc', compact('tncs'));
     }
 }

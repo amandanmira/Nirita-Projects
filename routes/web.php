@@ -13,6 +13,7 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/mobil', [HomeController::class, 'cars'])->name('cars');
 Route::get('/mobil/{id_mobil}', [HomeController::class, 'carDetail'])->name('car.detail');
 Route::get('/units', [HomeController::class, 'units'])->name('units');
+Route::get('/syarat-ketentuan', [HomeController::class, 'tnc'])->name('tnc');
 
 Route::get('/dashboard', function () {
     return view('dashboard');
