@@ -12,7 +12,7 @@
                 <button type="button" class="list-group-item list-group-item-action">Manage FAQ</button>
             </a>
             <a href="{{ route('admin.snk.index') }}" class="link-underline link-underline-opacity-0">
-                <button type="button" class="list-group-item list-group-item-action">Manage Standar Dan Ketentuan</button>
+                <button type="button" class="list-group-item list-group-item-action">Manage Syarat Dan Ketentuan</button>
             </a>
             <a href="{{ route('admin.testimoni.index') }}" class="link-underline link-underline-opacity-0">
                 <button type="button" class="list-group-item list-group-item-action">Manage Testimoni</button>

@@ -2,8 +2,8 @@
 
 @section('content')
     <div class="container">
-        <h2>Daftar Standar Dan Ketentuan</h2>
-        <a href="{{ route('admin.snk.create') }}" class="btn btn-primary mb-3">Tambah FAQ</a>
+        <h2>Daftar Syarat Dan Ketentuan</h2>
+        <a href="{{ route('admin.snk.create') }}" class="btn btn-primary mb-3">Tambah SnK</a>
 
         @if (session('success'))
             <div class="alert alert-success">{{ session('success') }}</div>

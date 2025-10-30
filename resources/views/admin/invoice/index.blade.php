@@ -3,7 +3,7 @@
 @section('content')
     <div class="container">
         <h2>Daftar Invoice</h2>
-        <a href="{{ route('admin.invoice.create') }}" class="btn btn-primary mb-3">Tambah Template</a>
+        <a href="{{ route('admin.invoice.create') }}" class="btn btn-primary mb-3">Tambah Invoice</a>
 
         @if (session('success'))
             <div class="alert alert-success">{{ session('success') }}</div>

@@ -42,7 +42,7 @@ class TncController extends Controller
             'judul' => $request->judul,
             'deskripsi' => $deskripsi,
         ]);
-        return redirect()->route('admin.snk.index')->with('success', 'Standar dan ketentuan berhasil ditambahkan.');
+        return redirect()->route('admin.snk.index')->with('success', 'Syarat dan ketentuan berhasil ditambahkan.');
     }
 
     /**
@@ -73,7 +73,7 @@ class TncController extends Controller
             'judul' => $request->judul,
             'deskripsi' => $deskripsi,
         ]);
-        return redirect()->route('admin.snk.index')->with('success', 'Standar dan ketentuan berhasil diperbarui.');
+        return redirect()->route('admin.snk.index')->with('success', 'Syarat dan ketentuan berhasil diperbarui.');
     }
 
     /**
@@ -84,6 +84,6 @@ class TncController extends Controller
         $tnc = Tnc::findOrFail($id);
 
         $tnc->delete();
-        return redirect()->route('admin.snk.index')->with('success', 'Standar dan ketentuan berhasil dihapus.');
+        return redirect()->route('admin.snk.index')->with('success', 'Syarat dan ketentuan berhasil dihapus.');
     }
 }

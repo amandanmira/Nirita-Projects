@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="container">
-        <h2>Tambah Standar Dan Ketentuan Baru</h2>
+        <h2>Tambah Syarat Dan Ketentuan Baru</h2>
 
         <form action="{{ route('admin.snk.store') }}" method="POST">
             @csrf
