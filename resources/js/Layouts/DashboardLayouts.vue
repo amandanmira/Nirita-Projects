@@ -6,9 +6,7 @@
         >
             <div>
                 <!-- Logo -->
-                <div
-                    class="flex items-center justify-center gap-3 py-5 px-5 border-b"
-                >
+                <div class="flex items-center justify-center gap-3 py-5 px-5">
                     <img :src="logo" alt="Logo" class="h-auto w-56" />
                 </div>
 
@@ -40,6 +38,15 @@
                             >
                                 <i class="fas fa-question-circle w-5"></i>
                                 FAQ
+                            </a>
+                        </li>
+                        <li>
+                            <a
+                                href="#"
+                                class="flex items-center gap-3 px-6 py-3 hover:bg-[#0E1A47] hover:text-white transition rounded-md"
+                            >
+                                <i class="fas fa-question-circle w-5"></i>
+                                S&K
                             </a>
                         </li>
                         <li>
@@ -99,12 +106,12 @@
 
             <!-- Page Content -->
             <main class="flex-1 p-8 overflow-y-auto">
-                <!-- Nanti isi di sini -->
-                <div
-                    class="h-full border-2 border-dashed border-gray-300 rounded-xl flex items-center justify-center text-gray-400"
-                >
-                    Konten Dashboard di sini
-                </div>
+                <!-- Support both programmatic slot usage and router child routes.
+                     Use <DashboardLayouts> as a wrapper (slot) OR register this
+                     component as a parent route and its children will render
+                     inside the <router-view /> below. -->
+                <slot></slot>
+                <router-view />
             </main>
         </div>
     </div>

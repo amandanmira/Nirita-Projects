@@ -17,7 +17,7 @@ const toggleMenu = () => (menuOpen.value = !menuOpen.value);
 <template>
     <header class="sticky top-0 z-50 bg-white shadow-md">
         <div
-            class="max-w-7xl mx-auto flex justify-between items-center py-3 px-4"
+            class="max-w-7xl mx-auto flex justify-between items-center py-3 px-5 md:px-3"
         >
             <!-- Logo -->
             <div class="flex-shrink-0">

@@ -9,6 +9,7 @@ import Faq from '../Pages/Faq.vue'
 import Login from '../Pages/Login.vue'
 import TermAndCond from '../TermAndCond/TermSection.vue';
 import DashboardLayouts from '../Layouts/DashboardLayouts.vue'
+import CarsDetails from '../Pages/CarsDetail.vue';
 
 const routes = [
     { path: '/', name: 'home', component: Home },
@@ -23,6 +24,8 @@ const routes = [
 const hiddenRoutes = [
     { path: '/dashboard', name: 'dashboard', component: DashboardLayouts, meta: { hidden: true } },
     { path: '/login/admin', name: 'login', component: Login, meta: { hidden: true } },
+    { path: '/units/:id', name: 'car-detail', component: CarsDetails, meta: { hidden: true } },
+    // { path: '/car/:id', name: 'car.detail', component: CarDetail, props: true },
 ]
 
 const router = createRouter({

@@ -4,34 +4,50 @@ import alphardImage from "@/Assets/hero-mobil.png";
 
 <template>
     <section
-        class="bg-gradient-to-t from-[#101B4E] to-blue-700 text-white py-16 px-8 md:px-20 flex flex-col md:flex-row items-center justify-between"
+        class="bg-gradient-to-t from-[#101B4E] to-blue-700 text-white py-14 px-5 md:px-16 lg:px-20"
     >
-        <div class="max-w-lg space-y-4">
-            <h3 class="text-yellow-400 font-semibold">Nirita Transport</h3>
-            <h1 class="text-4xl md:text-5xl font-extrabold leading-tight">
-                Solusi Transportasi <br />
-                Terpercaya
-            </h1>
-            <div class="flex space-x-4 mt-6">
-                <button
-                    class="bg-gray-200 text-gray-800 font-semibold px-6 py-2 rounded-full hover:bg-gray-300 transition"
+        <div class="max-w-7xl mx-auto w-full">
+            <div
+                class="w-full flex flex-col-reverse md:flex-row items-center md:items-center justify-between gap-5"
+            >
+                <!-- Left column: heading + buttons -->
+                <div
+                    class="w-full md:max-w-lg space-y-4 flex flex-col items-center text-center md:items-start md:text-left"
                 >
-                    Selengkapnya
-                </button>
-                <button
-                    class="bg-blue-500 text-white font-semibold px-6 py-2 rounded-full hover:bg-blue-600 transition"
-                >
-                    Pesan Sekarang
-                </button>
-            </div>
-        </div>
+                    <h3 class="text-yellow-400 font-semibold">
+                        Nirita Transport
+                    </h3>
+                    <h1
+                        class="text-3xl sm:text-4xl md:text-[54px] font-extrabold leading-tight"
+                    >
+                        Solusi Transportasi <br />
+                        Terpercaya
+                    </h1>
+                    <div class="flex flex-wrap gap-3 mt-6">
+                        <button
+                            class="bg-gray-200 text-gray-800 font-semibold px-6 py-2 rounded-full hover:bg-gray-300 transition"
+                        >
+                            Selengkapnya
+                        </button>
+                        <button
+                            class="bg-blue-500 text-white font-semibold px-6 py-2 rounded-full hover:bg-blue-600 transition"
+                        >
+                            Pesan Sekarang
+                        </button>
+                    </div>
+                </div>
 
-        <div class="mt-10 md:mt-0">
-            <img
-                :src="alphardImage"
-                alt="Alphard"
-                class="w-[400px] md:w-[550px] drop-shadow-2xl"
-            />
+                <!-- Right column: image -->
+                <div
+                    class="w-full md:w-auto flex justify-center md:justify-end"
+                >
+                    <img
+                        :src="alphardImage"
+                        alt="Alphard"
+                        class="w-[320px] sm:w-[380px] md:w-[480px] lg:w-[550px] max-w-full drop-shadow-2xl"
+                    />
+                </div>
+            </div>
         </div>
     </section>
 </template>
