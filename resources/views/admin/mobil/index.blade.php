@@ -22,8 +22,12 @@
 
             <tbody>
                 @foreach ($cars as $c)
+                    @php
+                        $gambar = json_decode($c->url_foto_mobil) ?? [''];
+                    @endphp
+
                     <tr>
-                        <td><img src="{{ asset('storage/' . $c->url_foto_mobil) }}" width="300"></td>
+                        <td><img src="{{ asset('storage/' . $gambar[0]) }}" width="300"></td>
                         <td>{{ $c->nama_mobil }}</td>
                         <td>{{ $c->specification->kategori }}</td>
                         <td>{{ $c->plat_nomor }}</td>

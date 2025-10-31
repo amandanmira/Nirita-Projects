@@ -32,7 +32,7 @@ class CarController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'url_foto_mobil' => 'required|image|mimes:jpg,jpeg,png|max:5120',
+            'url_foto_mobil' => 'required|array',
             'nama_mobil' => 'required',
             'plat_nomor' => 'required|unique:cars,plat_nomor',
             'ketersediaan' => 'required|numeric',
@@ -47,13 +47,16 @@ class CarController extends Controller
             'harga_luar_kota' => 'required|numeric',
         ]);
 
-        $image = $request->file('url_foto_mobil');
-        $path = $image->storeAs('mobil', $image->hashName());
+        $path = [];
+        foreach ($request->file('url_foto_mobil') as $image)
+            $path[] = $image->storeAs('mobil', $image->hashName());
+
+
         $fasilitas = $validated['fasilitas'];
 
         $mobil = Car::create([
             'nama_mobil' => $request->nama_mobil,
-            'url_foto_mobil' => $path,
+            'url_foto_mobil' => json_encode($path),
             'plat_nomor' => $request->plat_nomor,
             'ketersediaan' => $request->ketersediaan,
         ]);
@@ -104,7 +107,7 @@ class CarController extends Controller
         $mobil = Car::findOrFail($id);
 
         $validated = $request->validate([
-            'url_foto_mobil' => 'nullable|image|mimes:jpg,jpeg,png|max:5120',
+            'url_foto_mobil' => 'nullable|array',
             'nama_mobil' => 'required',
             'plat_nomor' => 'required|unique:cars,plat_nomor,' . $mobil->id_mobil . ',id_mobil',
             'ketersediaan' => 'required|numeric',
@@ -122,13 +125,16 @@ class CarController extends Controller
         $fasilitas = $validated['fasilitas'];
 
         if ($request->hasFile('url_foto_mobil')) {
-            $imagePath = 'storage/mobil/' . basename($mobil->url_foto_mobil);
+            foreach (json_decode($mobil->url_foto_mobil) as $gambar) {
+                $imagePath = 'storage/mobil/' . basename($gambar);
 
-            if (file_exists($imagePath))
-                unlink($imagePath);
+                if (file_exists($imagePath))
+                    unlink($imagePath);
+            }
 
-            $image = $request->file('url_foto_mobil');
-            $path = $image->storeAs('mobil', $image->hashName());
+            $path = [];
+            foreach ($request->file('url_foto_mobil') as $image)
+                $path[] = $image->storeAs('mobil', $image->hashName());
 
             $mobil->update([
                 'nama_mobil' => $request->nama_mobil,
@@ -175,10 +181,13 @@ class CarController extends Controller
     public function destroy(string $id)
     {
         $mobil = Car::findOrFail($id);
-        $imagePath = 'storage/mobil/' . basename($mobil->url_foto_mobil);
 
-        if (file_exists($imagePath))
-            unlink($imagePath);
+        foreach (json_decode($mobil->url_foto_mobil) as $gambar) {
+            $imagePath = 'storage/mobil/' . basename($gambar);
+
+            if (file_exists($imagePath))
+                unlink($imagePath);
+        }
 
         $mobil->specification()->delete();
         $mobil->rentalPrice()->delete();

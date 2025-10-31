@@ -7,7 +7,9 @@
         <br><br>
         <div class="row mb-3">
             <div class="col-4">
-                <img src="{{ asset('storage/' . $mobil->url_foto_mobil) }}" width="100%">
+                @foreach (json_decode($mobil->url_foto_mobil) as $gambar)
+                    <img src="{{ asset('storage/' . $gambar) }}" width="100%">
+                @endforeach
             </div>
 
             <div class="col">

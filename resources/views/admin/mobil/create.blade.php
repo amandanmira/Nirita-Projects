@@ -9,7 +9,15 @@
 
             <div class="mb-3">
                 <label for="url_foto_mobil" class="form-label">Gambar</label>
-                <input type="file" name="url_foto_mobil" id="url_foto_mobil" class="form-control" required>
+                <br>
+                <button type="button" id="add-gambar-row" class="btn btn-secondary mb-3">Tambah Gambar</button>
+
+                <div id="gambar-wrapper">
+                    <div class="input-group mb-2 gambar-item">
+                        <input type="file" name="url_foto_mobil[]" id="url_foto_mobil" class="form-control" required>
+                        <button type="button" class="btn btn-danger remove-gambar-row">Hapus</button>
+                    </div>
+                </div>
                 @error('url_foto_mobil') <small class="text-danger">{{ $message }}</small> @enderror
             </div>
 
@@ -116,10 +124,23 @@
                     wrapper.appendChild(newRow);
                 });
 
+                document.getElementById('add-gambar-row').addEventListener('click', function () {
+                    const wrapper = document.getElementById('gambar-wrapper');
+                    const newRow = document.createElement('div');
+                    newRow.classList.add('input-group', 'mb-2', 'gambar-item');
+                    newRow.innerHTML = `
+                                <input type="file" name="url_foto_mobil[]" id="url_foto_mobil" class="form-control" required>
+                                <button type="button" class="btn btn-danger remove-gambar-row">Hapus</button>
+                            `;
+                    wrapper.appendChild(newRow);
+                });
+
                 // Event hapus baris
                 document.addEventListener('click', function (e) {
                     if (e.target.classList.contains('remove-row')) {
                         e.target.closest('.fasilitas-item').remove();
+                    } else if (e.target.classList.contains('remove-gambar-row')) {
+                        e.target.closest('.gambar-item').remove();
                     }
                 });
             </script>
