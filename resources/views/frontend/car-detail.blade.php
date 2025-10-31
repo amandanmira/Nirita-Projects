@@ -41,12 +41,90 @@
             text-align: center;
         }
 
-        .detail-image img {
+        /* IMAGE SLIDER STYLES */
+        .image-slider {
+            position: relative;
+            width: 100%;
+            height: 400px;
+            overflow: hidden;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            background: #f0f0f0;
+        }
+
+        .slider-wrapper {
+            display: flex;
+            transition: transform 0.5s ease-in-out;
+            height: 100%;
+        }
+
+        .slider-wrapper img {
             width: 100%;
             height: 400px;
             object-fit: cover;
-            border-radius: 8px;
-            margin-bottom: 20px;
+            flex-shrink: 0;
+        }
+
+        .slider-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0, 0, 0, 0.5);
+            color: white;
+            border: none;
+            padding: 15px 20px;
+            cursor: pointer;
+            font-size: 20px;
+            border-radius: 4px;
+            transition: background 0.3s;
+            z-index: 10;
+        }
+
+        .slider-btn:hover {
+            background: rgba(0, 0, 0, 0.8);
+        }
+
+        .slider-btn-prev {
+            left: 10px;
+        }
+
+        .slider-btn-next {
+            right: 10px;
+        }
+
+        .slider-indicators {
+            position: absolute;
+            bottom: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 8px;
+            z-index: 10;
+        }
+
+        .indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.5);
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .indicator.active {
+            background: rgba(255, 255, 255, 1);
+        }
+
+        .slider-counter {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(0, 0, 0, 0.6);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+            z-index: 10;
         }
 
         .detail-info h2 {
@@ -259,6 +337,11 @@
                 grid-template-columns: 1fr;
                 gap: 20px;
             }
+
+            .slider-btn {
+                padding: 10px 15px;
+                font-size: 16px;
+            }
         }
     </style>
 </head>
@@ -274,11 +357,41 @@
 
         <div class="detail-container">
             <div class="detail-image">
-                @if($car->url_foto_mobil)
-                    <img src="{{ asset('storage/' . $car->url_foto_mobil) }}" alt="{{ $car->nama_mobil }}">
+                @php
+                    // Decode multiple images
+                    $fotoMobil = json_decode($car->url_foto_mobil);
+                    $jumlahFoto = is_array($fotoMobil) ? count($fotoMobil) : 0;
+                @endphp
+
+                @if($jumlahFoto > 0)
+                    <!-- IMAGE SLIDER -->
+                    <div class="image-slider">
+                        <div class="slider-wrapper" id="sliderWrapper">
+                            @foreach($fotoMobil as $index => $foto)
+                                <img src="{{ asset('storage/' . $foto) }}" alt="{{ $car->nama_mobil }} - Foto {{ $index + 1 }}">
+                            @endforeach
+                        </div>
+
+                        @if($jumlahFoto > 1)
+                            <!-- Navigation Buttons -->
+                            <button class="slider-btn slider-btn-prev" id="prevBtn">‹</button>
+                            <button class="slider-btn slider-btn-next" id="nextBtn">›</button>
+
+                            <!-- Counter -->
+                            <div class="slider-counter">
+                                <span id="currentSlide">1</span> / <span id="totalSlides">{{ $jumlahFoto }}</span>
+                            </div>
+
+                            <!-- Indicators -->
+                            <div class="slider-indicators" id="indicators">
+                                @for($i = 0; $i < $jumlahFoto; $i++)
+                                    <div class="indicator {{ $i === 0 ? 'active' : '' }}" data-index="{{ $i }}"></div>
+                                @endfor
+                            </div>
+                        @endif
+                    </div>
                 @else
-                    <div
-                        style="width: 100%; height: 400px; background: #ddd; border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+                    <div style="width: 100%; height: 400px; background: #ddd; border-radius: 8px; display: flex; align-items: center; justify-content: center;">
                         <p>Foto tidak tersedia</p>
                     </div>
                 @endif
@@ -407,6 +520,7 @@
     </footer>
 
     <script>
+        // Rental Price Calculator
         const hargaSolo = {{ $car->rentalPrice->harga_solo ?? 0 }};
         const hargaSoloraya = {{ $car->rentalPrice->harga_solo_raya ?? 0 }};
         const hargaLuarKota = {{ $car->rentalPrice->harga_luar_kota ?? 0 }};
@@ -462,6 +576,101 @@
         });
 
         hitungTotal();
+
+        // IMAGE SLIDER FUNCTIONALITY
+        const totalSlides = {{ $jumlahFoto ?? 0 }};
+
+        if (totalSlides > 1) {
+            let currentIndex = 0;
+            const sliderWrapper = document.getElementById('sliderWrapper');
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            const currentSlideSpan = document.getElementById('currentSlide');
+            const indicators = document.querySelectorAll('.indicator');
+
+            function updateSlider() {
+                const offset = -currentIndex * 100;
+                sliderWrapper.style.transform = `translateX(${offset}%)`;
+                currentSlideSpan.textContent = currentIndex + 1;
+
+                // Update indicators
+                indicators.forEach((indicator, index) => {
+                    if (index === currentIndex) {
+                        indicator.classList.add('active');
+                    } else {
+                        indicator.classList.remove('active');
+                    }
+                });
+            }
+
+            function nextSlide() {
+                currentIndex = (currentIndex + 1) % totalSlides;
+                updateSlider();
+            }
+
+            function prevSlide() {
+                currentIndex = (currentIndex - 1 + totalSlides) % totalSlides;
+                updateSlider();
+            }
+
+            function goToSlide(index) {
+                currentIndex = index;
+                updateSlider();
+            }
+
+            // Event listeners
+            nextBtn.addEventListener('click', nextSlide);
+            prevBtn.addEventListener('click', prevSlide);
+
+            // Indicator click events
+            indicators.forEach((indicator, index) => {
+                indicator.addEventListener('click', () => goToSlide(index));
+            });
+
+            // Auto slide (optional - setiap 5 detik)
+            let autoSlideInterval = setInterval(nextSlide, 5000);
+
+            // Pause auto slide on hover
+            const sliderContainer = document.querySelector('.image-slider');
+            sliderContainer.addEventListener('mouseenter', () => {
+                clearInterval(autoSlideInterval);
+            });
+
+            sliderContainer.addEventListener('mouseleave', () => {
+                autoSlideInterval = setInterval(nextSlide, 5000);
+            });
+
+            // Keyboard navigation
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'ArrowLeft') {
+                    prevSlide();
+                } else if (e.key === 'ArrowRight') {
+                    nextSlide();
+                }
+            });
+
+            // Touch swipe support for mobile
+            let touchStartX = 0;
+            let touchEndX = 0;
+
+            sliderContainer.addEventListener('touchstart', (e) => {
+                touchStartX = e.changedTouches[0].screenX;
+            });
+
+            sliderContainer.addEventListener('touchend', (e) => {
+                touchEndX = e.changedTouches[0].screenX;
+                handleSwipe();
+            });
+
+            function handleSwipe() {
+                if (touchEndX < touchStartX - 50) {
+                    nextSlide();
+                }
+                if (touchEndX > touchStartX + 50) {
+                    prevSlide();
+                }
+            }
+        }
     </script>
 </body>
 
