@@ -5,7 +5,7 @@
         </h2>
 
         <div
-            class="bg-blue-50 rounded-xl shadow-lg p-8 flex flex-col gap-8 md:flex-row justify-between items-start md:items-center"
+            class="bg-blue-50 rounded-xl shadow-lg p-8 flex flex-col gap-8 md:flex-row justify-between items-center"
         >
             <!-- Kolom Kiri -->
             <div class="flex-1 w-full space-y-4">
@@ -65,7 +65,7 @@
                     <p class="font-semibold text-gray-800">Total Biaya</p>
                     <input
                         type="text"
-                        class="bg-white rounded-md px-4 py-2 border text-right w-40"
+                        class="bg-white rounded-md px-4 py-2 text-right w-40"
                         :value="formatCurrency(totalBiaya)"
                         readonly
                     />

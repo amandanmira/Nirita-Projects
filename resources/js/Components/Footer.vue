@@ -3,7 +3,7 @@ import Logo from "../Assets/Logo Nirita Rentals.png";
 </script>
 
 <template>
-    <footer class="bg-[#0f172a] text-gray-300 py-10">
+    <footer class="bg-[#0f172a] text-gray-300 py-10 md:px-16 lg:px-16">
         <div class="max-w-7xl mx-auto px-6 grid md:grid-cols-3 gap-8">
             <!-- Logo & Description -->
             <div>

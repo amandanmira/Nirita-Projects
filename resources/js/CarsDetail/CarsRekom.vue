@@ -3,13 +3,14 @@
         <div class="max-w-7xl mx-auto text-center">
             <!-- Wrapper -->
             <div class="bg-[#0E1A47] rounded-2xl shadow-lg p-8 md:p-10">
+                <!-- Kontainer Scroll -->
                 <div
-                    class="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-4 gap-6"
+                    class="flex gap-6 overflow-x-auto snap-x snap-mandatory scroll-smooth scrollbar-hide"
                 >
                     <div
                         v-for="unit in displayedUnits"
                         :key="unit.id"
-                        class="bg-white shadow-md rounded-xl overflow-hidden hover:shadow-lg transition"
+                        class="flex-shrink-0 w-[100%] sm:w-[48%] lg:w-[23%] bg-white shadow-md rounded-xl overflow-hidden hover:shadow-lg transition snap-start"
                     >
                         <div class="p-4">
                             <img
@@ -85,3 +86,14 @@ const displayedUnits = computed(() => {
     return pool.slice(0, Math.min(4, pool.length));
 });
 </script>
+
+<style>
+/* Hilangkan scrollbar di browser */
+.scrollbar-hide::-webkit-scrollbar {
+    display: none;
+}
+.scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+</style>

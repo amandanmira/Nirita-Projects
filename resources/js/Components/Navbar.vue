@@ -15,10 +15,8 @@ const toggleMenu = () => (menuOpen.value = !menuOpen.value);
 </script>
 
 <template>
-    <header class="sticky top-0 z-50 bg-white shadow-md">
-        <div
-            class="max-w-7xl mx-auto flex justify-between items-center py-3 px-5 md:px-3"
-        >
+    <header class="sticky top-0 z-50 bg-white shadow-md md:px-16 lg:px-18">
+        <div class="max-w-7xl mx-auto flex justify-between items-center py-3">
             <!-- Logo -->
             <div class="flex-shrink-0">
                 <img :src="logo" alt="Nirita Transport" class="h-10 w-auto" />
