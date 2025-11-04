@@ -153,7 +153,7 @@
             @forelse($cars as $car)
                 <div class="car-card">
                     @if($car->url_foto_mobil)
-                        <img src="{{ asset('storage/' . $car->url_foto_mobil) }}" alt="{{ $car->nama_mobil }}"
+                        <img src="{{ asset('storage/' . json_decode($car->url_foto_mobil)[0]) }}" alt="{{ $car->nama_mobil }}"
                             style="width: 100%; height: 200px; object-fit: cover; border-radius: 8px; margin-bottom: 10px;">
                     @endif
                     <h3>{{ $car->nama_mobil }}</h3>

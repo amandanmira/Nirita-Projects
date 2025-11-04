@@ -27,7 +27,8 @@
                                     };
                                 @endphp
 
-                                <img src="{{ asset('storage/' . $d->cars->url_foto_mobil) }}" height="100">
+                                <img src="{{ asset('storage/' . json_decode($d->cars->url_foto_mobil)[0]) }}"
+                                    style="height: 100px">
                                 <ul>
                                     <li><strong>Mobil Yang Dipinjam : </strong>{{ $d->cars->nama_mobil }}</li>
                                     <li><strong>Lokasi Sewa : </strong>{{ $lokasi }}</li>

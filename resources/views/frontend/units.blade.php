@@ -437,19 +437,18 @@
 
         <div class="car-grid" id="carGrid">
             @forelse($cars as $car)
-                <div class="car-card"
-                     data-nama="{{ strtolower($car->nama_mobil) }}"
-                     data-kategori="{{ $car->specification->kategori ?? '' }}"
-                     data-kapasitas="{{ $car->specification->kapasitas ?? 0 }}"
-                     data-transmisi="{{ $car->specification->jenis_transmisi ?? '' }}"
-                     data-harga="{{ $car->rentalPrice->harga_solo ?? 0 }}"
-                     data-ketersediaan="{{ $car->ketersediaan }}">
+                <div class="car-card" data-nama="{{ strtolower($car->nama_mobil) }}"
+                    data-kategori="{{ $car->specification->kategori ?? '' }}"
+                    data-kapasitas="{{ $car->specification->kapasitas ?? 0 }}"
+                    data-transmisi="{{ $car->specification->jenis_transmisi ?? '' }}"
+                    data-harga="{{ $car->rentalPrice->harga_solo ?? 0 }}" data-ketersediaan="{{ $car->ketersediaan }}">
 
                     @if($car->url_foto_mobil)
-                        <img src="{{ asset('storage/' . $car->url_foto_mobil) }}" alt="{{ $car->nama_mobil }}"
+                        <img src="{{ asset('storage/' . json_decode($car->url_foto_mobil)[0]) }}" alt="{{ $car->nama_mobil }}"
                             class="car-image">
                     @else
-                        <div class="car-image" style="background: #ddd; display: flex; align-items: center; justify-content: center;">
+                        <div class="car-image"
+                            style="background: #ddd; display: flex; align-items: center; justify-content: center;">
                             <span style="color: #999;">No Image</span>
                         </div>
                     @endif

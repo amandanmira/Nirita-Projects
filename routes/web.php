@@ -14,6 +14,8 @@ Route::get('/mobil', [HomeController::class, 'cars'])->name('cars');
 Route::get('/mobil/{id_mobil}', [HomeController::class, 'carDetail'])->name('car.detail');
 Route::get('/units', [HomeController::class, 'units'])->name('units');
 Route::get('/syarat-ketentuan', [HomeController::class, 'tnc'])->name('tnc');
+Route::get('/invoice-test', function () {
+    return view('admin.invoice.invoice'); });
 
 Route::get('/dashboard', function () {
     return view('dashboard');

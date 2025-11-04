@@ -9,15 +9,21 @@
         body {
             font-family: "Times New Roman", serif;
             color: #002060;
-            margin: 40px;
+            margin: 10px;
             font-size: 12pt;
+        }
+
+        main {
+            padding: 0;
+            margin: 0;
         }
 
         h2 {
             text-align: center;
+            margin-top: 40px;
             margin-bottom: 30px;
-            padding-bottom: 20px;
-            border-bottom: 3px solid #002060;
+            padding-bottom: 10px;
+            border-bottom: 4px double #002060;
             font-size: 28pt;
         }
 
@@ -95,60 +101,83 @@
         .harga {
             text-align: right;
         }
+
+        .header-element {
+            position: fixed;
+            top: -30px;
+            left: 5px;
+            right: 5px;
+        }
+
+        .bold-border {
+            border: 3px solid #002060;
+        }
     </style>
 </head>
 
 <body>
-    <h2>INVOICE</h2>
+    <header>
+        <img class="header-element" src="{{ public_path('Logo Nirita Transport.png') }}" width="45%">
+        <p class="header-element" style="text-align: right; color: #a43742; font-size: 11pt;">
+            <strong>Jl. Nuri 28. Perumahan Gumpang Agung 1 Kartasura</strong><br>
+            0813 9360 4105 | 0856 4309 1156
+        </p>
+    </header>
 
-    <p class="penyewa"><strong>Kepada: {{ $nama ?? '' }}</strong></p>
+    <main>
+        <h2>INVOICE</h2>
 
-    <p class="header-text">
-        <strong>Bersama ini kami sampaikan, tagihan sewa kendaraan dengan rincian sebagai berikut:</strong>
-    </p>
+        <p class="penyewa"><strong>Kepada: {{ $nama ?? '' }}</strong></p>
 
-    <table>
-        <thead>
-            <tr>
-                <th style="width:4%;">No</th>
-                <th style="width:14%">Nama Kendaraan</th>
-                <th style="width:15%">Periode</th>
-                <th style="width:42%">Tujuan/Kegiatan</th>
-                <th style="width:25%">Harga</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach($items ?? [] as $i => $item)
+        <p class="header-text">
+            <strong>Bersama ini kami sampaikan, tagihan sewa kendaraan dengan rincian sebagai berikut:</strong>
+        </p>
+
+        <table>
+            <thead>
                 <tr>
-                    <td>{{ $i + 1 }}</td>
-                    <td>{{ $item['nama'] ?? '' }}</td>
-                    <td>{{ $item['periode'] ?? '' }}</td>
-                    <td>{{ $item['tujuan'] ?? '' }}</td>
-                    <td class="harga">{{ number_format($item['harga'] ?? 0, 0, ',', '.') }}</td>
+                    <th style="width:4%;">No</th>
+                    <th style="width:14%">Nama Kendaraan</th>
+                    <th style="width:15%">Periode</th>
+                    <th style="width:42%">Tujuan/Kegiatan</th>
+                    <th style="width:25%">Harga</th>
                 </tr>
-            @endforeach
-            <tr class="total-section">
-                <td colspan="2">TOTAL:</td>
-                <td colspan="2"></td>
-                <td class="harga">{{ number_format($total ?? 0, 0, ',', '.') }}</td>
-            </tr>
-            <tr>
-                <td colspan="2"><strong>TERBILANG:</strong></td>
-                <td colspan="3" style="text-align: center"><strong>{{ $terbilang ?? '' }}</strong></td>
-            </tr>
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @foreach($items ?? [] as $i => $item)
+                    <tr>
+                        <td>{{ $i + 1 }}</td>
+                        <td>{{ $item['nama'] ?? '' }}</td>
+                        <td>{{ $item['periode'] ?? '' }}</td>
+                        <td>{{ $item['tujuan'] ?? '' }}</td>
+                        <td class="harga">{{ number_format($item['harga'] ?? 0, 0, ',', '.') }}</td>
+                    </tr>
+                @endforeach
+                <tr class="total-section">
+                    <td class="bold-border" colspan="2">TOTAL:</td>
+                    <td class="bold-border" colspan="2"></td>
+                    <td class="harga bold-border">{{ number_format($total ?? 0, 0, ',', '.') }}</td>
+                </tr>
+                <tr>
+                    <td class="bold-border" colspan="2"><strong>TERBILANG:</strong></td>
+                    <td class="bold-border" colspan="3" style="text-align: center">
+                        <strong>{{ $terbilang ?? '' }}</strong>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
 
-    <p class="driver"><strong>Driver:</strong><br>{{ $driver ?? '' }}</p>
+        <p class="driver"><strong>Driver:</strong><br>{{ $driver ?? '' }}</p>
 
-    <div class="footer">
-        <p>Solo, {{ $tanggal ?? '' }}<br>Hormat Kami,</p>
-        <br><br><br><br>
-        <div>
-            {{ $penanggungJawab ?? 'Hari Suryono' }}<br>
-            <strong>{{ $perusahaan ?? 'Nirta Transport' }}</strong>
+        <div class="footer">
+            <p>Solo, {{ $tanggal ?? '' }}<br>Hormat Kami,</p>
+            <br><br><br><br><br>
+            <div>
+                {{ $penanggungJawab ?? 'Hari Suryono' }}<br>
+                <strong>{{ $perusahaan ?? 'Nirta Transport' }}</strong>
+            </div>
         </div>
-    </div>
+    </main>
 </body>
 
 </html>
