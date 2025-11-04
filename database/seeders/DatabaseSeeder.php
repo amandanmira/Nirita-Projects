@@ -29,7 +29,6 @@ class DatabaseSeeder extends Seeder
             'password' => 'admin',
         ]);
 
-        \App\Models\Faq::factory(5)->create();
         \App\Models\Tnc::factory(5)->create();
         \App\Models\MessageTemplate::factory(5)->create();
         \App\Models\Testimonial::factory(5)->create(['url_gambar' => '../placeholder_image/placeholder_testimoni.jpg']);

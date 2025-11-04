@@ -13,9 +13,8 @@ class HomeController extends Controller
     {
         $cars = Car::with(['rentalPrice', 'specification'])->latest()->take(6)->get();
         $testimonials = Testimonial::latest()->take(3)->get();
-        $faqs = Faq::all();
 
-        return view('frontend.home', compact('cars', 'testimonials', 'faqs'));
+        return view('frontend.home', compact('cars', 'testimonials'));
     }
 
     public function cars()

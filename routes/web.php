@@ -23,7 +23,6 @@ Route::prefix('admin')->name('admin.')->group(function () {
         return view('admin.index');
     });
     Route::resource('template_pesan', App\Http\Controllers\Admin\MessageTemplateController::class);
-    Route::resource('faq', App\Http\Controllers\Admin\FaqController::class);
     Route::resource('snk', App\Http\Controllers\Admin\TncController::class);
     Route::resource('testimoni', App\Http\Controllers\Admin\TestimonialController::class);
     Route::resource('mobil', App\Http\Controllers\Admin\CarController::class);

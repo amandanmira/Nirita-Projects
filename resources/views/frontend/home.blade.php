@@ -191,14 +191,7 @@
 
     <div class="container faq">
         <h2>FAQ (Frequently Asked Questions)</h2>
-        @forelse($faqs as $faq)
-            <div class="faq-item">
-                <h4>{{ $faq->pertanyaan }}</h4>
-                <p>{{ $faq->jawaban }}</p>
-            </div>
-        @empty
-            <p>Belum ada FAQ. Silakan tambahkan di dashboard admin.</p>
-        @endforelse
+        <p>Belum ada FAQ.</p>
     </div>
 
     <footer style="background: #333; color: #fff; text-align: center; padding: 20px; margin-top: 40px;">
