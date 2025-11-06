@@ -6,10 +6,10 @@ import logo from "../Assets/Logo Nirita Rentals.png";
 const router = useRouter();
 const menuOpen = ref(false);
 
-// Hanya tampilkan route yang tidak punya meta.hidden
-const links = router
-    .getRoutes()
-    .filter((r) => r.name && !r.path.startsWith("/:") && !r.meta.hidden);
+// // Hanya tampilkan route yang tidak punya meta.hidden
+// const links = router
+//     .getRoutes()
+//     .filter((r) => r.name && !r.path.startsWith("/:") && !r.meta.hidden);
 
 const toggleMenu = () => (menuOpen.value = !menuOpen.value);
 </script>
@@ -26,15 +26,57 @@ const toggleMenu = () => (menuOpen.value = !menuOpen.value);
             <nav
                 class="hidden md:flex flex-1 justify-center space-x-6 text-gray-800 font-medium"
             >
+                <!-- <RouterLink
+                        v-for="link in links"
+                        :key="link.path"
+                        :to="link.path"
+                        class="hover:text-blue-600 font-medium transition"
+                        active-class="text-blue-600 font-medium"
+                    >
+                        {{ link.name.charAt(0).toUpperCase() + link.name.slice(1) }}
+                    </RouterLink> -->
                 <RouterLink
-                    v-for="link in links"
-                    :key="link.path"
-                    :to="link.path"
-                    class="hover:text-blue-600 font-medium transition"
-                    active-class="text-blue-600 font-medium"
+                    to="#"
+                    class="cursor-pointer hover:text-blue-600 font-light transition"
+                    active-class="text-blue-600 font-light"
+                    >Home</RouterLink
                 >
-                    {{ link.name.charAt(0).toUpperCase() + link.name.slice(1) }}
-                </RouterLink>
+                <RouterLink
+                    to="../Pages/About.vue"
+                    class="cursor-pointer hover:text-blue-600 font-light transition"
+                    active-class="text-blue-600 font-light"
+                    >About</RouterLink
+                >
+                <RouterLink
+                    to="#"
+                    class="cursor-pointer hover:text-blue-600 font-light transition"
+                    active-class="text-blue-600 font-light"
+                    >Units</RouterLink
+                >
+                <RouterLink
+                    to="#"
+                    class="cursor-pointer hover:text-blue-600 font-light transition"
+                    active-class="text-blue-600 font-light"
+                    >Review</RouterLink
+                >
+                <RouterLink
+                    to="#"
+                    class="cursor-pointer hover:text-blue-600 font-light transition"
+                    active-class="text-blue-600 font-light"
+                    >Term and Condition</RouterLink
+                >
+                <RouterLink
+                    to="#"
+                    class="cursor-pointer hover:text-blue-600 font-light transition"
+                    active-class="text-blue-600 font-light"
+                    >Review</RouterLink
+                >
+                <RouterLink
+                    to="#"
+                    class="cursor-pointer hover:text-blue-600 font-light transition"
+                    active-class="text-blue-600 font-light"
+                    >FAQ</RouterLink
+                >
             </nav>
 
             <!-- Contact Button (kanan desktop) -->
