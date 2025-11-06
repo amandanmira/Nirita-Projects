@@ -1,0 +1,30 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+class Car extends Model
+{
+    use HasFactory;
+
+    protected $primaryKey = 'id_mobil';
+    protected $fillable = ['nama_mobil', 'url_foto_mobil', 'plat_nomor', 'ketersediaan'];
+
+    public function specification()
+    {
+        return $this->hasOne(Specification::class, 'id_mobil');
+    }
+
+    public function rentalPrice()
+    {
+        return $this->hasOne(RentalPrice::class, 'id_mobil');
+    }
+
+    public function bill()
+    {
+        return $this->belongsToMany(Bill::class, 'bill_details', 'id_mobil', 'id_nota')
+            ->withTimestamps();
+    }
+}
