@@ -437,47 +437,47 @@
 
         <div class="car-grid" id="carGrid">
             @forelse($cars as $car)
-                <div class="car-card" data-nama="{{ strtolower($car->nama_mobil) }}"
-                    data-kategori="{{ $car->specification->kategori ?? '' }}"
-                    data-kapasitas="{{ $car->specification->kapasitas ?? 0 }}"
-                    data-transmisi="{{ $car->specification->jenis_transmisi ?? '' }}"
-                    data-harga="{{ $car->rentalPrice->harga_solo ?? 0 }}" data-ketersediaan="{{ $car->ketersediaan }}">
+            <div class="car-card" data-nama="{{ strtolower($car->nama_mobil) }}"
+                data-kategori="{{ $car->specification->kategori ?? '' }}"
+                data-kapasitas="{{ $car->specification->kapasitas ?? 0 }}"
+                data-transmisi="{{ $car->specification->jenis_transmisi ?? '' }}"
+                data-harga="{{ $car->rentalPrice->harga_solo ?? 0 }}" data-ketersediaan="{{ $car->ketersediaan }}">
 
-                    @if($car->url_foto_mobil)
-                        <img src="{{ asset('storage/' . json_decode($car->url_foto_mobil)[0]) }}" alt="{{ $car->nama_mobil }}"
-                            class="car-image">
-                    @else
-                        <div class="car-image"
-                            style="background: #ddd; display: flex; align-items: center; justify-content: center;">
-                            <span style="color: #999;">No Image</span>
-                        </div>
-                    @endif
+                @if($car->url_foto_mobil)
+                <img src="{{ asset($car->url_foto_mobil) }}" alt="{{ $car->nama_mobil }}"
+                    class="car-image">
+                @else
+                <div class="car-image"
+                    style="background: #ddd; display: flex; align-items: center; justify-content: center;">
+                    <span style="color: #999;">No Image</span>
+                </div>
+                @endif
 
-                    <div class="car-info">
-                        <h3 class="car-name">{{ $car->nama_mobil }}</h3>
+                <div class="car-info">
+                    <h3 class="car-name">{{ $car->nama_mobil }}</h3>
 
-                        <div class="car-price">
-                            Rp {{ number_format($car->rentalPrice->harga_solo ?? 0, 0, ',', '.') }} / Hari
-                        </div>
-
-                        <div class="car-details">
-                            <div class="car-detail-item">{{ $car->specification->kapasitas ?? '-' }} Kursi</div>
-                            <div class="car-detail-item">{{ $car->specification->kategori ?? '-' }}</div>
-                            <div class="car-detail-item">{{ $car->specification->jenis_transmisi ?? '-' }}</div>
-                        </div>
-
-                        <p class="car-plat">Plat Nomor: {{ $car->plat_nomor }}</p>
-
-                        <span class="car-availability">Unit Tersedia: {{ $car->ketersediaan }}</span>
-
-                        <a href="{{ route('car.detail', $car->id_mobil) }}" class="btn-detail">Lihat Detail</a>
+                    <div class="car-price">
+                        Rp {{ number_format($car->rentalPrice->harga_solo ?? 0, 0, ',', '.') }} / Hari
                     </div>
+
+                    <div class="car-details">
+                        <div class="car-detail-item">{{ $car->specification->kapasitas ?? '-' }} Kursi</div>
+                        <div class="car-detail-item">{{ $car->specification->kategori ?? '-' }}</div>
+                        <div class="car-detail-item">{{ $car->specification->jenis_transmisi ?? '-' }}</div>
+                    </div>
+
+                    <p class="car-plat">Plat Nomor: {{ $car->plat_nomor }}</p>
+
+                    <span class="car-availability">Unit Tersedia: {{ $car->ketersediaan }}</span>
+
+                    <a href="{{ route('car.detail', $car->id_mobil) }}" class="btn-detail">Lihat Detail</a>
                 </div>
+            </div>
             @empty
-                <div class="no-results">
-                    <h3>Tidak ada mobil tersedia</h3>
-                    <p>Silakan coba filter lain atau hubungi kami untuk informasi lebih lanjut</p>
-                </div>
+            <div class="no-results">
+                <h3>Tidak ada mobil tersedia</h3>
+                <p>Silakan coba filter lain atau hubungi kami untuk informasi lebih lanjut</p>
+            </div>
             @endforelse
         </div>
 
@@ -498,7 +498,7 @@
         const noResults = document.getElementById('noResults');
         const resultCount = document.getElementById('resultCount');
 
-        document.getElementById('filterForm').addEventListener('submit', function (e) {
+        document.getElementById('filterForm').addEventListener('submit', function(e) {
             e.preventDefault();
             filterCars();
         });

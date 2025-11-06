@@ -151,24 +151,24 @@
         <h2>Mobil Tersedia</h2>
         <div class="cars-grid">
             @forelse($cars as $car)
-                <div class="car-card">
-                    @if($car->url_foto_mobil)
-                        <img src="{{ asset('storage/' . json_decode($car->url_foto_mobil)[0]) }}" alt="{{ $car->nama_mobil }}"
-                            style="width: 100%; height: 200px; object-fit: cover; border-radius: 8px; margin-bottom: 10px;">
-                    @endif
-                    <h3>{{ $car->nama_mobil }}</h3>
-                    @if($car->rentalPrice)
-                        <p><strong>Harga Solo:</strong> Rp
-                            {{ number_format($car->rentalPrice->harga_solo ?? 0, 0, ',', '.') }}/hari
-                        </p>
-                    @endif
-                    <p><strong>Plat Nomor:</strong> {{ $car->plat_nomor }}</p>
-                    <p><strong>Unit Tersedia:</strong> {{ $car->ketersediaan }}</p>
-                    <p>{{ Str::limit($car->deskripsi ?? 'Deskripsi tidak tersedia', 100) }}</p>
-                    <a href="{{ route('car.detail', $car->id_mobil) }}" class="btn">Lihat Detail</a>
-                </div>
+            <div class="car-card">
+                @if($car->url_foto_mobil)
+                <img src="{{ asset($car->url_foto_mobil) }}" alt="{{ $car->nama_mobil }}"
+                    style="width: 100%; height: 200px; object-fit: cover; border-radius: 8px; margin-bottom: 10px;">
+                @endif
+                <h3>{{ $car->nama_mobil }}</h3>
+                @if($car->rentalPrice)
+                <p><strong>Harga Solo:</strong> Rp
+                    {{ number_format($car->rentalPrice->harga_solo ?? 0, 0, ',', '.') }}/hari
+                </p>
+                @endif
+                <p><strong>Plat Nomor:</strong> {{ $car->plat_nomor }}</p>
+                <p><strong>Unit Tersedia:</strong> {{ $car->ketersediaan }}</p>
+                <p>{{ Str::limit($car->deskripsi ?? 'Deskripsi tidak tersedia', 100) }}</p>
+                <a href="{{ route('car.detail', $car->id_mobil) }}" class="btn">Lihat Detail</a>
+            </div>
             @empty
-                <p>Belum ada mobil tersedia. Silakan tambahkan di dashboard admin.</p>
+            <p>Belum ada mobil tersedia. Silakan tambahkan di dashboard admin.</p>
             @endforelse
         </div>
     </div>
@@ -177,15 +177,15 @@
         <div class="container">
             <h2>Testimoni Pelanggan</h2>
             @forelse($testimonials as $testimonial)
-                <div class="testimonial">
-                    @if($testimonial->url_gambar)
-                        <img src="{{ asset('storage/' . $testimonial->url_gambar) }}" alt="Testimoni"
-                            style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover; margin-bottom: 10px;">
-                    @endif
-                    <p style="font-style: italic;">"{{ $testimonial->desk_testimoni }}"</p>
-                </div>
+            <div class="testimonial">
+                @if($testimonial->url_gambar)
+                <img src="{{ asset('storage/' . $testimonial->url_gambar) }}" alt="Testimoni"
+                    style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover; margin-bottom: 10px;">
+                @endif
+                <p style="font-style: italic;">"{{ $testimonial->desk_testimoni }}"</p>
+            </div>
             @empty
-                <p>Belum ada testimoni.</p>
+            <p>Belum ada testimoni.</p>
             @endforelse
         </div>
     </div>
@@ -193,12 +193,12 @@
     <div class="container faq">
         <h2>FAQ (Frequently Asked Questions)</h2>
         @forelse($faqs as $faq)
-            <div class="faq-item">
-                <h4>{{ $faq->pertanyaan }}</h4>
-                <p>{{ $faq->jawaban }}</p>
-            </div>
+        <div class="faq-item">
+            <h4>{{ $faq->pertanyaan }}</h4>
+            <p>{{ $faq->jawaban }}</p>
+        </div>
         @empty
-            <p>Belum ada FAQ. Silakan tambahkan di dashboard admin.</p>
+        <p>Belum ada FAQ. Silakan tambahkan di dashboard admin.</p>
         @endforelse
     </div>
 
