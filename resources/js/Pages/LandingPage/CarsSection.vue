@@ -73,7 +73,7 @@
 
 <script setup>
 // Import data dummy dari file terpisah
-import cars from "@/data/cars.js"; // alias @ mengarah ke resources/js/
+import cars from "../data/cars2.js"; // alias @ mengarah ke resources/js/
 </script>
 
 <style scoped>

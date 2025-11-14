@@ -55,7 +55,7 @@
 </template>
 
 <script setup>
-import icon from "@/Assets/icon.webp";
+import icon from "../Assets/icon.webp";
 
 const reasons = [
     {

@@ -19,13 +19,13 @@
                 <nav class="mt-6">
                     <ul class="space-y-1">
                         <li v-for="menu in menus" :key="menu.label">
-                            <a
-                                href="#"
+                            <Link
+                                :href="menu.Link"
                                 class="flex items-center gap-3 px-6 py-3 hover:bg-[#0E1A47] hover:text-white transition rounded-md"
                             >
                                 <i :class="menu.icon + ' w-5'"></i>
                                 {{ menu.label }}
-                            </a>
+                            </Link>
                         </li>
                     </ul>
                 </nav>
@@ -90,6 +90,7 @@
                                 class="absolute right-0 mt-2 w-44 bg-white rounded-md shadow-lg z-20 overflow-hidden"
                             >
                                 <button
+                                    @click="logout"
                                     class="w-full flex items-center gap-2 px-4 py-2 text-red-600 hover:text-white hover:bg-red-500 hover:shadow-lg hover:shadow-red-300 transition-all duration-300 ease-out"
                                 >
                                     <i class="fas fa-sign-out-alt"></i> Keluar
@@ -111,6 +112,7 @@
 
 <script setup>
 import { ref } from "vue";
+import { Link, router } from "@inertiajs/vue3";
 import logo from "../Assets/Logo Nirita Rentals.png";
 
 const sidebarOpen = ref(false);
@@ -121,12 +123,29 @@ const toggleDropdown = () => {
 };
 
 const menus = [
-    { label: "Kendaraan", icon: "fas fa-car-side" },
-    { label: "Testimoni", icon: "fas fa-comment-dots" },
-    { label: "FAQ", icon: "fas fa-question-circle" },
-    { label: "S&K", icon: "fas fa-file-contract" },
+    {
+        label: "Kendaraan",
+        icon: "fas fa-car-side",
+        Link: "/admin/mobil",
+    },
+    {
+        label: "Testimoni",
+        icon: "fas fa-comment-dots",
+        Link: "/admin/testimoni",
+    },
     { label: "Invoice", icon: "fas fa-file-invoice" },
+    { label: "FAQ", icon: "fas fa-question-circle", Link: "/admin/faq" },
+    { label: "S&K", icon: "fas fa-file-contract", Link: "/admin/snk" },
+    {
+        label: "Template Pesan",
+        icon: "fas fa-brands fa-whatsapp",
+        Link: "/admin/template-pesan",
+    },
 ];
+
+const logout = () => {
+    router.post("/logout");
+};
 </script>
 
 <style scoped>

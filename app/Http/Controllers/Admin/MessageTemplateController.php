@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\MessageTemplate;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class MessageTemplateController extends Controller
 {
@@ -14,7 +15,9 @@ class MessageTemplateController extends Controller
     public function index()
     {
         $templates = MessageTemplate::all();
-        return view('admin.template_pesan.index', compact('templates'));
+        return Inertia::render('Admin/TemplatePesan/Index', [
+            'templates' => $templates,
+        ]);
     }
 
     /**
@@ -22,7 +25,7 @@ class MessageTemplateController extends Controller
      */
     public function create()
     {
-        return view('admin.template_pesan.create');
+        return Inertia::render('Admin/TemplatePesan/Create');
     }
 
     /**
@@ -37,7 +40,7 @@ class MessageTemplateController extends Controller
         ]);
 
         MessageTemplate::create($request->only('jenis_template', 'no_telp_tujuan', 'isi'));
-        return redirect()->route('admin.template_pesan.index')->with('success', 'Template berhasil ditambahkan.');
+        return redirect()->route('admin.template-pesan.index')->with('success', 'Template berhasil ditambahkan.');
     }
 
     public function show(int $id)
@@ -48,7 +51,10 @@ class MessageTemplateController extends Controller
         $pesanEncoded = urlencode($pesan);
         $waLink = "https://wa.me/{$nomor}?text={$pesanEncoded}";
 
-        return view('admin.template_pesan.show', compact('template', 'waLink'));
+        return Inertia::render('Admin/TemplatePesan/Show', [
+            'template' => $template,
+            'waLink' => $waLink,
+        ]);
     }
 
     /**
@@ -58,7 +64,9 @@ class MessageTemplateController extends Controller
     {
         $template = MessageTemplate::findOrFail($id);
 
-        return view('admin.template_pesan.edit', compact('template'));
+        return Inertia::render('Admin/TemplatePesan/Edit', [
+            'templates' => $template,
+        ]);
     }
 
     /**
@@ -75,7 +83,7 @@ class MessageTemplateController extends Controller
         ]);
 
         $template->update($request->only('jenis_template', 'no_telp_tujuan', 'isi'));
-        return redirect()->route('admin.template_pesan.index')->with('success', 'Template berhasil diperbarui.');
+        return redirect()->route('admin.template-pesan.index')->with('success', 'Template berhasil diperbarui.');
     }
 
     /**
@@ -86,6 +94,6 @@ class MessageTemplateController extends Controller
         $template = MessageTemplate::findOrFail($id);
 
         $template->delete();
-        return redirect()->route('admin.template_pesan.index')->with('success', 'Template berhasil dihapus.');
+        return redirect()->route('admin.template-pesan.index')->with('success', 'Template berhasil dihapus.');
     }
 }

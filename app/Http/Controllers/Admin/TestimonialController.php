@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Testimonial;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Inertia\Inertia;
 
 class TestimonialController extends Controller
 {
@@ -15,7 +16,9 @@ class TestimonialController extends Controller
     public function index()
     {
         $testimonials = Testimonial::all();
-        return view('admin.testimoni.index', compact('testimonials'));
+        return Inertia::render('Admin/Testimoni/Index', [
+            'testimonials' => $testimonials,
+        ]);
     }
 
     /**
@@ -23,7 +26,7 @@ class TestimonialController extends Controller
      */
     public function create()
     {
-        return view('admin.testimoni.create');
+        return Inertia::render('Admin/Testimoni/Create');
     }
 
     /**
@@ -37,7 +40,8 @@ class TestimonialController extends Controller
         ]);
 
         $image = $request->file('url_gambar');
-        $path = $image->storeAs('testimoni', $image->hashName());
+        // store on the public disk so files are available under /storage via the storage:link
+        $path = $image->store('testimoni', 'public');
 
         Testimonial::create([
             'url_gambar' => $path,
@@ -49,55 +53,50 @@ class TestimonialController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(int $id)
+    public function edit(Testimonial $testimoni)
     {
-        $testimoni = Testimonial::findOrFail($id);
-
-        return view('admin.testimoni.edit', compact('testimoni'));
+        // Laravel akan resolve Testimonial model via route-model binding
+        return Inertia::render('Admin/Testimoni/Edit', [
+            'testimoni' => $testimoni,
+        ]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, int $id)
+    // Recommended: gunakan model binding agar Laravel otomatis resolve model
+    public function update(Request $request, Testimonial $testimoni)
     {
-        $testimoni = Testimonial::findOrFail($id);
-
-        $request->validate([
+        // validasi
+        $validated = $request->validate([
             'url_gambar' => 'nullable|image|mimes:jpeg,png,jpg|max:5120',
             'desk_testimoni' => 'nullable|string',
         ]);
 
+        // handle file baru
         if ($request->hasFile('url_gambar')) {
-            $imagePath = 'storage/testimoni/' . basename($testimoni->url_gambar);
+            // hapus file lama (jika ada) dari storage disk 'public'
+            if ($testimoni->url_gambar && Storage::disk('public')->exists($testimoni->url_gambar)) {
+                Storage::disk('public')->delete($testimoni->url_gambar);
+            }
 
-            if (file_exists($imagePath))
-                unlink($imagePath);
-            
-            $image = $request->file('url_gambar');
-            $path = $image->storeAs('testimoni', $image->hashName());
-
-            $testimoni->update([
-                'url_gambar' => $path,
-                'desk_testimoni' => $request->desk_testimoni,
-            ]);
-        } else {
-            $testimoni->update($request->only('desk_testimoni'));
+            // simpan file baru di disk public (storage/app/public/testimoni/...)
+            $path = $request->file('url_gambar')->store('testimoni', 'public');
+            $validated['url_gambar'] = $path;
         }
 
-        return redirect()->route('admin.testimoni.index')->with('success', 'Testimoni berhasil diperbarui.');
+        // update model
+        $testimoni->update($validated);
+
+        return redirect()->route('admin.testimoni.index'); // atau ->route('admin.testimoni.index')
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(int $id)
+    public function destroy(Testimonial $testimoni)
     {
-        $testimoni = Testimonial::findOrFail($id);
-        $imagePath = 'storage/testimoni/' . basename($testimoni->url_gambar);
-
-        if (file_exists($imagePath))
-            unlink($imagePath);
+        // delete from public disk if exists
+        if ($testimoni->url_gambar && Storage::disk('public')->exists($testimoni->url_gambar)) {
+            Storage::disk('public')->delete($testimoni->url_gambar);
+        }
 
         $testimoni->delete();
         return redirect()->route('admin.testimoni.index')->with('success', 'Testimoni berhasil dihapus.');

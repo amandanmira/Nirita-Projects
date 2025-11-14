@@ -11,4 +11,10 @@ class Testimonial extends Model
 
     protected $primaryKey = 'id_testimoni';
     protected $fillable = ['url_gambar', 'desk_testimoni'];
+
+    // Jika kamu ingin route model binding memakai id_testimoni
+    public function getRouteKeyName()
+    {
+        return $this->primaryKey; // => 'id_testimoni'
+    }
 }

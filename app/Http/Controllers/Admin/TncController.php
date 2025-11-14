@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Tnc;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 use Mews\Purifier\Facades\Purifier;
 
 class TncController extends Controller
@@ -15,7 +16,9 @@ class TncController extends Controller
     public function index()
     {
         $tncs = Tnc::all();
-        return view('admin.snk.index', compact('tncs'));
+        return Inertia::render('Admin/SnK/Index', [
+            'tncs' => $tncs,
+        ]);
     }
 
     /**
@@ -23,7 +26,7 @@ class TncController extends Controller
      */
     public function create()
     {
-        return view('admin.snk.create');
+        return Inertia::render('Admin/SnK/Create');
     }
 
     /**
@@ -50,9 +53,12 @@ class TncController extends Controller
      */
     public function edit(int $id)
     {
-        $tnc = Tnc::findOrFail($id);
+        $tncs = Tnc::findOrFail($id);
 
-        return view('admin.snk.edit', compact('tnc'));
+        return Inertia::render('Admin/SnK/Edit', [
+            'tncs' => $tncs,
+            'errors' => session('errors') ? session('errors')->getBag('default')->toArray() : (object) [],
+        ]);
     }
 
     /**

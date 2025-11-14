@@ -1,5 +1,5 @@
 <script setup>
-import alphardImage from "@/Assets/hero-mobil.png";
+import alphardImage from "../Assets/hero-mobil.png";
 </script>
 
 <template>
