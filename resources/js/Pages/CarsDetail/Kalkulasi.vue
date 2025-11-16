@@ -18,7 +18,7 @@
                         class="border rounded-md px-3 py-1 text-gray-700 bg-white focus:outline-none"
                     >
                         <option
-                            v-for="(harga, index) in mobil.price"
+                            v-for="(harga, index) in priceOptions"
                             :key="index"
                             :value="harga.label"
                         >
@@ -48,9 +48,9 @@
                         >
                             −
                         </button>
-                        <span class="text-lg font-semibold">{{
-                            jumlahHari
-                        }}</span>
+                        <span class="text-lg font-semibold">
+                            {{ jumlahHari }}
+                        </span>
                         <button
                             @click="tambahHari"
                             class="cursor-pointer w-8 h-8 flex justify-center items-center rounded-full bg-white shadow text-gray-600 hover:bg-gray-100"
@@ -90,47 +90,56 @@
 
 <script setup>
 import { ref, computed } from "vue";
-import mobilData from "../data/cars2.js";
 
-const mobilId = parseInt(window.location.pathname.split("/").pop());
-const mobil = mobilData.find((m) => m.id === mobilId);
-
-const jumlahHari = ref(1);
-const selectedLabel = ref(mobil.price[0].label); // default area pertama
-const totalBiaya = ref(0);
-
-// Ambil harga berdasarkan label yang dipilih
-const selectedPrice = computed(() => {
-    return mobil.price.find((p) => p.label === selectedLabel.value);
+const props = defineProps({
+    cars: Object,
 });
 
-// Fungsi hitung total biaya
+// === Harga dari backend ===
+const priceOptions = computed(() => [
+    { label: "Area Solo", value: props.cars.rental_price?.harga_solo ?? 0 },
+    {
+        label: "Solo Raya",
+        value: props.cars.rental_price?.harga_solo_raya ?? 0,
+    },
+    {
+        label: "Luar Kota",
+        value: props.cars.rental_price?.harga_luar_kota ?? 0,
+    },
+]);
+
+// === Default area pertama ===
+const selectedLabel = ref(priceOptions.value[0].label);
+
+// === Harga sesuai label ===
+const selectedPrice = computed(() => {
+    return (
+        priceOptions.value.find((p) => p.label === selectedLabel.value) || {
+            value: 0,
+        }
+    );
+});
+
+// === Jumlah hari & total biaya ===
+const jumlahHari = ref(1);
+const totalBiaya = ref(0);
+
+// Hitung biaya
 const hitungBiaya = () => {
     totalBiaya.value = selectedPrice.value.value * jumlahHari.value;
 };
 
-// Tambah/Kurang hari
-const tambahHari = () => {
-    jumlahHari.value++;
-    // hitungBiaya();
-};
-
+// Tambah / kurang hari
+const tambahHari = () => jumlahHari.value++;
 const kurangiHari = () => {
-    if (jumlahHari.value > 1) {
-        jumlahHari.value--;
-        // hitungBiaya();
-    }
+    if (jumlahHari.value > 1) jumlahHari.value--;
 };
 
-// Format rupiah
-const formatCurrency = (number) => {
-    return new Intl.NumberFormat("id-ID", {
+// Format currency
+const formatCurrency = (number) =>
+    new Intl.NumberFormat("id-ID", {
         style: "currency",
         currency: "IDR",
         minimumFractionDigits: 0,
     }).format(number);
-};
-
-// Jalankan perhitungan awal
-// hitungBiaya();
 </script>

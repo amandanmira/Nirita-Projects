@@ -43,7 +43,7 @@
                             {{ item.title }}
                         </h3>
                         <p
-                            class="text-center text-gray-600 text-md leading-relaxed"
+                            class="text-center text-gray-600 text-[14px] leading-relaxed"
                         >
                             {{ item.desc }}
                         </p>
@@ -55,23 +55,25 @@
 </template>
 
 <script setup>
-import icon from "../Assets/icon.webp";
+import kenyamanan from "../Assets/icon-kenyamanan.png";
+import fleksibilitas from "../Assets/icon-fleksibilitas.png";
+import efisiensi from "../Assets/icon-efisiensi-biaya.png";
 
 const reasons = [
     {
-        title: "Jaringan Nasional",
-        image: icon,
-        desc: "Layanan tersebar di seluruh Indonesia, siap melayani Anda di mana pun.",
+        title: "Kenyamanan",
+        image: kenyamanan,
+        desc: "Pengguna tidak perlu memikirkan biaya perawatan dan perbaikan mobil.",
     },
     {
-        title: "Cover Asuransi All Risk",
-        image: icon,
-        desc: "Perlindungan maksimal untuk keamanan Anda di setiap perjalanan.",
+        title: "Fleksibilitas",
+        image: fleksibilitas,
+        desc: "Pengguna dapat menyewa mobil sesuai dengan kebutuhannya, baik untuk perjalanan sehari-hari, liburan, maupun keperluan lain nya.",
     },
     {
-        title: "Fleet Management",
-        image: icon,
-        desc: "Kendali armada yang canggih untuk efisiensi dan kenyamanan optimal.",
+        title: "Efisiensi biaya",
+        image: efisiensi,
+        desc: "Sewa mobil dapat menjadi pilihan yang lebih hemat dibandingkan dengan membeli mobil pribadi.",
     },
 ];
 </script>

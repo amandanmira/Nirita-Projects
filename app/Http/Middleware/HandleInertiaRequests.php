@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Illuminate\Http\Request;
 use Inertia\Middleware;
+use App\Models\MessageTemplate;
 
 class HandleInertiaRequests extends Middleware
 {
@@ -35,9 +36,35 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
-        return [
-            ...parent::share($request),
-            //
-        ];
+        return array_merge(parent::share($request), [
+
+            // Semua template tersedia sebagai array
+            'waTemplates' => function () {
+                return MessageTemplate::all()->map(function ($t) {
+                    return [
+                        'id' => $t->id_template,
+                        'title' => $t->jenis_template ?? null,
+                        'message' => $t->isi,
+                        'phone' => preg_replace('/[^0-9]/', '', $t->no_telp_tujuan),
+                        'link' => "https://wa.me/"
+                            . preg_replace('/[^0-9]/', '', $t->no_telp_tujuan)
+                            . "?text=" . urlencode($t->isi),
+                    ];
+                });
+            },
+
+        ]);
     }
+
+    // protected function waLinkGenerator()
+    // {
+    //     $template = MessageTemplate::first();
+
+    //     if (!$template) return null;
+
+    //     $pesan = urlencode($template->isi);
+    //     $nomor = preg_replace('/[^0-9]/', '', $template->no_telp_tujuan);
+
+    //     return "https://wa.me/{$nomor}?text={$pesan}";
+    // }
 }

@@ -1,7 +1,7 @@
 <template>
     <section class="px-18 py-10 bg-white text-gray-800">
         <!-- Judul utama -->
-        <div class="grid md:grid-cols-2 gap-14">
+        <div class="grid md:grid-cols-2 gap-16">
             <!-- Kolom Kiri - Paket Layanan -->
             <div>
                 <h2
@@ -59,19 +59,10 @@
                 </h2>
 
                 <h3 class="font-semibold mb-2">Fasilitas Yang Tersedia:</h3>
+
                 <ul class="list-decimal list-inside space-y-1 leading-relaxed">
-                    <li>Kapasitas 5 seat untuk penumpang</li>
-                    <li>Bagasi luas, head room & leg room sangat lega</li>
-                    <li>Captain seat, legrest, electric seat, meja</li>
-                    <li>Bantal, coolbox, dan sunroof</li>
-                    <li>Headunit Android/Apple CarPlay</li>
-                    <li>
-                        (Bluetooth, AUX, USB, CD, Gmaps, Netflix, Spotify,
-                        YouTube, dll)
-                    </li>
-                    <li>Terdapat TV / layar entertainment di baris ke-2</li>
-                    <li>
-                        Cup holder, USB port charger tersedia di baris 1 & 2
+                    <li v-for="(item, index) in fasilitasList" :key="index">
+                        {{ item }}
                     </li>
                 </ul>
             </div>
@@ -112,7 +103,29 @@
 </template>
 
 <script setup>
-// Tidak perlu script tambahan (static section)
+import { computed } from "vue";
+
+const props = defineProps({
+    cars: {
+        type: Object,
+        required: true,
+    },
+});
+
+// Parsing fasilitas TEXT → array
+const fasilitasList = computed(() => {
+    if (!props.cars.specification?.fasilitas) return [];
+
+    try {
+        // Jika string JSON → parse
+        return JSON.parse(props.cars.specification?.fasilitas);
+    } catch (e) {
+        // Jika formatnya dipisah koma → "AC,TV,Minum"
+        return props.cars.specification?.fasilitas
+            .split(",")
+            .map((item) => item.trim());
+    }
+});
 </script>
 
 <style scoped></style>

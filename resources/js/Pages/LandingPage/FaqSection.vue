@@ -12,8 +12,8 @@
             <!-- FAQ List -->
             <div class="border rounded-md text-left">
                 <div
-                    v-for="(faq, index) in faqs"
-                    :key="faq.id"
+                    v-for="(faq, index) in props.faqs"
+                    :key="faq.id_faq"
                     class="border-t first:border-t-0 overflow-hidden transition-all duration-300"
                 >
                     <!-- Pertanyaan -->
@@ -21,7 +21,7 @@
                         class="w-full flex justify-between items-center px-4 py-3 text-left text-gray-800 font-medium hover:bg-gray-50"
                         @click="toggleFAQ(index)"
                     >
-                        <span>{{ faq.question }}</span>
+                        <span>{{ faq.pertanyaan }}</span>
                         <span
                             class="text-xl font-bold transform transition-transform duration-300"
                             :class="{
@@ -46,9 +46,8 @@
                         >
                             <div
                                 class="px-4 py-4 text-gray-600 text-sm bg-gray-50"
-                            >
-                                {{ faq.answer }}
-                            </div>
+                                v-html="faq.jawaban"
+                            ></div>
                         </div>
                     </transition>
                 </div>
@@ -69,34 +68,12 @@
 <script setup>
 import { ref } from "vue";
 
-// Data dummy FAQ
-const faqs = [
-    {
-        id: 1,
-        question: "Bagaimana cara melakukan pemesanan?",
-        answer: "Anda dapat melakukan pemesanan melalui WhatsApp atau mengisi formulir kontak pada halaman kami.",
+const props = defineProps({
+    faqs: {
+        type: Array,
+        default: () => [],
     },
-    {
-        id: 2,
-        question: "Apakah bisa sewa mobil tanpa sopir?",
-        answer: "Untuk saat ini layanan kami hanya menyediakan sewa mobil dengan sopir profesional demi keamanan dan kenyamanan Anda.",
-    },
-    {
-        id: 3,
-        question: "Apakah harga sudah termasuk BBM?",
-        answer: "Harga yang kami tawarkan sudah termasuk jasa sopir namun belum termasuk BBM dan biaya tol.",
-    },
-    {
-        id: 4,
-        question: "Apakah bisa antar jemput di luar kota?",
-        answer: "Tentu bisa! Kami melayani antar-jemput dari dan ke berbagai kota di wilayah Jawa Tengah dan sekitarnya.",
-    },
-    {
-        id: 5,
-        question: "Apakah tersedia layanan 24 jam?",
-        answer: "Ya, layanan pelanggan kami siap membantu Anda selama 24 jam setiap hari.",
-    },
-];
+});
 
 // Menyimpan index FAQ yang sedang dibuka
 const activeIndex = ref(null);

@@ -1,22 +1,46 @@
 <script setup>
 import { ref } from "vue";
-import { useRouter } from "vue-router";
+import { Link, usePage } from "@inertiajs/vue3";
 import logo from "../Assets/Logo Nirita Rentals.png";
+import NavContactUsBtn from "./NavContactUsBtn.vue";
 
-const router = useRouter();
+const page = usePage();
+const waTemplates = page.props.waTemplates;
+
+// const page = usePage();
+// const waLink = page.props.waLink;
+// const template = page.props.template;
+
+// console.log("WA LINK:", page.props.waLink);
+
 const menuOpen = ref(false);
 
-// // Hanya tampilkan route yang tidak punya meta.hidden
-// const links = router
-//     .getRoutes()
-//     .filter((r) => r.name && !r.path.startsWith("/:") && !r.meta.hidden);
+const menus = [
+    {
+        label: "Home",
+        Link: "/",
+    },
+    {
+        label: "About",
+        Link: "/about",
+    },
+    { label: "Units", Link: "/units" },
+    { label: "Review", Link: "/review" },
+    { label: "Term and Condition", Link: "/tnc" },
+    {
+        label: "FAQ",
+        Link: "/faq",
+    },
+];
 
 const toggleMenu = () => (menuOpen.value = !menuOpen.value);
 </script>
 
 <template>
     <header class="sticky top-0 z-50 bg-white shadow-md md:px-16 lg:px-18">
-        <div class="max-w-7xl mx-auto flex justify-between items-center py-3">
+        <div
+            class="max-w-7xl mx-auto flex justify-between items-center py-3 px-4 md:px-0"
+        >
             <!-- Logo -->
             <div class="flex-shrink-0">
                 <img :src="logo" alt="Nirita Transport" class="h-10 w-auto" />
@@ -26,68 +50,33 @@ const toggleMenu = () => (menuOpen.value = !menuOpen.value);
             <nav
                 class="hidden md:flex flex-1 justify-center space-x-6 text-gray-800 font-medium"
             >
-                <!-- <RouterLink
-                        v-for="link in links"
-                        :key="link.path"
-                        :to="link.path"
-                        class="hover:text-blue-600 font-medium transition"
-                        active-class="text-blue-600 font-medium"
-                    >
-                        {{ link.name.charAt(0).toUpperCase() + link.name.slice(1) }}
-                    </RouterLink> -->
-                <RouterLink
-                    to="#"
-                    class="cursor-pointer hover:text-blue-600 font-light transition"
-                    active-class="text-blue-600 font-light"
-                    >Home</RouterLink
+                <Link
+                    v-for="link in menus"
+                    :key="link.Link"
+                    :href="link.Link"
+                    class="hover:text-blue-600 font-medium transition"
+                    active-class="text-blue-600 font-medium"
                 >
-                <RouterLink
-                    to="../Pages/About.vue"
-                    class="cursor-pointer hover:text-blue-600 font-light transition"
-                    active-class="text-blue-600 font-light"
-                    >About</RouterLink
-                >
-                <RouterLink
-                    to="#"
-                    class="cursor-pointer hover:text-blue-600 font-light transition"
-                    active-class="text-blue-600 font-light"
-                    >Units</RouterLink
-                >
-                <RouterLink
-                    to="#"
-                    class="cursor-pointer hover:text-blue-600 font-light transition"
-                    active-class="text-blue-600 font-light"
-                    >Review</RouterLink
-                >
-                <RouterLink
-                    to="#"
-                    class="cursor-pointer hover:text-blue-600 font-light transition"
-                    active-class="text-blue-600 font-light"
-                    >Term and Condition</RouterLink
-                >
-                <RouterLink
-                    to="#"
-                    class="cursor-pointer hover:text-blue-600 font-light transition"
-                    active-class="text-blue-600 font-light"
-                    >Review</RouterLink
-                >
-                <RouterLink
-                    to="#"
-                    class="cursor-pointer hover:text-blue-600 font-light transition"
-                    active-class="text-blue-600 font-light"
-                    >FAQ</RouterLink
-                >
+                    {{
+                        link.label.charAt(0).toUpperCase() + link.label.slice(1)
+                    }}
+                </Link>
             </nav>
 
             <!-- Contact Button (kanan desktop) -->
             <div class="hidden md:block">
-                <a
-                    href="https://wa.me/6287701681963"
+                <!-- <a
+                    :href="waLink"
                     target="_blank"
                     class="bg-green-600 hover:bg-green-700 text-white font-medium px-5 py-2 rounded-full transition inline-flex items-center gap-2"
                 >
                     Contact Us
-                </a>
+                </a> -->
+                <NavContactUsBtn
+                    :templates="waTemplates"
+                    :templateId="3"
+                    label="Contact Us"
+                />
             </div>
 
             <!-- Mobile Menu Button -->
@@ -126,13 +115,18 @@ const toggleMenu = () => (menuOpen.value = !menuOpen.value);
                     {{ link.name.charAt(0).toUpperCase() + link.name.slice(1) }}
                 </RouterLink>
 
-                <a
-                    href="https://wa.me/6281393604105"
+                <!-- <a
+                    :href="waLink"
                     target="_blank"
                     class="block bg-green-600 hover:bg-green-700 text-white text-center font-medium px-4 py-2 rounded-full mt-2"
                 >
                     Contact Us
-                </a>
+                </a> -->
+                <NavContactUsBtn
+                    :templates="waTemplates"
+                    :templateId="1"
+                    label="Contact Us"
+                />
             </div>
         </transition>
     </header>

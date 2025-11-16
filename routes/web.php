@@ -6,26 +6,18 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 
-Route::get('/', function () {
-    return Inertia::render('Home');
-});
+// Route::get('/', function () {
+//     return Inertia::render('Home');
+// });
 
-// Route::get('/login', function () {
-//     return inertia('Pages/Login');
-// })->name('login');
-
-// Route::get('/{any}', function () {
-//     return view('welcome'); // ganti 'app' sesuai nama blade kamu
-// })->where('any', '.*');
-/*Route::get('/', function () {
-    return view('welcome');
-});*/
-
-// Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/mobil', [HomeController::class, 'cars'])->name('cars');
-Route::get('/mobil/{id_mobil}', [HomeController::class, 'carDetail'])->name('car.detail');
+Route::get('/about', [HomeController::class, 'about'])->name('about');
 Route::get('/units', [HomeController::class, 'units'])->name('units');
-Route::get('/syarat-ketentuan', [HomeController::class, 'tnc'])->name('tnc');
+Route::get('/units/{id_mobil}', [HomeController::class, 'unitsDetail'])->name('units.detail');
+Route::get('/review', [HomeController::class, 'review'])->name('review');
+Route::get('/tnc', [HomeController::class, 'tnc'])->name('tnc');
+Route::get('/faq', [HomeController::class, 'faq'])->name('faq');
 Route::get('/invoice-test', function () {
     return view('admin.invoice.invoice');
 });
@@ -52,5 +44,12 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'verified'])->group(
     Route::resource('invoice', App\Http\Controllers\Admin\BillController::class);
     Route::get('invoice/cetak/{id_nota}', [BillController::class, 'fillPdf'])->name('invoice.print');
 });
+
+// Route::get('/{any}', function () {
+//     return view('welcome'); // ganti 'app' sesuai nama blade kamu
+// })->where('any', '.*');
+/*Route::get('/', function () {
+    return view('welcome');
+});*/
 
 require __DIR__ . '/auth.php';

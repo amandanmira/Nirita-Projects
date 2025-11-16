@@ -22,13 +22,13 @@
                 >
                     <!-- Setiap Slide: 1 item (mobile), 3 item (tablet), 5 item (desktop) -->
                     <div
-                        v-for="(chunk, index) in chunkedReviews"
+                        v-for="(chunk, index) in chunkedTestimonials"
                         :key="index"
                         class="flex flex-none w-full min-w-full justify-center gap-2 md:gap-3 lg:gap-4"
                     >
                         <div
-                            v-for="review in chunk"
-                            :key="review.id"
+                            v-for="testi in chunk"
+                            :key="testi.id_testimoni"
                             class="bg-gray-200 rounded-xl shadow-md flex-shrink-0"
                             :class="{
                                 'w-[90%] h-64': windowWidth < 640,
@@ -38,8 +38,8 @@
                             }"
                         >
                             <img
-                                :src="getImage(review.path)"
-                                :alt="review.desk"
+                                :src="`/storage/${testi.url_gambar}`"
+                                :alt="`Foto dari ${testi.desk_testimoni}`"
                                 class="w-full h-full object-cover rounded-lg"
                             />
                         </div>
@@ -50,7 +50,7 @@
             <!-- Navigasi Bullets -->
             <div class="flex justify-center mt-6 space-x-3">
                 <button
-                    v-for="(chunk, index) in chunkedReviews"
+                    v-for="(chunk, index) in chunkedTestimonials"
                     :key="'dot-' + index"
                     @click="currentIndex = index"
                     class="w-3 h-3 rounded-full transition"
@@ -65,47 +65,48 @@
 
 <script setup>
 import { ref, computed, onMounted, onUnmounted } from "vue";
-import reviews from "../data/testimoni.js"; // ← file data dummy kamu
 
-// Index aktif untuk slider
+const props = defineProps({
+    testimonials: Array,
+});
+
+// slider index
 const currentIndex = ref(0);
 
-// Reactive window width untuk responsive
+// lebar layar
 const windowWidth = ref(window.innerWidth);
 
-// Update window width on resize
 const updateWidth = () => {
     windowWidth.value = window.innerWidth;
-    currentIndex.value = 0; // Reset ke slide pertama saat resize
+    currentIndex.value = 0;
 };
 
+onMounted(() => window.addEventListener("resize", updateWidth));
 onMounted(() => {
-    window.addEventListener("resize", updateWidth);
+    console.log("TESTI:", props.testimonials);
 });
+onUnmounted(() => window.removeEventListener("resize", updateWidth));
 
-onUnmounted(() => {
-    window.removeEventListener("resize", updateWidth);
-});
-
-// Menentukan jumlah item per slide berdasarkan ukuran layar
+// jumlah item per slide
 const itemsPerSlide = computed(() => {
-    if (windowWidth.value < 640) return 1; // Mobile: 1 item
-    if (windowWidth.value < 1024) return 3; // Tablet: 3 items
-    return 5; // Desktop: 5 items
+    if (windowWidth.value < 640) return 1;
+    if (windowWidth.value < 1024) return 3;
+    return 5;
 });
 
-// Fungsi untuk membagi array menjadi kelompok (chunk) sesuai ukuran layar
-const chunkedReviews = computed(() => {
+// membuat chunk array
+const chunkedTestimonials = computed(() => {
+    if (!props.testimonials || !Array.isArray(props.testimonials)) {
+        return [];
+    }
+
     const chunkSize = itemsPerSlide.value;
     const chunks = [];
-    for (let i = 0; i < reviews.length; i += chunkSize) {
-        chunks.push(reviews.slice(i, i + chunkSize));
+
+    for (let i = 0; i < props.testimonials.length; i += chunkSize) {
+        chunks.push(props.testimonials.slice(i, i + chunkSize));
     }
+
     return chunks;
 });
-
-// Helper function untuk resolve path gambar (agar tidak error saat build)
-const getImage = (path) => {
-    return new URL(path, import.meta.url).href;
-};
 </script>

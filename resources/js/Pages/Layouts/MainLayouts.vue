@@ -17,3 +17,7 @@
 import Navbar from "../Components/Navbar.vue";
 import Footer from "../Components/Footer.vue";
 </script>
+
+<style scoped>
+@import "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css";
+</style>

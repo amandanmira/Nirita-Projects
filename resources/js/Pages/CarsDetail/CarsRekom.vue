@@ -1,61 +1,66 @@
 <template>
     <section class="bg-white py-16 px-6 md:px-12 lg:px-20">
-        <div class="max-w-7xl mx-auto text-center">
-            <!-- Wrapper -->
-            <div class="bg-[#0E1A47] rounded-2xl shadow-lg p-8 md:p-10">
-                <!-- Kontainer Scroll -->
-                <div
-                    class="flex gap-6 overflow-x-auto snap-x snap-mandatory scroll-smooth scrollbar-hide"
-                >
+        <div class="max-w-7xl mx-auto">
+            <!-- ===== REKOMENDASI ===== -->
+            <div class="text-center">
+                <h2 class="text-2xl font-bold text-blue-900 mb-6">
+                    Rekomendasi Mobil Lain
+                </h2>
+
+                <div class="bg-[#0E1A47] rounded-2xl shadow-lg p-8 md:p-10">
                     <div
-                        v-for="unit in displayedUnits"
-                        :key="unit.id"
-                        class="flex-shrink-0 w-[100%] sm:w-[48%] lg:w-[23%] bg-white shadow-md rounded-xl overflow-hidden hover:shadow-lg transition snap-start"
+                        class="flex gap-6 overflow-x-auto snap-x snap-mandatory scroll-smooth scrollbar-hide"
                     >
-                        <div class="p-4">
-                            <img
-                                :src="unit.image"
-                                :alt="unit.name"
-                                class="w-full h-44 object-cover"
-                            />
-                        </div>
-                        <div class="p-4">
-                            <h3 class="font-semibold text-gray-900">
-                                {{ unit.name }}
-                            </h3>
-                            <p class="text-sm text-gray-600">
-                                {{ unit.transmission }} •
-                                {{ unit.capacity }} Kursi • {{ unit.fuel }}
-                            </p>
-                            <p class="text-blue-700 font-semibold mt-1">
-                                Rp
-                                {{
-                                    unit.price
-                                        .find((p) => p.label === "Area Solo")
-                                        .value.toLocaleString("id-ID")
-                                }}
-                                / Hari (Area Solo)
-                            </p>
+                        <div
+                            v-for="unit in rekomUnits"
+                            :key="unit.id_mobil"
+                            class="flex-shrink-0 w-[100%] sm:w-[48%] lg:w-[23%] bg-white shadow-md rounded-xl overflow-hidden hover:shadow-lg transition snap-start"
+                        >
+                            <div class="p-4 w-full h-35 overflow-hidden">
+                                <img
+                                    :src="unit.first_photo"
+                                    :alt="unit.nama_mobil"
+                                    class="object-cover rounded-md"
+                                />
+                            </div>
 
-                            <div class="mt-2 flex justify-between">
-                                <!-- Tombol Hitam -->
-                                <router-link
-                                    :to="{
-                                        name: 'car-detail',
-                                        params: { id: unit.id },
-                                    }"
-                                    class="cursor-pointer flex items-center justify-center gap-2 bg-black text-white text-md rounded-l-md px-5 py-3 w-full hover:bg-blue-600 transition"
-                                >
-                                    <i class="fa-solid fa-arrow-right"></i>
-                                    Lihat Detail
-                                </router-link>
+                            <div class="p-4">
+                                <h3 class="font-semibold text-gray-900">
+                                    {{ unit.nama_mobil }}
+                                </h3>
+                                <p class="text-sm text-gray-600">
+                                    {{ unit.specification?.jenis_transmisi }} •
+                                    {{ unit.specification?.kapasitas }} Kursi •
+                                    {{ unit.specification?.kategori }}
+                                </p>
 
-                                <!-- Tombol Biru -->
-                                <button
-                                    class="cursor-pointer flex items-center justify-center bg-blue-600 text-white rounded-r-md px-3 py-2 hover:bg-black transition"
-                                >
-                                    <i class="fa-solid fa-phone"></i>
-                                </button>
+                                <p class="text-blue-700 font-semibold mt-1">
+                                    Rp
+                                    {{
+                                        formatNumber(
+                                            unit.rental_price?.harga_solo
+                                        )
+                                    }}
+                                    / Hari
+                                </p>
+
+                                <div class="mt-2 flex justify-between">
+                                    <a
+                                        :href="`/units/${unit.id_mobil}`"
+                                        class="flex items-center justify-center gap-2 bg-black text-white text-md rounded-l-md px-5 py-3 w-full hover:bg-blue-600 transition"
+                                    >
+                                        <i class="fa-solid fa-arrow-right"></i>
+                                        Lihat Detail
+                                    </a>
+
+                                    <a
+                                        :href="`https://wa.me/6281393604105?text=Halo,%20saya%20ingin%20menyewa%20${unit.nama_mobil}`"
+                                        target="_blank"
+                                        class="flex items-center justify-center bg-blue-600 text-white rounded-r-md px-4 py-4 hover:bg-black transition"
+                                    >
+                                        <i class="fa-solid fa-phone"></i>
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -67,28 +72,54 @@
 
 <script setup>
 import { computed } from "vue";
-import allUnits from "@/data/cars2.js";
+import { usePage } from "@inertiajs/vue3";
 
-// Shuffle helper (Fisher-Yates)
-const shuffle = (array) => {
-    const a = array.slice();
-    for (let i = a.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [a[i], a[j]] = [a[j], a[i]];
+const page = usePage();
+
+// === Data dari Controller ===
+const cars = page.props.cars;
+const carsRekom = page.props.carsRekom;
+
+// ===== FOTO PERTAMA UNTUK DETAIL =====
+const firstPhoto = computed(() => {
+    if (!cars.url_foto_mobil) return "/default.jpg";
+
+    try {
+        const arr = JSON.parse(cars.url_foto_mobil); // Pastikan decode JSON
+        return arr.length ? `/storage/${arr[0]}` : "/default.jpg";
+    } catch (e) {
+        return "/default.jpg";
     }
-    return a;
-};
-
-// Display only 4 random units (if less than 4, show all)
-const displayedUnits = computed(() => {
-    if (!Array.isArray(allUnits)) return [];
-    const pool = shuffle(allUnits);
-    return pool.slice(0, Math.min(4, pool.length));
 });
+
+// ===== FORMAT DATA REKOMENDASI =====
+const rekomUnits = computed(() => {
+    return carsRekom
+        .filter((unit) => unit.id_mobil !== cars.id_mobil) // Jangan tampilkan mobil yang sama
+        .slice(0, 4)
+        .map((unit) => {
+            let first = "/default.jpg";
+            try {
+                const arr = JSON.parse(unit.url_foto_mobil);
+                if (arr.length) {
+                    first = `/storage/${arr[0]}`;
+                }
+            } catch (e) {}
+
+            return {
+                ...unit,
+                first_photo: first,
+            };
+        });
+});
+
+// ===== FORMAT RUPIAH =====
+const formatNumber = (num) => {
+    return Number(num).toLocaleString("id-ID");
+};
 </script>
 
 <style>
-/* Hilangkan scrollbar di browser */
 .scrollbar-hide::-webkit-scrollbar {
     display: none;
 }
