@@ -40,7 +40,7 @@ class DatabaseSeeder extends Seeder
         $carIds = Car::orderBy('id_mobil')->pluck('id_mobil')->take(10)->toArray();
 
         foreach ($carIds as $id) {
-            \App\Models\BillDetail::factory()->create(['id_mobil' => $id, 'id_nota' => $id]);
+            \App\Models\BillDetail::factory(rand(1, 3))->create(['id_nota' => $id]);
             \App\Models\RentalPrice::factory()->create(['id_mobil' => $id]);
             \App\Models\Specification::factory()->create(['id_mobil' => $id]);
         }

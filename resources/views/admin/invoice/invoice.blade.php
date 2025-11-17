@@ -170,7 +170,7 @@
         <p class="driver"><strong>Driver:</strong><br>{{ $driver ?? '' }}</p>
 
         <div class="footer">
-            <p>Solo, {{ $tanggal ?? '' }}<br>Hormat Kami,</p>
+            <p>{{ $lokasi ?? 'Solo'}}, {{ $tanggal ?? '' }}<br>Hormat Kami,</p>
             <br><br><br><br><br>
             <div>
                 {{ $penanggungJawab ?? 'Hari Suryono' }}<br>

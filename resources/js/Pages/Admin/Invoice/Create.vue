@@ -106,11 +106,26 @@
                                     <div>
                                         <label
                                             class="block text-sm font-medium text-gray-700"
-                                            >Tanggal Sewa</label
+                                            >Tanggal Mulai Sewa</label
                                         >
                                         <input
                                             type="date"
                                             v-model="item.tanggal_sewa"
+                                            @change="updatePrice(i)"
+                                            class="mt-1 block w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                                            required
+                                        />
+                                    </div>
+
+                                    <div>
+                                        <label
+                                            class="block text-sm font-medium text-gray-700"
+                                            >Tanggal Akhir Sewa</label
+                                        >
+                                        <input
+                                            type="date"
+                                            v-model="item.tanggal_akhir_sewa"
+                                            @change="updatePrice(i)"
                                             class="mt-1 block w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
                                             required
                                         />
@@ -222,6 +237,30 @@
                                 required
                             />
                         </div>
+
+                        <div>
+                            <label
+                                class="block text-sm font-medium text-gray-700"
+                                >Alamat Invoice</label
+                            >
+                            <input
+                                type="text"
+                                v-model="form.lokasi_invoice"
+                                class="mt-1 block w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                            />
+                        </div>
+
+                        <div>
+                            <label
+                                class="block text-sm font-medium text-gray-700"
+                                >Tanggal Invoice</label
+                            >
+                            <input
+                                type="date"
+                                v-model="form.tanggal_invoice"
+                                class="mt-1 block w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                            />
+                        </div>
                     </div>
 
                     <!-- BUTTON -->
@@ -276,12 +315,15 @@ const form = useForm({
     nama_penyewa: "",
     no_hp_penyewa: "",
     driver: "",
+    lokasi_invoice: "",
+    tanggal_invoice: "",
     total_pembayaran: 0,
     detail: [
         {
             id_mobil: "",
             lokasi_sewa: "",
             tanggal_sewa: "",
+            tanggal_akhir_sewa: "",
             deskripsi_kegiatan: "",
             harga_terpilih: 0,
         },
@@ -294,6 +336,7 @@ const addRow = () => {
         id_mobil: "",
         lokasi_sewa: "",
         tanggal_sewa: "",
+        tanggal_akhir_sewa: "",
         deskripsi_kegiatan: "",
         harga_terpilih: 0,
     });
@@ -304,12 +347,24 @@ const removeRow = (index) => {
     form.detail.splice(index, 1);
 };
 
+const getDays = (tglSewa, tglAkhirSewa) => {
+    if (!tglSewa || !tglAkhirSewa) return 0;
+
+    const s = new Date(tglSewa);
+    const e = new Date(tglAkhirSewa);
+
+    const diff = e - s;
+    return Math.ceil(diff / (1000 * 60 * 60 * 24)) + 1;
+};
+
 // ---------------------------
 // Hitung harga berdasarkan pilihan
 // ---------------------------
-const getPrice = (carId, location) => {
+const getPrice = (carId, location, tglSewa, tglAkhirSewa) => {
     const car = props.cars.find((c) => c.id_mobil == carId);
-    if (!car || !location) return 0;
+    const waktuSewa = getDays(tglSewa, tglAkhirSewa);
+
+    if (!car || !location || waktuSewa < 0) return 0;
 
     const priceMap = {
         solo: car.rental_price.harga_solo,
@@ -317,13 +372,18 @@ const getPrice = (carId, location) => {
         luar_kota: car.rental_price.harga_luar_kota,
     };
 
-    return priceMap[location] ?? 0;
+    return (priceMap[location] ?? 0) * waktuSewa;
 };
 
 // Update harga setiap kali pilihan berubah
 const updatePrice = (index) => {
     const row = form.detail[index];
-    row.harga_terpilih = getPrice(row.id_mobil, row.lokasi_sewa);
+    row.harga_terpilih = getPrice(
+        row.id_mobil,
+        row.lokasi_sewa,
+        row.tanggal_sewa,
+        row.tanggal_akhir_sewa
+    );
 };
 
 // ---------------------------

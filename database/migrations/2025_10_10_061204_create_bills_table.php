@@ -15,6 +15,8 @@ return new class extends Migration {
             $table->string('nama_penyewa', 50);
             $table->string('no_hp_penyewa', 40);
             $table->string('driver', 50)->nullable();
+            $table->string('lokasi_invoice', 50)->nullable();
+            $table->date('tanggal_invoice')->nullable();
             $table->decimal('total_pembayaran', 12, 2);
             $table->timestamps();
         });

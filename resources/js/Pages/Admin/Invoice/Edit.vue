@@ -43,6 +43,36 @@
                     </p>
                 </div>
 
+                <div>
+                    <label class="font-semibold">Alamat Invoice</label>
+                    <input
+                        type="text"
+                        v-model="form.lokasi_invoice"
+                        class="w-full border rounded p-2"
+                    />
+                    <p
+                        class="text-red-500 text-sm"
+                        v-if="errors.lokasi_invoice"
+                    >
+                        {{ errors.lokasi_invoice }}
+                    </p>
+                </div>
+
+                <div>
+                    <label class="font-semibold">Tanggal Invoice</label>
+                    <input
+                        type="date"
+                        v-model="form.tanggal_invoice"
+                        class="w-full border rounded p-2"
+                    />
+                    <p
+                        class="text-red-500 text-sm"
+                        v-if="errors.tanggal_invoice"
+                    >
+                        {{ errors.tanggal_invoice }}
+                    </p>
+                </div>
+
                 <!-- Total Pembayaran -->
                 <div>
                     <label class="font-semibold">Total Pembayaran</label>
@@ -128,10 +158,13 @@
 
                         <!-- Tanggal Sewa -->
                         <div class="mb-3">
-                            <label class="font-semibold">Tanggal Sewa</label>
+                            <label class="font-semibold"
+                                >Tanggal Mulai Sewa</label
+                            >
                             <input
                                 type="date"
                                 v-model="d.tanggal_sewa"
+                                @change="updatePrice(i)"
                                 class="w-full border rounded p-2"
                             />
                             <p
@@ -139,6 +172,24 @@
                                 v-if="errors[`detail.${i}.tanggal_sewa`]"
                             >
                                 {{ errors[`detail.${i}.tanggal_sewa`] }}
+                            </p>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="font-semibold"
+                                >Tanggal Akhir Sewa</label
+                            >
+                            <input
+                                type="date"
+                                v-model="d.tanggal_akhir_sewa"
+                                @change="updatePrice(i)"
+                                class="w-full border rounded p-2"
+                            />
+                            <p
+                                class="text-red-500 text-sm"
+                                v-if="errors[`detail.${i}.tanggal_sewa`]"
+                            >
+                                {{ errors[`detail.${i}.tanggal_akhir_sewa`] }}
                             </p>
                         </div>
 
@@ -201,10 +252,22 @@ const props = defineProps({
     errors: Object,
 });
 
+const getDays = (tglSewa, tglAkhirSewa) => {
+    if (!tglSewa || !tglAkhirSewa) return 0;
+
+    const s = new Date(tglSewa);
+    const e = new Date(tglAkhirSewa);
+
+    const diff = e - s;
+    return Math.ceil(diff / (1000 * 60 * 60 * 24)) + 1;
+};
+
 // helper: get price from cars list
-const getPrice = (carId, location) => {
+const getPrice = (carId, location, tglSewa, tglAkhirSewa) => {
     const car = props.cars.find((c) => c.id_mobil == carId);
-    if (!car || !location) return 0;
+    const waktuSewa = getDays(tglSewa, tglAkhirSewa);
+
+    if (!car || !location || waktuSewa < 0) return 0;
 
     const rp = car.rental_price || car.rentalPrice || {};
     const priceMap = {
@@ -213,7 +276,7 @@ const getPrice = (carId, location) => {
         luar_kota: rp.harga_luar_kota ?? 0,
     };
 
-    return priceMap[location] ?? 0;
+    return (priceMap[location] ?? 0) * waktuSewa;
 };
 
 // Mapping awal data (include harga_terpilih)
@@ -221,14 +284,22 @@ const form = useForm({
     nama_penyewa: props.bill.nama_penyewa,
     no_hp_penyewa: props.bill.no_hp_penyewa,
     driver: props.bill.driver,
+    lokasi_invoice: props.bill.lokasi_invoice,
+    tanggal_invoice: props.bill.tanggal_invoice,
     total_pembayaran: props.bill.total_pembayaran,
     detail: props.bill.bill_details.map((d) => ({
         id: d.id,
         id_mobil: d.id_mobil,
         lokasi_sewa: d.lokasi_sewa,
         tanggal_sewa: d.tanggal_sewa,
+        tanggal_akhir_sewa: d.tanggal_akhir_sewa,
         deskripsi_kegiatan: d.deskripsi_kegiatan,
-        harga_terpilih: getPrice(d.id_mobil, d.lokasi_sewa),
+        harga_terpilih: getPrice(
+            d.id_mobil,
+            d.lokasi_sewa,
+            d.tanggal_sewa,
+            d.tanggal_akhir_sewa
+        ),
     })),
 });
 
@@ -239,6 +310,7 @@ const addDetail = () => {
         id_mobil: "",
         lokasi_sewa: "",
         tanggal_sewa: "",
+        tanggal_akhir_sewa: "",
         deskripsi_kegiatan: "",
         harga_terpilih: 0,
     });
@@ -252,7 +324,14 @@ const removeDetail = (index) => {
 // Update harga setiap kali pilihan berubah
 const updatePrice = (index) => {
     const row = form.detail[index];
-    row.harga_terpilih = getPrice(row.id_mobil, row.lokasi_sewa);
+    row.harga_terpilih = getPrice(
+        row.id_mobil,
+        row.lokasi_sewa,
+        row.tanggal_sewa,
+        row.tanggal_akhir_sewa
+    );
+
+    form.total_pembayaran = totalHarga;
 };
 
 // Hitung total semua harga

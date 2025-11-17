@@ -19,9 +19,10 @@ class BillDetailFactory extends Factory
     public function definition(): array
     {
         return [
-            'id_mobil' => Car::factory(),
+            'id_mobil' => $this->faker->numberBetween(1, 10),
             'id_nota' => Bill::factory(),
-            'tanggal_sewa' => $this->faker->dateTimeBetween('-1 month', 'now'),
+            'tanggal_sewa' => $this->faker->dateTimeBetween('-15 days', 'now'),
+            'tanggal_akhir_sewa' => $this->faker->dateTimeBetween('+1 days', '+15 days'),
             'lokasi_sewa' => $this->faker->randomElement(['solo', 'solo_raya', 'luar_kota']),
             'deskripsi_kegiatan' => $this->faker->sentence(10),
             'created_at' => now(),

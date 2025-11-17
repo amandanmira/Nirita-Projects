@@ -14,6 +14,7 @@ class BillDetail extends Model
         'id_mobil',
         'tanggal_sewa',
         'lokasi_sewa',
+        'tanggal_akhir_sewa',
         'deskripsi_kegiatan'
     ];
 

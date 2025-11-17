@@ -14,7 +14,9 @@ class Bill extends Model
         'nama_penyewa',
         'no_hp_penyewa',
         'driver',
-        'total_pembayaran'
+        'total_pembayaran',
+        'lokasi_invoice',
+        'tanggal_invoice',
     ];
 
     public function billDetails()

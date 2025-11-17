@@ -64,8 +64,22 @@
                                             }}
                                         </li>
                                         <li>
-                                            <strong>Tanggal Sewa :</strong>
+                                            <strong>Tanggal Awal Sewa :</strong>
                                             {{ d.tanggal_sewa }}
+                                        </li>
+                                        <li>
+                                            <strong
+                                                >Tanggal Akhir Sewa :</strong
+                                            >
+                                            {{ d.tanggal_akhir_sewa }} (Sewa
+                                            selama
+                                            {{
+                                                getDays(
+                                                    d.tanggal_sewa,
+                                                    d.tanggal_akhir_sewa
+                                                )
+                                            }}
+                                            hari)
                                         </li>
                                         <li>
                                             <strong>Deskripsi :</strong>
@@ -112,6 +126,18 @@
                                 }}
                             </td>
                         </tr>
+
+                        <tr>
+                            <td class="font-semibold">Alamat Invoice</td>
+                            <td>:</td>
+                            <td>{{ bill.lokasi_invoice ?? "-" }}</td>
+                        </tr>
+
+                        <tr>
+                            <td class="font-semibold">Tanggal Invoice</td>
+                            <td>:</td>
+                            <td>{{ bill.tanggal_invoice ?? "-" }}</td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
@@ -131,6 +157,16 @@ const props = defineProps({
 //     window.open(`/invoice/${props.bill.id_nota}/pdf`, "_blank");
 // };
 
+const getDays = (tglSewa, tglAkhirSewa) => {
+    if (!tglSewa || !tglAkhirSewa) return 0;
+
+    const s = new Date(tglSewa);
+    const e = new Date(tglAkhirSewa);
+
+    const diff = e - s;
+    return Math.ceil(diff / (1000 * 60 * 60 * 24)) + 1;
+};
+
 // Map lokasi (sama seperti Blade)
 const mapLokasi = (lokasi) => {
     return {
@@ -144,11 +180,13 @@ const mapLokasi = (lokasi) => {
 const hargaSewa = (d) => {
     const rp = d.cars.rental_price;
 
-    return {
-        solo: rp.harga_solo,
-        solo_raya: rp.harga_solo_raya,
-        luar_kota: rp.harga_luar_kota,
-    }[d.lokasi_sewa];
+    return (
+        {
+            solo: rp.harga_solo,
+            solo_raya: rp.harga_solo_raya,
+            luar_kota: rp.harga_luar_kota,
+        }[d.lokasi_sewa] * getDays(d.tanggal_sewa, d.tanggal_akhir_sewa)
+    );
 };
 </script>
 

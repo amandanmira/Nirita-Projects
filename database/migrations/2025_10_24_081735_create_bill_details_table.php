@@ -15,6 +15,7 @@ return new class extends Migration {
             $table->foreignId('id_mobil')->constrained('cars', 'id_mobil')->onDelete('cascade');
             $table->foreignId('id_nota')->constrained('bills', 'id_nota')->onDelete('cascade');
             $table->date('tanggal_sewa');
+            $table->date('tanggal_akhir_sewa')->nullable();
             $table->enum('lokasi_sewa', ['solo', 'solo_raya', 'luar_kota']);
             $table->text('deskripsi_kegiatan')->nullable();
             $table->timestamps();

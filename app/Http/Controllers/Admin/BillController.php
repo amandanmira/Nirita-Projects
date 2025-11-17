@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
+use Carbon\Carbon;
 
 class BillController extends Controller
 {
@@ -43,11 +44,14 @@ class BillController extends Controller
         $request->validate([
             'nama_penyewa' => 'required|string|max:50',
             'no_hp_penyewa' => 'required|string|max:40',
-            'driver' => 'nullable|string|max:50',
+            'driver' => 'required|string|max:50',
             'total_pembayaran' => 'required|numeric',
+            'lokasi_invoice' => 'nullable|string',
+            'tanggal_invoice' => 'nullable|date',
             'detail.*.id_mobil' => 'required|exists:cars,id_mobil',
             'detail.*.lokasi_sewa' => 'required',
             'detail.*.tanggal_sewa' => 'required|date',
+            'detail.*.tanggal_akhir_sewa' => 'required|date',
         ]);
 
         $total = 0;
@@ -57,7 +61,9 @@ class BillController extends Controller
                 'nama_penyewa',
                 'no_hp_penyewa',
                 'driver',
-                'total_pembayaran'
+                'total_pembayaran',
+                'lokasi_invoice',
+                'tanggal_invoice',
             ]));
 
             foreach ($request->detail as $d) {
@@ -65,6 +71,7 @@ class BillController extends Controller
                     'id_nota' => $bill->id_nota,
                     'id_mobil' => $d['id_mobil'],
                     'tanggal_sewa' => $d['tanggal_sewa'],
+                    'tanggal_akhir_sewa' => $d['tanggal_akhir_sewa'],
                     'lokasi_sewa' => $d['lokasi_sewa'],
                     'deskripsi_kegiatan' => $d['deskripsi_kegiatan'] ?? null,
                 ]);
@@ -110,11 +117,14 @@ class BillController extends Controller
         $request->validate([
             'nama_penyewa' => 'required|string|max:50',
             'no_hp_penyewa' => 'required|string|max:40',
-            'driver' => 'nullable|string|max:50',
+            'driver' => 'required|string|max:50',
             'total_pembayaran' => 'required|numeric',
+            'lokasi_invoice' => 'nullable|string',
+            'tanggal_invoice' => 'nullable|date',
             'detail.*.id_mobil' => 'required|exists:cars,id_mobil',
             'detail.*.lokasi_sewa' => 'required',
             'detail.*.tanggal_sewa' => 'required|date',
+            'detail.*.tanggal_akhir_sewa' => 'required|date',
         ]);
 
         $oldDetailIds = $bill->billDetails()->pluck('id')->toArray();
@@ -134,6 +144,7 @@ class BillController extends Controller
                         'id_mobil' => $d['id_mobil'],
                         'lokasi_sewa' => $d['lokasi_sewa'],
                         'tanggal_sewa' => $d['tanggal_sewa'],
+                        'tanggal_akhir_sewa' => $d['tanggal_akhir_sewa'],
                         'deskripsi_kegiatan' => $d['deskripsi_kegiatan'],
                     ]);
                 }
@@ -143,6 +154,7 @@ class BillController extends Controller
                     'id_mobil' => $d['id_mobil'],
                     'lokasi_sewa' => $d['lokasi_sewa'],
                     'tanggal_sewa' => $d['tanggal_sewa'],
+                    'tanggal_akhir_sewa' => $d['tanggal_akhir_sewa'],
                     'deskripsi_kegiatan' => $d['deskripsi_kegiatan'],
                 ]);
             }
@@ -153,6 +165,8 @@ class BillController extends Controller
             'no_hp_penyewa',
             'driver',
             'total_pembayaran',
+            'lokasi_invoice',
+            'tanggal_invoice',
         ]));
 
         return redirect()->route('admin.invoice.index')->with('success', 'Invoice berhasil diperbarui.');
@@ -184,7 +198,7 @@ class BillController extends Controller
                 'luar_kota' => $detail->cars->rentalPrice->harga_luar_kota,
             };
 
-            $total += $harga;
+            $total += $harga * self::hitungSelisihHari($detail->tanggal_sewa, $detail->tanggal_akhir_sewa);
         }
 
         // Render ke Blade
@@ -195,7 +209,7 @@ class BillController extends Controller
                     'solo' => $detail->cars->rentalPrice->harga_solo,
                     'solo_raya' => $detail->cars->rentalPrice->harga_solo_raya,
                     'luar_kota' => $detail->cars->rentalPrice->harga_luar_kota,
-                };
+                } * self::hitungSelisihHari($detail->tanggal_sewa, $detail->tanggal_akhir_sewa);
 
                 return [
                     'nama' => $detail->cars->nama_mobil,
@@ -207,7 +221,8 @@ class BillController extends Controller
             'total' => $total,
             'terbilang' => self::terbilang($total) . ' RUPIAH',
             'driver' => $bill->driver,
-            'tanggal' => self::formatTanggal(now()),
+            'lokasi' => $bill->lokasi_invoice,
+            'tanggal' => self::formatTanggal($bill->tanggal_invoice ?? now()),
             'penanggungJawab' => 'Hari Suryono',
             'perusahaan' => 'Nirta Transport'
         ]);
@@ -275,5 +290,15 @@ class BillController extends Controller
         $hasil = $tgl . ' ' . $bulan[$bln] . ' ' . $thn;
 
         return $hasil;
+    }
+
+    private function hitungSelisihHari($tglSewa, $tglAkhirSewa)
+    {
+        $start = Carbon::parse($tglSewa);
+        $end = Carbon::parse($tglAkhirSewa);
+
+        $days = $start->diffInDays($end);
+
+        return $days + 1;
     }
 }
