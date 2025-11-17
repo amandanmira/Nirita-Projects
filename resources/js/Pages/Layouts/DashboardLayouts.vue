@@ -133,7 +133,7 @@ const menus = [
         icon: "fas fa-comment-dots",
         Link: "/admin/testimoni",
     },
-    { label: "Invoice", icon: "fas fa-file-invoice" },
+    { label: "Invoice", icon: "fas fa-file-invoice", Link: "/admin/invoice" },
     { label: "FAQ", icon: "fas fa-question-circle", Link: "/admin/faq" },
     { label: "S&K", icon: "fas fa-file-contract", Link: "/admin/snk" },
     {

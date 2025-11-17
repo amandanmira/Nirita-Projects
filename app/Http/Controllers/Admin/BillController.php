@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\DB;
+use Inertia\Inertia;
 
 class BillController extends Controller
 {
@@ -18,7 +19,9 @@ class BillController extends Controller
     public function index()
     {
         $bills = Bill::with('billDetails.cars')->get();
-        return view('admin.invoice.index', compact('bills'));
+        return Inertia::render('Admin/Invoice/Index', [
+            'bills' => $bills
+        ]);
     }
 
     /**
@@ -26,8 +29,10 @@ class BillController extends Controller
      */
     public function create()
     {
-        $cars = Car::all();
-        return view('admin.invoice.create', compact('cars'));
+        $cars = Car::with('rentalPrice')->get();
+        return Inertia::render('Admin/Invoice/Create', [
+            'cars' => $cars
+        ]);
     }
 
     /**
@@ -76,7 +81,9 @@ class BillController extends Controller
     {
         $bill = Bill::with('billDetails.cars.rentalPrice')->findOrFail($id);
 
-        return view('admin.invoice.show', compact('bill'));
+        return Inertia::render('Admin/Invoice/Show', [
+            'bill' => $bill,
+        ]);
     }
 
     /**
@@ -85,9 +92,12 @@ class BillController extends Controller
     public function edit(int $id)
     {
         $bill = Bill::with('billDetails.cars')->findOrFail($id);
-        $cars = Car::all();
+        $cars = Car::with('rentalPrice')->get();
 
-        return view('admin.invoice.edit', compact('bill', 'cars'));
+        return Inertia::render('Admin/Invoice/Edit', [
+            'bill' => $bill,
+            'cars' => $cars,
+        ]);
     }
 
     /**

@@ -42,7 +42,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'verified'])->group(
     Route::resource('testimoni', App\Http\Controllers\Admin\TestimonialController::class);
     Route::resource('mobil', App\Http\Controllers\Admin\CarController::class);
     Route::resource('invoice', App\Http\Controllers\Admin\BillController::class);
-    Route::get('invoice/cetak/{id_nota}', [BillController::class, 'fillPdf'])->name('invoice.print');
+    Route::get('/invoice/{id_nota}/pdf', [BillController::class, 'fillPdf'])->name('invoice.pdf');
 });
 
 // Route::get('/{any}', function () {
