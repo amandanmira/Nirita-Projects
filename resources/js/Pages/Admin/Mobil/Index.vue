@@ -38,9 +38,6 @@
                             <th class="py-3 px-4 font-semibold">Foto Mobil</th>
                             <th class="py-3 px-4 font-semibold">Nama Mobil</th>
                             <th class="py-3 px-4 font-semibold text-center">
-                                Plat Nomor
-                            </th>
-                            <th class="py-3 px-4 font-semibold text-center">
                                 Ketersediaan
                             </th>
                             <th class="py-3 px-4 font-semibold text-center">
@@ -63,9 +60,6 @@
                             </td>
                             <td class="py-3 px-4 font-medium">
                                 {{ mobil.nama_mobil }}
-                            </td>
-                            <td class="py-3 px-4 text-center">
-                                {{ mobil.plat_nomor }}
                             </td>
                             <td class="py-3 px-4 text-center">
                                 <span

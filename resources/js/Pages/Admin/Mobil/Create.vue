@@ -38,24 +38,6 @@
 
                         <div>
                             <label class="block font-medium mb-2"
-                                >Plat Nomor</label
-                            >
-                            <input
-                                v-model="form.plat_nomor"
-                                type="text"
-                                placeholder="AB 1234 CD"
-                                class="border border-gray-300 rounded-lg px-3 py-2 w-full focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                            />
-                            <p
-                                v-if="form.errors.plat_nomor"
-                                class="text-sm text-red-500 mt-1"
-                            >
-                                {{ form.errors.plat_nomor }}
-                            </p>
-                        </div>
-
-                        <div>
-                            <label class="block font-medium mb-2"
                                 >Ketersediaan</label
                             >
                             <input
@@ -319,7 +301,6 @@ import { useForm, Link } from "@inertiajs/vue3";
 
 const form = useForm({
     nama_mobil: "",
-    plat_nomor: "",
     ketersediaan: 1,
     url_foto_mobil: [],
     kapasitas: "",

@@ -37,23 +37,6 @@
 
                         <div>
                             <label class="block font-medium mb-2"
-                                >Plat Nomor</label
-                            >
-                            <input
-                                v-model="form.plat_nomor"
-                                type="text"
-                                class="border border-gray-300 rounded-lg px-3 py-2 w-full focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                            />
-                            <p
-                                v-if="form.errors.plat_nomor"
-                                class="text-sm text-red-500 mt-1"
-                            >
-                                {{ form.errors.plat_nomor }}
-                            </p>
-                        </div>
-
-                        <div>
-                            <label class="block font-medium mb-2"
                                 >Ketersediaan</label
                             >
                             <input
@@ -297,7 +280,6 @@ const parsedFotoLama = JSON.parse(props.mobil.url_foto_mobil || "[]");
 // form data
 const form = useForm({
     nama_mobil: props.mobil.nama_mobil || "",
-    plat_nomor: props.mobil.plat_nomor || "",
     ketersediaan: props.mobil.ketersediaan || 1,
     old_photos: props.mobil.foto_mobil || [], // foto lama (dari DB)
     deleted_photos: [], // untuk mencatat foto lama yang ingin dihapus

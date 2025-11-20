@@ -37,7 +37,6 @@ class CarController extends Controller
         $validated = $request->validate([
             'url_foto_mobil' => 'required|array',
             'nama_mobil' => 'required',
-            'plat_nomor' => 'required|unique:cars,plat_nomor',
             'ketersediaan' => 'required|numeric',
             // spesifikasi
             'kapasitas' => 'required|numeric',
@@ -74,7 +73,6 @@ class CarController extends Controller
         $mobil = Car::create([
             'nama_mobil' => $validated['nama_mobil'],
             'url_foto_mobil' => json_encode($path),
-            'plat_nomor' => $validated['plat_nomor'],
             'ketersediaan' => $validated['ketersediaan'],
         ]);
 
@@ -136,7 +134,6 @@ class CarController extends Controller
             'url_foto_mobil' => 'nullable|array',
             'url_foto_mobil.*' => 'image|mimes:jpeg,png,jpg|max:5120',
             'nama_mobil' => 'nullable|string',
-            'plat_nomor' => 'nullable|string|unique:cars,plat_nomor,' . $mobil->id_mobil . ',id_mobil',
             'ketersediaan' => 'nullable|numeric',
 
             'kapasitas' => 'nullable|numeric',
@@ -156,7 +153,8 @@ class CarController extends Controller
             if (is_array($fotoLama)) {
                 foreach ($fotoLama as $gambar) {
                     $imagePath = storage_path('app/public/' . $gambar);
-                    if (file_exists($imagePath)) unlink($imagePath);
+                    if (file_exists($imagePath))
+                        unlink($imagePath);
                 }
             }
 
@@ -170,7 +168,6 @@ class CarController extends Controller
 
         // 🔹 2. Update data utama mobil
         $mobil->nama_mobil = $request->nama_mobil ?? $mobil->nama_mobil;
-        $mobil->plat_nomor = $request->plat_nomor ?? $mobil->plat_nomor;
         $mobil->ketersediaan = $request->ketersediaan ?? $mobil->ketersediaan;
         $mobil->save();
 

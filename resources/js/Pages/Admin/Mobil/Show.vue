@@ -71,12 +71,6 @@
                             </p>
                         </div>
                         <div>
-                            <p class="text-sm text-gray-500">Plat Nomor</p>
-                            <p class="font-semibold text-gray-900 text-lg">
-                                {{ mobil.plat_nomor }}
-                            </p>
-                        </div>
-                        <div>
                             <p class="text-sm text-gray-500">Kapasitas</p>
                             <p class="font-semibold">
                                 {{ mobil.specification?.kapasitas || "-" }}
