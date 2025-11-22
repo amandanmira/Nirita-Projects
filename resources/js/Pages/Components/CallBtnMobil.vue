@@ -2,6 +2,7 @@
 import { computed } from "vue";
 
 const props = defineProps({
+    car : Object,
     templates: Array, // dari inertia global
     templateId: Number, // template yang dipilih
     label: {

@@ -32,6 +32,14 @@ Route::get('/login', function () {
     return Inertia::render('Login');
 });
 
+Route::get('/phpinfo', function () {
+    phpinfo();
+});
+
+Route::get('/check', function () {
+    dd(function_exists('imagecreatetruecolor'));
+});
+
 Route::prefix('admin')->name('admin.')->middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard', function () {
         return Inertia::render('Layouts/DashboardLayouts');

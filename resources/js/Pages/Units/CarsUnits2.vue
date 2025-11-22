@@ -259,7 +259,7 @@ const resetFilter = () => {
                             </a> -->
                             <CallBtnMobil
                                 :templates="waTemplates"
-                                :templateId="4"
+                                :templateId="2"
                             />
                         </div>
                     </div>
