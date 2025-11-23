@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Car;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 
 class CarController extends Controller
@@ -131,59 +132,76 @@ class CarController extends Controller
         $mobil = Car::findOrFail($id);
 
         $validated = $request->validate([
-            'url_foto_mobil' => 'nullable|array',
-            'url_foto_mobil.*' => 'image|mimes:jpeg,png,jpg|max:5120',
-            'nama_mobil' => 'nullable|string',
-            'ketersediaan' => 'nullable|numeric',
+            // Validasi untuk foto baru (menggunakan nama field 'new_photos' dari frontend)
+            'new_photos' => 'nullable|array',
+            'new_photos.*' => 'image|mimes:jpeg,png,jpg|max:5120', // Maks 5MB
 
-            'kapasitas' => 'nullable|numeric',
-            'kategori' => 'nullable|string',
+            // Validasi untuk foto lama yang akan dihapus
+            'deleted_photos' => 'nullable|array',
+
+            'nama_mobil' => 'nullable|string|max:255',
+            'ketersediaan' => 'nullable|numeric|min:0',
+
+            'kapasitas' => 'nullable|numeric|min:1',
+            'kategori' => 'nullable|string|max:50',
             'fasilitas' => 'nullable|array',
-            'jenis_transmisi' => 'nullable|string',
+            'fasilitas.*' => 'string|max:255',
+            'jenis_transmisi' => 'nullable|string|max:50',
 
-            'harga_solo' => 'nullable|numeric',
-            'harga_solo_raya' => 'nullable|numeric',
-            'harga_luar_kota' => 'nullable|numeric',
+            'harga_solo' => 'nullable|numeric|min:0',
+            'harga_solo_raya' => 'nullable|numeric|min:0',
+            'harga_luar_kota' => 'nullable|numeric|min:0',
         ]);
 
-        // 🔹 1. Update Foto Mobil
-        if ($request->hasFile('url_foto_mobil')) {
-            // Hapus foto lama
-            $fotoLama = json_decode($mobil->url_foto_mobil, true);
-            if (is_array($fotoLama)) {
-                foreach ($fotoLama as $gambar) {
-                    $imagePath = storage_path('app/public/' . $gambar);
-                    if (file_exists($imagePath))
-                        unlink($imagePath);
+        // 1. Inisialisasi daftar foto yang sudah ada di database
+        $currentPhotoPaths = json_decode($mobil->url_foto_mobil, true) ?? [];
+        $deletedPhotos = $request->input('deleted_photos', []);
+
+        // 2. Hapus foto lama yang ditandai untuk dihapus (dari frontend)
+        if (!empty($deletedPhotos)) {
+            foreach ($deletedPhotos as $pathToDelete) {
+                // Pastikan path yang dihapus ada di storage
+                if (Storage::disk('public')->exists($pathToDelete)) {
+                    Storage::disk('public')->delete($pathToDelete);
                 }
             }
-
-            // Simpan foto baru
-            $pathBaru = [];
-            foreach ($request->file('url_foto_mobil') as $image) {
-                $pathBaru[] = $image->store('mobil', 'public');
-            }
-            $mobil->url_foto_mobil = json_encode($pathBaru);
+            // Filter path foto lama yang dihapus dari daftar saat ini
+            $currentPhotoPaths = array_filter($currentPhotoPaths, function ($path) use ($deletedPhotos) {
+                return !in_array($path, $deletedPhotos);
+            });
         }
 
-        // 🔹 2. Update data utama mobil
+        // 3. Upload dan simpan path foto baru (dari field 'new_photos')
+        $newPhotoPaths = [];
+        if ($request->hasFile('new_photos')) {
+            foreach ($request->file('new_photos') as $image) {
+                // Simpan ke direktori 'mobil' di public disk
+                $newPhotoPaths[] = $image->store('mobil', 'public');
+            }
+        }
+
+        // 4. Gabungkan foto yang tersisa dan foto baru
+        $finalPhotoPaths = array_merge($currentPhotoPaths, $newPhotoPaths);
+        $mobil->url_foto_mobil = json_encode(array_values($finalPhotoPaths)); // array_values untuk mereset key array
+
+        // 5. Update data utama mobil
         $mobil->nama_mobil = $request->nama_mobil ?? $mobil->nama_mobil;
         $mobil->ketersediaan = $request->ketersediaan ?? $mobil->ketersediaan;
         $mobil->save();
 
-        // 🔹 3. Update spesifikasi
+        // 6. Update spesifikasi (jika relasi ada)
         if ($mobil->specification) {
             $mobil->specification()->update([
                 'jenis_transmisi' => $request->jenis_transmisi ?? $mobil->specification->jenis_transmisi,
                 'kapasitas' => $request->kapasitas ?? $mobil->specification->kapasitas,
                 'kategori' => $request->kategori ?? $mobil->specification->kategori,
                 'fasilitas' => isset($request->fasilitas)
-                    ? json_encode($request->fasilitas)
+                    ? json_encode(array_values(array_filter($request->fasilitas))) // Filter nilai kosong
                     : $mobil->specification->fasilitas,
             ]);
         }
 
-        // 🔹 4. Update harga sewa
+        // 7. Update harga sewa (jika relasi ada)
         if ($mobil->rentalPrice) {
             $mobil->rentalPrice()->update([
                 'harga_solo' => $request->harga_solo ?? $mobil->rentalPrice->harga_solo,
@@ -192,76 +210,7 @@ class CarController extends Controller
             ]);
         }
 
-        return redirect()->route('admin.mobil.index')->with('success', 'Mobil berhasil diperbarui.');
-
-
-        // $validated = $request->validate([
-        //     'url_foto_mobil' => 'nullable|array',
-        //     'nama_mobil' => 'required',
-        //     'plat_nomor' => 'required|unique:cars,plat_nomor,' . $mobil->id_mobil . ',id_mobil',
-        //     'ketersediaan' => 'required|numeric',
-        //     // spesifikasi
-        //     'kapasitas' => 'required|numeric',
-        //     'kategori' => 'required',
-        //     'fasilitas' => 'required|array',
-        //     'jenis_transmisi' => 'required',
-        //     // harga sewa
-        //     'harga_solo' => 'required|numeric',
-        //     'harga_solo_raya' => 'required|numeric',
-        //     'harga_luar_kota' => 'required|numeric',
-        // ]);
-
-        // $fasilitas = $validated['fasilitas'];
-
-        // if ($request->hasFile('url_foto_mobil')) {
-        //     foreach (json_decode($mobil->url_foto_mobil) as $gambar) {
-        //         $imagePath = 'storage/mobil/' . basename($gambar);
-
-        //         if (file_exists($imagePath))
-        //             unlink($imagePath);
-        //     }
-
-        //     $path = [];
-        //     foreach ($request->file('url_foto_mobil') as $image)
-        //         $path[] = $image->storeAs('mobil', $image->hashName());
-
-        //     $mobil->update([
-        //         'nama_mobil' => $request->nama_mobil,
-        //         'url_foto_mobil' => $path,
-        //         'plat_nomor' => $request->plat_nomor,
-        //         'ketersediaan' => $request->ketersediaan,
-        //     ]);
-
-        //     $mobil->specification()->update([
-        //         'jenis_transmisi' => $request->jenis_transmisi,
-        //         'kapasitas' => $request->kapasitas,
-        //         'kategori' => $request->kategori,
-        //         'fasilitas' => json_encode($fasilitas),
-        //     ]);
-
-        //     $mobil->rentalPrice()->update([
-        //         'harga_solo' => $request->harga_solo,
-        //         'harga_solo_raya' => $request->harga_solo_raya,
-        //         'harga_luar_kota' => $request->harga_luar_kota,
-        //     ]);
-        // } else {
-        //     $mobil->update($request->only('nama_mobil', 'plat_nomor', 'ketersediaan', 'deskripsi'));
-
-        //     $mobil->specification()->update([
-        //         'jenis_transmisi' => $request->jenis_transmisi,
-        //         'kapasitas' => $request->kapasitas,
-        //         'kategori' => $request->kategori,
-        //         'fasilitas' => json_encode($fasilitas),
-        //     ]);
-
-        //     $mobil->rentalPrice()->update([
-        //         'harga_solo' => $request->harga_solo,
-        //         'harga_solo_raya' => $request->harga_solo_raya,
-        //         'harga_luar_kota' => $request->harga_luar_kota,
-        //     ]);
-        // }
-
-        // return redirect()->route('admin.mobil.index')->with('success', 'Mobil berhasil diperbarui.');
+        return redirect()->route('admin.mobil.index')->with('success', 'Data mobil berhasil diperbarui.');
     }
 
     /**

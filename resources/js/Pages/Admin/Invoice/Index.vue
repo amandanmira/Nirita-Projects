@@ -3,7 +3,7 @@
         <div class="max-w-6xl mx-auto p-3">
             <!-- Header -->
             <div
-                class="flex flex-col md:flex-row md:items-center md:justify-between mb-4 gap-3"
+                class="flex flex-col items-start md:flex-row md:items-center md:justify-between mb-6 gap-3"
             >
                 <h1 class="text-3xl font-bold text-gray-800">Daftar Invoice</h1>
                 <Link
@@ -41,6 +41,7 @@
                         class="bg-[#15224F] text-white text-left sticky top-0"
                     >
                         <tr>
+                            <th class="py-3 px-4 font-semibold">No</th>
                             <th class="py-3 px-4 font-semibold">Penyewa</th>
                             <th class="py-3 px-4 font-semibold">Driver</th>
                             <th class="py-3 px-4 font-semibold">
@@ -53,7 +54,14 @@
                     </thead>
 
                     <tbody>
-                        <tr v-for="b in paginatedBills" :key="b.id_nota">
+                        <tr
+                            v-for="(b, idx) in paginatedBills"
+                            :key="b.id_nota"
+                            class="border-b hover:bg-gray-50"
+                        >
+                            <td class="py-3 px-4">
+                                {{ startIndex + idx + 1 }}
+                            </td>
                             <td class="py-3 px-4">
                                 {{ b.nama_penyewa }}
                             </td>
@@ -63,7 +71,7 @@
                             </td>
                             <td class="py-3 px-4 space-x-2">
                                 <div
-                                    class="flex justify-center gap-3 bg-gray-300/50 py-2 rounded-full"
+                                    class="flex justify-center gap-3 rounded-full"
                                 >
                                     <!-- Detail -->
                                     <Link
@@ -175,9 +183,25 @@ const formatCurrency = (value) => {
 };
 
 const deleteInvoice = (id) => {
-    if (confirm("Hapus template ini?")) {
-        router.delete(`/admin/invoice/${id}`);
-    }
+    Swal.fire({
+        title: "Yakin ingin menghapus?",
+        text: "Data yang dihapus tidak dapat dikembalikan!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Ya, Hapus!",
+        cancelButtonText: "Batal",
+    }).then((result) => {
+        if (result.isConfirmed) {
+            router.delete(`/admin/invoice/${id}`, {
+                onSuccess: () => {
+                    Swal.fire({
+                        icon: "success",
+                        title: "Invoice Berhasil Dihapus!",
+                    });
+                },
+            });
+        }
+    });
 };
 
 const itemsPerPage = 10;

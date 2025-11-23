@@ -1,6 +1,7 @@
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import { Link, usePage } from "@inertiajs/vue3";
+import { gsap } from "gsap";
 import logo from "../Assets/Logo Nirita Rentals.png";
 import NavContactUsBtn from "./NavContactUsBtn.vue";
 
@@ -33,11 +34,27 @@ const menus = [
     },
 ];
 
+// Function sederhana untuk cek active halaman
+const isActive = (path) => page.url === path;
+
+const navbar = ref(null);
+onMounted(() => {
+    gsap.from(navbar.value, {
+        duration: 1,
+        opacity: 0,
+        y: -100,
+        ease: "power3.out",
+    });
+});
+
 const toggleMenu = () => (menuOpen.value = !menuOpen.value);
 </script>
 
 <template>
-    <header class="sticky top-0 z-50 bg-white shadow-md md:px-16 lg:px-18">
+    <header
+        ref="navbar"
+        class="sticky top-0 z-50 bg-white shadow-md md:px-16 lg:px-18"
+    >
         <div
             class="max-w-7xl mx-auto flex justify-between items-center py-3 px-4 md:px-0"
         >
@@ -54,8 +71,11 @@ const toggleMenu = () => (menuOpen.value = !menuOpen.value);
                     v-for="link in menus"
                     :key="link.Link"
                     :href="link.Link"
-                    class="hover:text-blue-600 font-medium transition"
-                    active-class="text-blue-600 font-medium"
+                    class="relative group py-2"
+                    :class="{
+                        'text-blue-600 font-semibold after:content-[\'\'] after:absolute after:left-0 after:-bottom-1 after:w-full after:h-[3px] after:bg-blue-600 after:rounded-full':
+                            isActive(link.Link),
+                    }"
                 >
                     {{
                         link.label.charAt(0).toUpperCase() + link.label.slice(1)
@@ -99,32 +119,35 @@ const toggleMenu = () => (menuOpen.value = !menuOpen.value);
         </div>
 
         <!-- Mobile Menu -->
-        <transition name="fade">
+        <transition name="slide-left">
             <div
                 v-if="menuOpen"
-                class="md:hidden bg-white border-t border-gray-200 px-6 pb-4 space-y-2"
+                class="md:hidden bg-white border-t border-gray-200 px-5 pb-4"
             >
-                <RouterLink
-                    v-for="link in links"
-                    :key="link.path"
-                    :to="link.path"
-                    class="block py-2 text-gray-800 hover:text-blue-600"
-                    active-class="text-blue-600 font-semibold"
-                    @click="menuOpen = false"
+                <Link
+                    v-for="link in menus"
+                    :key="link.Link"
+                    :href="link.Link"
+                    class="block py-2 font-semibold transition"
+                    :class="[
+                        selected === link.Link || isActive(link.Link)
+                            ? 'text-blue-600'
+                            : 'text-gray-700 hover:text-blue-600',
+                    ]"
+                    @click="
+                        selected = link.Link;
+                        menuOpen = false;
+                    "
                 >
-                    {{ link.name.charAt(0).toUpperCase() + link.name.slice(1) }}
-                </RouterLink>
+                    {{
+                        link.label.charAt(0).toUpperCase() + link.label.slice(1)
+                    }}
+                </Link>
 
-                <!-- <a
-                    :href="waLink"
-                    target="_blank"
-                    class="block bg-green-600 hover:bg-green-700 text-white text-center font-medium px-4 py-2 rounded-full mt-2"
-                >
-                    Contact Us
-                </a> -->
                 <NavContactUsBtn
+                    class="mt-2 w-full text-center"
                     :templates="waTemplates"
-                    :templateId="1"
+                    :templateId="3"
                     label="Contact Us"
                 />
             </div>
@@ -136,12 +159,56 @@ const toggleMenu = () => (menuOpen.value = !menuOpen.value);
 header {
     font-family: Poppins, sans-serif;
 }
-.fade-enter-active,
-.fade-leave-active {
-    transition: opacity 0.2s;
-}
-.fade-enter-from,
-.fade-leave-to {
+/* MENU MASUK */
+.slide-left-enter-from {
+    transform: translateX(-100%);
     opacity: 0;
+}
+
+.slide-left-enter-active {
+    transition: all 0.3s ease;
+}
+
+.slide-left-enter-to {
+    transform: translateX(0);
+    opacity: 1;
+}
+
+/* MENU KELUAR */
+.slide-left-leave-from {
+    transform: translateX(0);
+    opacity: 1;
+}
+
+.slide-left-leave-active {
+    transition: all 0.3s ease;
+}
+
+.slide-left-leave-to {
+    transform: translateX(-100%);
+    opacity: 0;
+}
+
+/* Underline animasi modern */
+nav .group::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 2px;
+    width: 0;
+    background: transparent;
+    transition: all 0.3s ease;
+}
+
+/* Hover muncul underline */
+nav .group:hover::after {
+    width: 100%;
+    background: #2563eb; /* biru tailwind */
+}
+
+/* Jika active route */
+nav .group.after\:w-full::after {
+    width: 100%;
 }
 </style>

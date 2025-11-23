@@ -3,7 +3,7 @@
         <div class="max-w-6xl mx-auto">
             <!-- Header -->
             <div
-                class="flex flex-col md:flex-row md:items-center md:justify-between mb-6 gap-3"
+                class="flex flex-col items-start md:flex-row md:items-center md:justify-between mb-6 gap-3"
             >
                 <h1 class="text-3xl font-bold text-gray-800">
                     Daftar Testimoni
@@ -37,6 +37,7 @@
                         class="bg-[#15224F] text-white text-left sticky top-0"
                     >
                         <tr>
+                            <th class="py-3 px-4 font-semibold">No</th>
                             <th class="py-3 px-4 font-semibold">Gambar</th>
                             <th class="py-3 px-4 font-semibold">Deskripsi</th>
                             <th class="py-3 px-4 font-semibold text-center">
@@ -46,10 +47,13 @@
                     </thead>
                     <tbody>
                         <tr
-                            v-for="testimonial in paginatedTestimonials"
+                            v-for="(testimonial, idx) in paginatedTestimonials"
                             :key="testimonial.id_testimoni"
                             class="border-b hover:bg-gray-50"
                         >
+                            <td class="py-3 px-4">
+                                {{ startIndex + idx + 1 }}
+                            </td>
                             <td class="py-3 px-4">
                                 <img
                                     :src="`/storage/${testimonial.url_gambar}`"
@@ -63,7 +67,7 @@
                             ></td>
                             <td class="py-3 px-4 text-center">
                                 <div
-                                    class="flex justify-center gap-3 bg-gray-200/50 py-2 px-4 rounded-full"
+                                    class="flex justify-center gap-3 rounded-full"
                                 >
                                     <!-- Edit -->
                                     <EditBtn
@@ -143,9 +147,25 @@ const props = defineProps({
 });
 
 const hapus = (id) => {
-    if (confirm("Yakin ingin menghapus Testimoni ini?")) {
-        router.delete(`/admin/testimoni/${id}`);
-    }
+    Swal.fire({
+        title: "Yakin ingin menghapus?",
+        text: "Data yang dihapus tidak dapat dikembalikan!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Ya, Hapus!",
+        cancelButtonText: "Batal",
+    }).then((result) => {
+        if (result.isConfirmed) {
+            router.delete(`/admin/testimoni/${id}`, {
+                onSuccess: () => {
+                    Swal.fire({
+                        icon: "success",
+                        title: "Testimoni telah dihapus.",
+                    });
+                },
+            });
+        }
+    });
 };
 
 // const faqs = props.faqs;

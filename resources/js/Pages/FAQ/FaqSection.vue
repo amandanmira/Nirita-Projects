@@ -105,17 +105,6 @@
                     </div>
                 </div>
             </div>
-
-            <!-- Tombol bantuan -->
-            <div class="mt-14">
-                <a
-                    href="https://wa.me/6281393604105"
-                    target="_blank"
-                    class="inline-block bg-green-600 hover:bg-green-700 text-white font-semibold px-8 py-3 rounded-full transition"
-                >
-                    Butuh Bantuan Lainnya? Hubungi Kami
-                </a>
-            </div>
         </div>
     </section>
 </template>
