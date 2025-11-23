@@ -1,4 +1,5 @@
 <script setup>
+import { Link } from "@inertiajs/vue3";
 import Logo from "../Assets/Logo Nirita Rentals.png";
 </script>
 
@@ -60,29 +61,30 @@ import Logo from "../Assets/Logo Nirita Rentals.png";
                 <h3 class="text-white font-semibold mb-3">Navigasi</h3>
                 <ul class="space-y-1 text-sm flex gap-3 md:flex-col md:gap-0">
                     <li>
-                        <RouterLink to="#" class="hover:text-blue-400"
-                            >Beranda</RouterLink
+                        <Link href="/" class="hover:text-blue-400">Home</Link>
+                    </li>
+                    <li>
+                        <Link href="/about" class="hover:text-blue-400"
+                            >About</Link
                         >
                     </li>
                     <li>
-                        <RouterLink to="#" class="hover:text-blue-400"
-                            >Tentang Kami</RouterLink
+                        <Link href="/units" class="hover:text-blue-400"
+                            >Units</Link
                         >
                     </li>
                     <li>
-                        <RouterLink to="#" class="hover:text-blue-400"
-                            >Unit</RouterLink
+                        <Link href="/review" class="hover:text-blue-400"
+                            >Review</Link
                         >
                     </li>
                     <li>
-                        <RouterLink to="#" class="hover:text-blue-400"
-                            >Review</RouterLink
+                        <Link href="/tnc" class="hover:text-blue-400"
+                            >Term and Condition</Link
                         >
                     </li>
                     <li>
-                        <RouterLink to="#" class="hover:text-blue-400"
-                            >FAQ</RouterLink
-                        >
+                        <Link href="/faq" class="hover:text-blue-400">FAQ</Link>
                     </li>
                 </ul>
             </div>
@@ -91,7 +93,7 @@ import Logo from "../Assets/Logo Nirita Rentals.png";
         <hr class="border-gray-700 my-6 max-w-7xl mx-auto" />
 
         <div class="text-center text-xs text-gray-500">
-            © 2025 Nirita Transport. Didesain oleh 404 Founders.
+            © 2025 Nirita Transport.
         </div>
     </footer>
 </template>

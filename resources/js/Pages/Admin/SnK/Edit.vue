@@ -96,8 +96,10 @@ const updateSnk = () => {
     form.put(`/admin/snk/${props.tncs.id_snk}`, {
         preserveScroll: true,
         onSuccess: () => {
-            console.log("Update berhasil:", form);
-            alert("SnK berhasil diperbarui!");
+            Swal.fire({
+                title: "SNK Berhasil Diperbarui!",
+                icon: "success",
+            });
         },
         onError: (errors) => {
             console.error("Error saat update:", errors);

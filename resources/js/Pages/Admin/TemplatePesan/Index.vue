@@ -3,7 +3,7 @@
         <div class="max-w-6xl mx-auto">
             <!-- Header -->
             <div
-                class="flex flex-col md:flex-row md:items-center md:justify-between mb-6 gap-3"
+                class="flex flex-col items-start md:flex-row md:items-center md:justify-between mb-6 gap-3"
             >
                 <h1 class="text-3xl font-bold text-gray-800">
                     Daftar Template Pesan
@@ -32,38 +32,68 @@
 
             <!-- Tabel -->
             <div class="overflow-x-auto bg-white shadow-lg rounded-xl">
-                <table class="min-w-full text-sm text-gray-700">
+                <table class="min-w-full text-sm text-gray-700 border-collapse">
                     <thead
                         class="bg-[#15224F] text-white text-left sticky top-0"
                     >
                         <tr>
-                            <th class="py-3 px-4 font-semibold">
+                            <th
+                                class="py-3 px-4 font-semibold whitespace-nowrap"
+                            >
+                                No
+                            </th>
+                            <th
+                                class="py-3 px-4 font-semibold whitespace-nowrap"
+                            >
                                 Jenis Template
                             </th>
-                            <th class="py-3 px-4 font-semibold">No Tujuan</th>
-                            <th class="py-3 px-4 font-semibold">Isi Pesan</th>
-                            <th class="py-3 px-4 font-semibold text-center">
+                            <th
+                                class="py-3 px-4 font-semibold whitespace-nowrap"
+                            >
+                                No Tujuan
+                            </th>
+                            <th
+                                class="py-3 px-4 font-semibold whitespace-nowrap"
+                            >
+                                Isi Pesan
+                            </th>
+                            <th
+                                class="py-3 px-4 font-semibold text-center whitespace-nowrap"
+                            >
                                 Aksi
                             </th>
                         </tr>
                     </thead>
+
                     <tbody>
                         <tr
-                            v-for="template in paginatedTemplates"
+                            v-for="(template, idx) in paginatedTemplates"
                             :key="template.id_template"
-                            class="border-b hover:bg-gray-50"
+                            class="border-b hover:bg-gray-50 transition"
                         >
-                            <td class="py-3 px-4">
+                            <td class="py-3 px-4 text-center">
+                                {{ startIndex + idx + 1 }}
+                            </td>
+
+                            <td class="py-3 px-4 whitespace-nowrap font-medium">
                                 {{ template.jenis_template }}
                             </td>
-                            <td class="py-3 px-4">
+
+                            <td class="py-3 px-4 whitespace-nowrap">
                                 {{ template.no_telp_tujuan }}
                             </td>
-                            <td class="py-3 px-4">{{ template.isi }}</td>
+
+                            <td class="py-3 px-4 max-w-[300px]">
+                                <p class="line-clamp-2">
+                                    {{ template.isi }}
+                                </p>
+                            </td>
+
                             <td class="py-3 px-4 text-center">
                                 <div
-                                    class="flex justify-center gap-3 bg-gray-200/50 py-2 px-4 rounded-full"
+                                    class="flex items-center justify-center gap-2 rounded-full flex-wrap"
                                 >
+                                    <!-- Detail -->
                                     <Link
                                         :href="`/admin/template-pesan/${template.id_template}`"
                                         class="text-blue-600 hover:text-blue-800 transition flex items-center gap-1"
@@ -84,16 +114,27 @@
                                         </svg>
                                         Detail
                                     </Link>
+
                                     <!-- Edit -->
                                     <EditBtn
                                         :href="`/admin/template-pesan/${template.id_template}/edit`"
-                                    ></EditBtn>
+                                    />
 
                                     <!-- Hapus -->
                                     <HapusBtn
                                         @click="hapus(template.id_template)"
-                                    ></HapusBtn>
+                                    />
                                 </div>
+                            </td>
+                        </tr>
+
+                        <!-- Jika data kosong -->
+                        <tr v-if="paginatedTemplates.length === 0">
+                            <td
+                                colspan="5"
+                                class="text-center py-6 text-gray-500"
+                            >
+                                Tidak ada template pesan.
                             </td>
                         </tr>
                     </tbody>
@@ -162,9 +203,25 @@ const props = defineProps({
 });
 
 const hapus = (id) => {
-    if (confirm("Yakin ingin menghapus template ini?")) {
-        router.delete(`/admin/template-pesan/${id}`);
-    }
+    Swal.fire({
+        title: "Yakin ingin menghapus?",
+        text: "Data yang dihapus tidak dapat dikembalikan!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Ya, Hapus!",
+        cancelButtonText: "Batal",
+    }).then((result) => {
+        if (result.isConfirmed) {
+            router.delete(`/admin/template-pesan/${id}`, {
+                onSuccess: () => {
+                    Swal.fire({
+                        icon: "success",
+                        title: "Template Pesan Berhasil Dihapus!",
+                    });
+                },
+            });
+        }
+    });
 };
 
 // const faqs = props.faqs;

@@ -241,10 +241,10 @@ const resetFilter = () => {
                             Hari
                         </p>
 
-                        <div class="mt-3 flex justify-between items-center">
+                        <div class="mt-3 tombol-aksi">
                             <a
                                 :href="`/units/${car.id_mobil}`"
-                                class="flex items-center justify-center gap-2 bg-black text-white text-md rounded-l-md px-5 py-3 w-full hover:bg-blue-600 transition"
+                                class="flex items-center justify-center gap-2 bg-black text-white text-md rounded-l-md px-5 py-3 w-full border border-transparent hover:bg-white hover:text-black hover:border-black transition"
                             >
                                 <i class="fa-solid fa-arrow-right"></i>
                                 Lihat Detail
@@ -260,6 +260,7 @@ const resetFilter = () => {
                             <CallBtnMobil
                                 :templates="waTemplates"
                                 :templateId="4"
+                                :carName="car.nama_mobil"
                             />
                         </div>
                     </div>
@@ -268,3 +269,10 @@ const resetFilter = () => {
         </div>
     </section>
 </template>
+
+<style scoped>
+.tombol-aksi {
+    display: grid;
+    grid-template-columns: auto 50px;
+}
+</style>

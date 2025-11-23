@@ -65,13 +65,18 @@
                                 Lihat Detail
                             </a>
 
-                            <a
+                            <!-- <a
                                 :href="`https://wa.me/6281393604105?text=Halo,%20saya%20ingin%20menyewa%20${car.nama_mobil}`"
                                 target="_blank"
                                 class="cursor-pointer flex items-center justify-center bg-blue-600 text-white rounded-r-md px-3 py-2 border border-transparent hover:bg-white hover:text-black hover:border-black transition"
                             >
                                 <i class="fa-solid fa-phone"></i>
-                            </a>
+                            </a> -->
+                            <CallBtnMobil
+                                :templates="waTemplates"
+                                :templateId="4"
+                                :carName="car.nama_mobil"
+                            />
                         </div>
                     </div>
                 </div>
@@ -81,6 +86,12 @@
 </template>
 
 <script setup>
+import { usePage } from "@inertiajs/vue3";
+import CallBtnMobil from "../Components/CallBtnMobil.vue";
+
+const page = usePage();
+const waTemplates = page.props.waTemplates;
+
 const props = defineProps({
     cars: {
         type: Array,

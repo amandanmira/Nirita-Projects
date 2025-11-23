@@ -150,7 +150,7 @@
                             Fasilitas
                         </h2>
                         <ul
-                            class="grid grid-cols-3 list-disc list-inside text-gray-700 space-y-1"
+                            class="grid grid-cols-1 list-disc list-inside text-gray-700 space-y-1"
                         >
                             <li
                                 v-for="(item, index) in parsedFasilitas"

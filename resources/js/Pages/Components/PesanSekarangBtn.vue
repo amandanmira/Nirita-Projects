@@ -6,7 +6,7 @@ const props = defineProps({
     templateId: Number, // template yang dipilih
     label: {
         type: String,
-        default: "Contact Us",
+        default: "Pesan Sekarang",
     },
 });
 // console.log("template", props.templates);
@@ -21,7 +21,7 @@ const selected = computed(() => {
         v-if="selected"
         :href="selected.link"
         target="_blank"
-        class="cursor-pointer inline-block bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-full"
+        class="bg-blue-500 text-white font-semibold px-6 py-2 rounded-full hover:bg-blue-600 transition"
     >
         {{ label }}
     </a>

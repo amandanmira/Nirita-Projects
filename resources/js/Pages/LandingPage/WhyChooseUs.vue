@@ -1,7 +1,10 @@
 <template>
-    <section class="bg-white py-12 md:py-20 px-6 md:px-16 lg:px-20">
+    <section
+        ref="sectionRef"
+        class="bg-white py-12 md:py-20 px-6 md:px-16 lg:px-20"
+    >
         <div
-            class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-12 items-center"
+            class="reason-item max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-12 items-center"
         >
             <!-- Bagian Kiri: Judul dan Deskripsi -->
             <div>
@@ -29,7 +32,7 @@
                 <div
                     v-for="(item, index) in reasons"
                     :key="index"
-                    class="flex xs:gap-2 lg:flex-col items-center"
+                    class="reason-item flex gap-3 lg:flex-col items-center"
                 >
                     <img
                         :src="item.image"
@@ -55,9 +58,43 @@
 </template>
 
 <script setup>
+import { onMounted, ref } from "vue";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+gsap.registerPlugin(ScrollTrigger);
 import kenyamanan from "../Assets/icon-kenyamanan.png";
 import fleksibilitas from "../Assets/icon-fleksibilitas.png";
 import efisiensi from "../Assets/icon-efisiensi-biaya.png";
+
+const sectionRef = ref(null);
+
+onMounted(() => {
+    // Animasi section masuk
+    gsap.from(sectionRef.value, {
+        opacity: 0,
+        y: 80,
+        duration: 1.2,
+        ease: "power3.out",
+        scrollTrigger: {
+            trigger: sectionRef.value,
+            start: "top 60%",
+            toggleActions: "play reverse play reverse",
+        },
+    });
+
+    // Animasi stagger card
+    gsap.from(".reason-item", {
+        opacity: 0,
+        y: 60,
+        duration: 0.8,
+        stagger: 0.25,
+        scrollTrigger: {
+            trigger: sectionRef.value,
+            start: "top 90%",
+            toggleActions: "play reverse play reverse",
+        },
+    });
+});
 
 const reasons = [
     {

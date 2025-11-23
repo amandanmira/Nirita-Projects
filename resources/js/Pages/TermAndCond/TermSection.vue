@@ -28,9 +28,9 @@ const props = defineProps({
                     v-for="term in props.tncs"
                     class="efek-hover bg-white rounded-xl p-6"
                 >
-                    <h3 class="text-lg md:text-xl font-bold mb-3">
+                    <!-- <h3 class="text-lg md:text-xl font-bold mb-3">
                         {{ term.judul }}
-                    </h3>
+                    </h3> -->
                     <div
                         v-html="term.deskripsi"
                         class="text-gray-700 leading-relaxed"
