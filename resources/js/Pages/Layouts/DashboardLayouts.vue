@@ -16,12 +16,18 @@
                 </div>
 
                 <!-- Menu -->
-                <nav class="mt-6">
+                <nav class="mx-4 mt-4">
                     <ul class="space-y-1">
                         <li v-for="menu in menus" :key="menu.label">
                             <Link
                                 :href="menu.Link"
-                                class="flex items-center gap-3 px-6 py-3 hover:bg-[#0E1A47] hover:text-white transition rounded-md"
+                                class="flex items-center gap-3 px-6 py-3 transition rounded-md"
+                                :class="{
+                                    'bg-[#0E1A47] text-white shadow-md':
+                                        isActive(menu.Link),
+                                    'text-gray-800 hover:bg-[#0E1A47] hover:text-white':
+                                        !isActive(menu.Link),
+                                }"
                             >
                                 <i :class="menu.icon + ' w-5'"></i>
                                 {{ menu.label }}
@@ -104,7 +110,7 @@
             <!-- Page Content -->
             <main class="flex-1 p-6 overflow-y-auto">
                 <slot></slot>
-                <router-view />
+                <!-- <router-view /> -->
             </main>
         </div>
     </div>
@@ -112,11 +118,15 @@
 
 <script setup>
 import { ref } from "vue";
-import { Link, router } from "@inertiajs/vue3";
+import { Link, router, usePage } from "@inertiajs/vue3";
 import logo from "../Assets/Logo Nirita Rentals.png";
 
 const sidebarOpen = ref(false);
 const dropdownOpen = ref(false);
+
+const page = usePage();
+
+const isActive = (path) => page.url.startsWith(path); // cocok juga untuk sub-route
 
 const toggleDropdown = () => {
     dropdownOpen.value = !dropdownOpen.value;

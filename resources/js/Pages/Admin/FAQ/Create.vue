@@ -77,6 +77,12 @@ const form = useForm({
 const submit = () => {
     form.post("/admin/faq", {
         forceFormData: true,
+        onSuccess: () => {
+            Swal.fire({
+                title: "FAQ Berhasil Ditambahkan!",
+                icon: "success",
+            });
+        },
     });
 };
 </script>

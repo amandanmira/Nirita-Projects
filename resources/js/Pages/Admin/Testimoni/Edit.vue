@@ -104,7 +104,10 @@ const updateTestimoni = () => {
     router.post(`/admin/testimoni/${props.testimoni.id_testimoni}`, data, {
         preserveState: false,
         onSuccess: () => {
-            console.log("Update berhasil");
+            Swal.fire({
+                title: "Testimoni Berhasil Diperbarui!",
+                icon: "success",
+            });
         },
         onError: (errs) => {
             console.error("Error update", errs);

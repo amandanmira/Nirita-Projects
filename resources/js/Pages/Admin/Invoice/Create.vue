@@ -413,11 +413,14 @@ const submit = () => {
 
     form.post("/admin/invoice", {
         forceFormData: true,
+        onSuccess: () => {
+            Swal.fire({
+                title: "Invoice Berhasil Ditambahkan!",
+                icon: "success",
+            });
+        },
         onError: (errors) => {
             console.log(errors); // Debug jika gagal
-        },
-        onSuccess: () => {
-            alert("Invoice berhasil disimpan!");
         },
     });
 };

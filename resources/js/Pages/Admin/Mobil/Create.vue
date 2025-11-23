@@ -325,6 +325,12 @@ const removeFasilitas = (index) => form.fasilitas.splice(index, 1);
 const submit = () => {
     form.post("/admin/mobil", {
         forceFormData: true,
+        onSuccess: () => {
+            Swal.fire({
+                title: "Mobil Berhasil Ditambahkan!",
+                icon: "success",
+            });
+        },
     });
 };
 </script>

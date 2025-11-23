@@ -122,7 +122,10 @@ const submitForm = () => {
     form.post("/admin/testimoni", {
         forceFormData: true, // agar dikirim sebagai multipart/form-data
         onSuccess: () => {
-            alert("✅ Testimoni berhasil ditambahkan!");
+            Swal.fire({
+                title: "Testimoni Berhasil Ditambahkan!",
+                icon: "success",
+            });
         },
         onError: (errors) => {
             console.error(errors);

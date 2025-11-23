@@ -96,8 +96,10 @@ const updateFaq = () => {
     form.put(`/admin/faq/${props.faq.id_faq}`, {
         preserveScroll: true,
         onSuccess: () => {
-            console.log("Update berhasil:", form);
-            alert("FAQ berhasil diperbarui!");
+            Swal.fire({
+                title: "FAQ Berhasil Diperbarui!",
+                icon: "success",
+            });
         },
         onError: (errors) => {
             console.error("Error saat update:", errors);

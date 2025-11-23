@@ -3,7 +3,7 @@
         <div class="max-w-6xl mx-auto">
             <!-- Header -->
             <div
-                class="flex flex-col md:flex-row md:items-center md:justify-between mb-6 gap-3"
+                class="flex flex-col items-start md:flex-row md:items-center md:justify-between mb-6 gap-3"
             >
                 <h1 class="text-3xl font-bold text-gray-800">
                     Daftar Syarat dan Kententuan
@@ -37,6 +37,7 @@
                         class="bg-[#15224F] text-white text-left sticky top-0"
                     >
                         <tr>
+                            <th class="py-3 px-4 font-semibold">No</th>
                             <th class="py-3 px-4 font-semibold">Pertanyaan</th>
                             <th class="py-3 px-4 font-semibold">Jawaban</th>
                             <th class="py-3 px-4 font-semibold text-center">
@@ -46,15 +47,18 @@
                     </thead>
                     <tbody>
                         <tr
-                            v-for="tncs in paginatedFaqs"
+                            v-for="(tncs, idx) in paginatedFaqs"
                             :key="tncs.id_snk"
                             class="border-b hover:bg-gray-50"
                         >
+                            <td class="py-3 px-4">
+                                {{ startIndex + idx + 1 }}
+                            </td>
                             <td class="py-3 px-4">{{ tncs.judul }}</td>
                             <td class="py-3 px-4" v-html="tncs.deskripsi"></td>
                             <td class="py-3 px-4 text-center">
                                 <div
-                                    class="flex justify-center gap-3 bg-gray-200/50 py-2 px-4 rounded-full"
+                                    class="flex justify-center gap-3 rounded-full"
                                 >
                                     <!-- Edit -->
                                     <EditBtn
@@ -134,9 +138,25 @@ const props = defineProps({
 });
 
 const hapus = (id) => {
-    if (confirm("Yakin ingin menghapus SNK ini?")) {
-        router.delete(`/admin/snk/${id}`);
-    }
+    Swal.fire({
+        title: "Yakin ingin menghapus?",
+        text: "Data yang dihapus tidak dapat dikembalikan!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Ya, Hapus!",
+        cancelButtonText: "Batal",
+    }).then((result) => {
+        if (result.isConfirmed) {
+            router.delete(`/admin/snk/${id}`, {
+                onSuccess: () => {
+                    Swal.fire({
+                        icon: "success",
+                        title: "SNK Berhasil Dihapus!",
+                    });
+                },
+            });
+        }
+    });
 };
 
 // const faqs = props.faqs;

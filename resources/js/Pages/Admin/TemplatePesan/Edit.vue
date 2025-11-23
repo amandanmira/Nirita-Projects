@@ -95,8 +95,10 @@ const updateTemplates = () => {
     form.put(`/admin/template-pesan/${props.templates.id_template}`, {
         preserveScroll: true,
         onSuccess: () => {
-            console.log("Update berhasil:", form);
-            alert("Template Pesan berhasil diperbarui!");
+            Swal.fire({
+                title: "Template Pesan Berhasil Diperbarui!",
+                icon: "success",
+            });
         },
         onError: (errors) => {
             console.error("Error saat update:", errors);

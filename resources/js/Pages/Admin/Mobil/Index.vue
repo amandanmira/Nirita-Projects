@@ -3,7 +3,7 @@
         <div class="max-w-6xl mx-auto">
             <!-- Header -->
             <div
-                class="flex flex-col md:flex-row md:items-center md:justify-between mb-6 gap-3"
+                class="flex flex-col items-start md:flex-row md:items-center md:justify-between mb-6 gap-3"
             >
                 <h1 class="text-3xl font-bold text-gray-800">Daftar Mobil</h1>
                 <Link
@@ -30,41 +30,65 @@
 
             <!-- Tabel -->
             <div class="overflow-x-auto bg-white shadow-lg rounded-xl">
-                <table class="min-w-full text-sm text-gray-700">
+                <table class="min-w-full text-sm text-gray-700 border-collapse">
                     <thead
                         class="bg-[#15224F] text-white text-left sticky top-0"
                     >
                         <tr>
-                            <th class="py-3 px-4 font-semibold">Foto Mobil</th>
-                            <th class="py-3 px-4 font-semibold">Nama Mobil</th>
-                            <th class="py-3 px-4 font-semibold text-center">
+                            <th
+                                class="py-3 px-4 font-semibold whitespace-nowrap"
+                            >
+                                No
+                            </th>
+                            <th
+                                class="py-3 px-4 font-semibold whitespace-nowrap"
+                            >
+                                Foto Mobil
+                            </th>
+                            <th
+                                class="py-3 px-4 font-semibold whitespace-nowrap"
+                            >
+                                Nama Mobil
+                            </th>
+                            <th
+                                class="py-3 px-4 font-semibold text-center whitespace-nowrap"
+                            >
                                 Ketersediaan
                             </th>
-                            <th class="py-3 px-4 font-semibold text-center">
+                            <th
+                                class="py-3 px-4 font-semibold text-center whitespace-nowrap"
+                            >
                                 Aksi
                             </th>
                         </tr>
                     </thead>
+
                     <tbody>
                         <tr
-                            v-for="mobil in paginatedCars"
+                            v-for="(mobil, idx) in paginatedCars"
                             :key="mobil.id_mobil"
                             class="border-b hover:bg-gray-50 transition"
                         >
+                            <td class="py-3 px-4 text-center">
+                                {{ startIndex + idx + 1 }}
+                            </td>
+
                             <td class="py-3 px-4">
                                 <img
                                     :src="getFirstPhoto(mobil.url_foto_mobil)"
                                     alt="Foto Mobil"
-                                    class="w-20 h-12 object-cover rounded-md"
+                                    class="w-20 h-14 object-cover rounded-lg mx-auto"
                                 />
                             </td>
-                            <td class="py-3 px-4 font-medium">
+
+                            <td class="py-3 px-4 font-medium whitespace-nowrap">
                                 {{ mobil.nama_mobil }}
                             </td>
+
                             <td class="py-3 px-4 text-center">
                                 <span
                                     :class="[
-                                        'px-2 py-1 rounded-full text-xs font-semibold',
+                                        'px-3 py-1 rounded-full text-xs font-semibold inline-block min-w-[90px]',
                                         mobil.ketersediaan > 0
                                             ? 'bg-green-100 text-green-700'
                                             : 'bg-red-100 text-red-700',
@@ -77,14 +101,14 @@
                                     }}
                                 </span>
                             </td>
-                            <td class="py-3 px-4 text-center">
+
+                            <td class="py-3 px-4">
                                 <div
-                                    class="flex justify-center gap-3 bg-gray-300/50 py-2 rounded-full"
+                                    class="flex items-center justify-start md:justify-center gap-2 flex-wrap"
                                 >
-                                    <!-- Detail -->
                                     <Link
                                         :href="`/admin/mobil/${mobil.id_mobil}`"
-                                        class="text-blue-600 hover:text-blue-800 transition flex items-center gap-1"
+                                        class="text-blue-600 hover:text-blue-800 flex items-center gap-1"
                                     >
                                         <svg
                                             xmlns="http://www.w3.org/2000/svg"
@@ -103,15 +127,11 @@
                                         Detail
                                     </Link>
 
-                                    <!-- Edit -->
                                     <EditBtn
                                         :href="`/admin/mobil/${mobil.id_mobil}/edit`"
-                                    ></EditBtn>
+                                    />
 
-                                    <!-- Hapus -->
-                                    <HapusBtn
-                                        @click="hapus(mobil.id_mobil)"
-                                    ></HapusBtn>
+                                    <HapusBtn @click="hapus(mobil.id_mobil)" />
                                 </div>
                             </td>
                         </tr>
@@ -119,7 +139,7 @@
                         <!-- Jika kosong -->
                         <tr v-if="cars.length === 0">
                             <td
-                                colspan="4"
+                                colspan="5"
                                 class="text-center py-6 text-gray-500"
                             >
                                 Tidak ada data mobil tersedia.
@@ -253,8 +273,24 @@ const goToPage = (page) => {
 };
 
 const hapus = (id) => {
-    if (confirm("Yakin ingin menghapus mobil ini?")) {
-        router.delete(`/admin/mobil/${id}`);
-    }
+    Swal.fire({
+        title: "Yakin ingin menghapus?",
+        text: "Data yang dihapus tidak dapat dikembalikan!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Ya, Hapus!",
+        cancelButtonText: "Batal",
+    }).then((result) => {
+        if (result.isConfirmed) {
+            router.delete(`/admin/mobil/${id}`, {
+                onSuccess: () => {
+                    Swal.fire({
+                        icon: "success",
+                        title: "Mobil Berhasil Dihapus!",
+                    });
+                },
+            });
+        }
+    });
 };
 </script>

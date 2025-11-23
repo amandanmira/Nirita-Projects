@@ -357,8 +357,10 @@ const submitForm = () => {
     form.put(`/admin/invoice/${props.bill.id_nota}`, {
         preserveScroll: true,
         onSuccess: () => {
-            console.log("Update berhasil:", form);
-            alert("Invoice berhasil diperbarui!");
+            cSwal.fire({
+                title: "Invoice Berhasil Diperbarui!",
+                icon: "success",
+            });
         },
         onError: (errors) => {
             console.error("Error saat update:", errors);

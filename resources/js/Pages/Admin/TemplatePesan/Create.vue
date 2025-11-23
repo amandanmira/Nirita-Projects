@@ -89,6 +89,12 @@ const form = useForm({
 const submit = () => {
     form.post("/admin/template-pesan", {
         forceFormData: true,
+        onSuccess: () => {
+            Swal.fire({
+                title: "Template Pesan Berhasil Ditambahkan!",
+                icon: "success",
+            });
+        },
     });
 };
 </script>
