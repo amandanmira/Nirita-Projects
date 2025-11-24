@@ -68,7 +68,7 @@
                     <i class="fas fa-bell text-gray-600 text-lg"></i>
 
                     <!-- Profil dropdown -->
-                    <div class="relative">
+                    <div class="relative" ref="dropdownRef">
                         <button
                             @click="toggleDropdown"
                             class="flex items-center gap-2 focus:outline-none"
@@ -117,12 +117,14 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted, onUnmounted } from "vue";
 import { Link, router, usePage } from "@inertiajs/vue3";
 import logo from "../Assets/Logo Nirita Rentals.png";
 
 const sidebarOpen = ref(false);
 const dropdownOpen = ref(false);
+const dropdownRef = ref(null);
+
 
 const page = usePage();
 
@@ -154,8 +156,23 @@ const menus = [
 ];
 
 const logout = () => {
+    dropdownOpen.value = false; 
     router.post("/logout");
 };
+
+const handleClickOutside = (event) => {
+  if (dropdownOpen.value && dropdownRef.value && !dropdownRef.value.contains(event.target)) {
+    dropdownOpen.value = false;
+  }
+};
+
+onMounted(() => {
+  document.addEventListener('click', handleClickOutside);
+});
+
+onUnmounted(() => {
+  document.removeEventListener('click', handleClickOutside);
+});
 </script>
 
 <style scoped>
