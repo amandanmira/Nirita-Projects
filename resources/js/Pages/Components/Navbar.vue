@@ -27,7 +27,7 @@ const menus = [
     },
     { label: "Units", Link: "/units" },
     { label: "Review", Link: "/review" },
-    { label: "Term and Condition", Link: "/tnc" },
+    { label: "Terms and Condition", Link: "/tnc" },
     {
         label: "FAQ",
         Link: "/faq",
@@ -85,13 +85,6 @@ const toggleMenu = () => (menuOpen.value = !menuOpen.value);
 
             <!-- Contact Button (kanan desktop) -->
             <div class="hidden md:block">
-                <!-- <a
-                    :href="waLink"
-                    target="_blank"
-                    class="bg-green-600 hover:bg-green-700 text-white font-medium px-5 py-2 rounded-full transition inline-flex items-center gap-2"
-                >
-                    Contact Us
-                </a> -->
                 <NavContactUsBtn
                     :templates="waTemplates"
                     :templateId="3"
