@@ -20,7 +20,8 @@
                     <div
                         v-for="item in props.testimonials"
                         :key="item.id_testimoni"
-                        class="bg-gradient-to-t from-[#101B4E] to-[#173A84] p-4 rounded-xl overflow-hidden shadow-md hover:shadow-lg transition transform hover:-translate-y-1"
+                        class="bg-gradient-to-t from-[#101B4E] to-[#173A84] p-4 rounded-xl overflow-hidden shadow-md hover:shadow-lg transition transform hover:-translate-y-1 cursor-pointer"
+                        @click="openPreview(`storage/${item.url_gambar}`)"
                     >
                         <img
                             :src="`storage/${item.url_gambar}`"
@@ -31,10 +32,44 @@
                 </div>
             </div>
         </div>
+        <!-- Modal Preview -->
+        <div
+            v-if="previewImage"
+            class="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4"
+            @click="closePreview"
+        >
+            <div @click.stop class="relative">
+                <img
+                    :src="previewImage"
+                    class="rounded-lg max-h-[90vh] max-w-[90vw] object-contain"
+                />
+                <button
+                    @click="closePreview"
+                    class="absolute top-4 right-4 bg-black/60 hover:bg-black/80 text-white rounded-full p-2 transition"
+                    aria-label="Tutup preview"
+                >
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="h-5 w-5"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                    >
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M6 18L18 6M6 6l12 12"
+                        />
+                    </svg>
+                </button>
+            </div>
+        </div>
     </section>
 </template>
 
 <script setup>
+import { ref } from "vue";
 // import reviews from "../data/testimoni.js";
 
 const props = defineProps({
@@ -43,6 +78,18 @@ const props = defineProps({
         default: () => [],
     },
 });
+
+const previewImage = ref(null);
+
+const openPreview = (imageUrl) => {
+    previewImage.value = imageUrl;
+    document.body.classList.add("overflow-hidden");
+};
+
+const closePreview = () => {
+    previewImage.value = null;
+    document.body.classList.remove("overflow-hidden");
+};
 
 // Helper function untuk resolve path gambar dengan Vite
 const getImage = (path) => {

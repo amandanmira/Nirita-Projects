@@ -27,7 +27,7 @@ const menus = [
     },
     { label: "Units", Link: "/units" },
     { label: "Review", Link: "/review" },
-    { label: "Term and Condition", Link: "/tnc" },
+    { label: "Terms and Condition", Link: "/tnc" },
     {
         label: "FAQ",
         Link: "/faq",
