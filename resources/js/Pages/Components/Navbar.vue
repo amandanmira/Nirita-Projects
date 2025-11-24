@@ -94,7 +94,7 @@ const toggleMenu = () => (menuOpen.value = !menuOpen.value);
                 </a> -->
                 <NavContactUsBtn
                     :templates="waTemplates"
-                    :templateId="1"
+                    :templateId="3"
                     label="Contact Us"
                 />
             </div>

@@ -1,8 +1,71 @@
 <script setup>
+import { onMounted } from "vue";
+import gsap from "gsap";
+import ScrollTrigger from "gsap/ScrollTrigger";
+
 import MainLayout from "../Layouts/MainLayouts.vue";
+
+gsap.registerPlugin(ScrollTrigger);
 
 const props = defineProps({
     tncs: Array,
+});
+
+onMounted(() => {
+    // Animasi judul
+    gsap.fromTo(
+        ".tnc-title",
+        { opacity: 0, y: 40 },
+        {
+            opacity: 1,
+            y: 0,
+            duration: 1,
+            ease: "power3.out",
+            scrollTrigger: {
+                trigger: ".tnc-title",
+                start: "top 85%",
+                toggleActions: "restart none none reset",
+            },
+        }
+    );
+
+    // Animasi deskripsi
+    gsap.fromTo(
+        ".tnc-desc",
+        { opacity: 0, y: 40 },
+        {
+            opacity: 1,
+            y: 0,
+            duration: 1,
+            delay: 0.15,
+            ease: "power3.out",
+            scrollTrigger: {
+                trigger: ".tnc-desc",
+                start: "top 85%",
+                toggleActions: "restart none none reset",
+            },
+        }
+    );
+
+    // Animasi kartu TnC (stagger)
+    gsap.utils.toArray(".tnc-card").forEach((card, i) => {
+        gsap.fromTo(
+            card,
+            { opacity: 0, y: 50 },
+            {
+                opacity: 1,
+                y: 0,
+                duration: 1,
+                delay: i * 0.2,
+                ease: "power3.out",
+                scrollTrigger: {
+                    trigger: card,
+                    start: "top 90%",
+                    toggleActions: "restart none none reset",
+                },
+            }
+        );
+    });
 });
 </script>
 
@@ -10,10 +73,13 @@ const props = defineProps({
     <MainLayout>
         <section class="py-16 px-4 bg-gray-50 text-gray-800">
             <div class="max-w-4xl mx-auto text-center mb-12">
-                <h2 class="text-2xl md:text-3xl font-bold mb-3 text-gray-900">
+                <h2
+                    class="tnc-title text-2xl md:text-3xl font-bold mb-3 text-gray-900 opacity-0"
+                >
                     Syarat & Ketentuan
                 </h2>
-                <p class="text-gray-600 leading-relaxed">
+
+                <p class="tnc-desc text-gray-600 leading-relaxed opacity-0">
                     Selamat datang di layanan rental mobil kami. Sebelum
                     melakukan pemesanan, harap membaca dan memahami syarat serta
                     ketentuan berikut ini. Dengan melakukan pemesanan, Anda
@@ -26,11 +92,9 @@ const props = defineProps({
             >
                 <div
                     v-for="term in props.tncs"
-                    class="efek-hover bg-white rounded-xl p-6"
+                    :key="term.id"
+                    class="tnc-card efek-hover bg-white rounded-xl p-6 opacity-0"
                 >
-                    <!-- <h3 class="text-lg md:text-xl font-bold mb-3">
-                        {{ term.judul }}
-                    </h3> -->
                     <div
                         v-html="term.deskripsi"
                         class="text-gray-700 leading-relaxed"
