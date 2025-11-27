@@ -38,6 +38,19 @@ class HandleInertiaRequests extends Middleware
     {
         return array_merge(parent::share($request), [
 
+            // Data admin yang sedang login
+            'admin' => $request->user() ? [
+                'id' => $request->user()->id_admin,
+                'username' => $request->user()->username,
+                'email' => $request->user()->email,
+            ] : null,
+
+            // Flash messages untuk alert/notification
+            'flash' => [
+                'success' => fn() => $request->session()->get('success'),
+                'error' => fn() => $request->session()->get('error'),
+            ],
+
             // Semua template tersedia sebagai array
             'waTemplates' => function () {
                 return MessageTemplate::all()->map(function ($t) {

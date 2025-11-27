@@ -74,13 +74,15 @@ const form = useForm({
     deskripsi: "",
 });
 
-form.post("/admin/faq", {
-    forceFormData: true,
-    onSuccess: () => {
-        Swal.fire({
-            title: "FAQ Berhasil Ditambahkan!",
-            icon: "success",
-        });
-    },
-});
+const submit = () => {
+    form.post("/admin/snk", {
+        forceFormData: true,
+        onSuccess: () => {
+            Swal.fire({
+                title: "Syarat dan Ketentuan Berhasil Ditambahkan!",
+                icon: "success",
+            });
+        },
+    });
+};
 </script>

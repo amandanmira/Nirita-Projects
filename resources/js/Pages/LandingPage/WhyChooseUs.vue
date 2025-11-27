@@ -78,7 +78,7 @@ onMounted(() => {
         scrollTrigger: {
             trigger: sectionRef.value,
             start: "top 50%",
-            toggleActions: "play none play none",
+            toggleActions: "restart none none reset",
         },
     });
 
@@ -91,7 +91,7 @@ onMounted(() => {
         scrollTrigger: {
             trigger: sectionRef.value,
             start: "top 90%",
-            toggleActions: "play none play none",
+            toggleActions: "restart none none reset",
         },
     });
 });

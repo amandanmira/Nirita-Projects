@@ -1,6 +1,7 @@
 <script setup>
-import { ref, computed } from "vue";
+import { ref, computed, onMounted } from "vue";
 import { usePage } from "@inertiajs/vue3";
+import gsap from "gsap";
 import CallBtnMobil from "../Components/CallBtnMobil.vue";
 
 const page = usePage();
@@ -11,6 +12,31 @@ const props = defineProps({
         type: Array,
         default: () => [],
     },
+});
+
+// GSAP Animasi HANYA saat halaman reload
+onMounted(() => {
+    // Sidebar animasi
+    gsap.from(".filter-sidebar", {
+        opacity: 0,
+        x: -50,
+        duration: 1,
+        ease: "power3.out",
+    });
+
+    // Grid card animasi
+    gsap.fromTo(
+        ".car-card",
+        { opacity: 0, y: 50 },
+        {
+            opacity: 1,
+            y: 0,
+            duration: 1,
+            ease: "power3.out",
+            stagger: 0.15,
+            delay: 0.3,
+        }
+    );
 });
 
 // Filter Model
@@ -69,7 +95,13 @@ const filteredUnits = computed(() => {
 
         const matchCapacity =
             filters.value.capacity === "Semua" ||
-            sp.kapasitas == Number(filters.value.capacity);
+            (filters.value.capacity === "5" &&
+                sp.kapasitas >= 5 &&
+                sp.kapasitas < 8) ||
+            (filters.value.capacity === "8" &&
+                sp.kapasitas >= 8 &&
+                sp.kapasitas < 14) ||
+            (filters.value.capacity === "14" && sp.kapasitas >= 14);
 
         const matchTransmission =
             filters.value.transmission === "Semua" ||
@@ -83,16 +115,12 @@ const filteredUnits = computed(() => {
                 rp.harga_solo < 3000000) ||
             (filters.value.price === "mahal" && rp.harga_solo >= 3000000);
 
-        const matchAvailable =
-            !filters.value.availableOnly || car.status_mobil === "Tersedia";
-
         return (
             matchName &&
             matchType &&
             matchCapacity &&
             matchTransmission &&
-            matchPrice &&
-            matchAvailable
+            matchPrice
         );
     });
 });
@@ -114,7 +142,9 @@ const resetFilter = () => {
     <section class="bg-gray-100 py-10 px-4 md:px-8 lg:px-16">
         <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-6">
             <!-- 🔹 Filter Sidebar -->
-            <div class="bg-white p-5 rounded-xl shadow-md h-fit">
+            <div
+                class="bg-white p-5 rounded-xl shadow-md h-fit filter-sidebar md:sticky md:top-0"
+            >
                 <h2 class="text-xl font-semibold text-blue-800 mb-4">
                     Filter Unit
                 </h2>
@@ -136,8 +166,10 @@ const resetFilter = () => {
                     <option>Semua</option>
                     <option>MPV</option>
                     <option>SUV</option>
-                    <option>Van</option>
-                    <option>City Car</option>
+                    <option>Large SUV</option>
+                    <option>MPV Luxury</option>
+                    <option>MiniBus</option>
+                    <option>Luxury Minibus</option>
                 </select>
 
                 <!-- Kapasitas -->
@@ -147,8 +179,8 @@ const resetFilter = () => {
                     class="w-full border border-gray-300 rounded-lg px-3 py-2 mb-3"
                 >
                     <option>Semua</option>
-                    <option value="4">4</option>
-                    <option value="7">7</option>
+                    <option value="5">5</option>
+                    <option value="8">8</option>
                     <option value="14">14</option>
                 </select>
 
@@ -175,19 +207,6 @@ const resetFilter = () => {
                     <option value="mahal">&gt; Rp 3.000.000</option>
                 </select>
 
-                <!-- Hanya tersedia -->
-                <div class="flex items-center mb-4">
-                    <input
-                        type="checkbox"
-                        v-model="filters.availableOnly"
-                        id="availableOnly"
-                        class="mr-2"
-                    />
-                    <label for="availableOnly" class="text-gray-700 text-sm"
-                        >Tampilkan Unit Tersedia Saja</label
-                    >
-                </div>
-
                 <!-- Tombol -->
                 <div class="flex gap-3">
                     <button
@@ -211,7 +230,7 @@ const resetFilter = () => {
                 <div
                     v-for="car in filteredUnits"
                     :key="car.id_mobil"
-                    class="bg-white shadow-md rounded-xl overflow-hidden hover:shadow-lg transition px-2 py-3"
+                    class="bg-white shadow-md rounded-xl overflow-hidden hover:shadow-lg transition px-2 py-3 car-card"
                 >
                     <!-- Foto -->
                     <div
@@ -250,13 +269,6 @@ const resetFilter = () => {
                                 Lihat Detail
                             </a>
 
-                            <!-- <a
-                                :href="`https://wa.me/6281393604105?text=Halo,%20saya%20ingin%20menyewa%20${car.nama_mobil}`"
-                                target="_blank"
-                                class="flex items-center justify-center bg-blue-600 text-white rounded-r-md px-4 py-4 hover:bg-black transition"
-                            >
-                                <i class="fa-solid fa-phone"></i>
-                            </a> -->
                             <CallBtnMobil
                                 :templates="waTemplates"
                                 :templateId="4"

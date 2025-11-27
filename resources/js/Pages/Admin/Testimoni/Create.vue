@@ -1,89 +1,113 @@
 <template>
     <DashLayouts>
-        <div
-            class="max-w-3xl mx-auto bg-white p-8 rounded-2xl shadow-lg mt-10 border border-gray-100"
-        >
-            <!-- Header -->
-            <div class="flex items-center justify-between mb-8 border-b pb-4">
-                <h1 class="text-2xl font-bold text-gray-800">
-                    🖼️ Tambah Testimoni
-                </h1>
-            </div>
-
-            <!-- Form -->
-            <form
-                @submit.prevent="submitForm"
-                enctype="multipart/form-data"
-                class="space-y-6"
+        <div class="max-w-3xl mx-auto mt-4">
+            <div
+                class="bg-white/60 backdrop-blur-xl p-10 rounded-3xl shadow-xl border border-gray-200/70 transition-all"
             >
-                <!-- Upload Gambar -->
-                <div>
-                    <label class="block text-gray-700 font-semibold mb-1"
-                        >Upload Gambar</label
-                    >
-                    <input
-                        type="file"
-                        accept="image/*"
-                        @change="handleFileChange"
-                        class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
-                    />
-                    <p
-                        v-if="errors.url_gambar"
-                        class="text-red-500 text-sm mt-1"
-                    >
-                        {{ errors.url_gambar }}
-                    </p>
-
-                    <!-- Preview -->
-                    <div v-if="preview" class="mt-4">
-                        <img
-                            :src="preview"
-                            alt="Preview"
-                            class="w-48 h-48 object-cover rounded-lg border shadow"
-                        />
+                <!-- Header -->
+                <div class="flex items-center justify-between mb-10">
+                    <div>
+                        <h1
+                            class="text-3xl font-bold text-gray-900 flex items-center gap-2"
+                        >
+                            <i class="fa-solid fa-plus text-blue-600"></i>
+                            Tambah Testimoni
+                        </h1>
+                        <p class="text-gray-500 text-sm mt-1">
+                            Tambahkan testimoni baru dari pelanggan.
+                        </p>
                     </div>
                 </div>
 
-                <!-- Deskripsi -->
-                <div>
-                    <label class="block text-gray-700 font-semibold mb-1"
-                        >Deskripsi Testimoni</label
-                    >
-                    <textarea
-                        v-model="form.desk_testimoni"
-                        rows="4"
-                        placeholder="Masukkan deskripsi testimoni (opsional)"
-                        class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
-                    ></textarea>
-                    <p
-                        v-if="errors.desk_testimoni"
-                        class="text-red-500 text-sm mt-1"
-                    >
-                        {{ errors.desk_testimoni }}
-                    </p>
-                </div>
+                <!-- Form -->
+                <form
+                    @submit.prevent="submitForm"
+                    enctype="multipart/form-data"
+                    class="space-y-8"
+                >
+                    <!-- Upload Gambar -->
+                    <div>
+                        <label class="block text-gray-700 font-semibold mb-2">
+                            Upload Gambar
+                        </label>
 
-                <!-- Tombol -->
-                <div class="flex justify-end gap-3 mt-8">
-                    <Link
-                        href="/admin/testimoni"
-                        class="px-5 py-2 bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium rounded-lg transition"
-                    >
-                        Batal
-                    </Link>
-                    <button
-                        type="submit"
-                        :disabled="form.processing"
-                        class="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg shadow transition"
-                    >
-                        {{
-                            form.processing
-                                ? "Menyimpan..."
-                                : "Simpan Testimoni"
-                        }}
-                    </button>
-                </div>
-            </form>
+                        <div
+                            class="border-2 border-dashed border-gray-300 rounded-2xl p-6 text-center hover:border-blue-500 hover:bg-blue-50/40 transition cursor-pointer"
+                        >
+                            <input
+                                type="file"
+                                accept="image/*"
+                                @change="handleFileChange"
+                                class="w-full text-sm text-gray-600"
+                            />
+
+                            <p class="text-gray-400 text-sm mt-2">
+                                Format: JPG, PNG — Max 5MB
+                            </p>
+                        </div>
+
+                        <!-- Error -->
+                        <p
+                            v-if="errors.url_gambar"
+                            class="text-red-500 text-sm mt-2"
+                        >
+                            {{ errors.url_gambar }}
+                        </p>
+
+                        <!-- Preview -->
+                        <div v-if="preview" class="mt-5 flex justify-center">
+                            <img
+                                :src="preview"
+                                alt="Preview"
+                                class="w-48 h-48 object-cover rounded-xl shadow-md border"
+                            />
+                        </div>
+                    </div>
+
+                    <!-- Deskripsi -->
+                    <div>
+                        <label class="block text-gray-700 font-semibold mb-2">
+                            Deskripsi Testimoni
+                        </label>
+
+                        <textarea
+                            v-model="form.desk_testimoni"
+                            rows="4"
+                            placeholder="Masukkan deskripsi testimoni (opsional)"
+                            class="w-full rounded-2xl border border-gray-300 px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition shadow-sm"
+                        ></textarea>
+
+                        <p
+                            v-if="errors.desk_testimoni"
+                            class="text-red-500 text-sm mt-2"
+                        >
+                            {{ errors.desk_testimoni }}
+                        </p>
+                    </div>
+
+                    <!-- Tombol -->
+                    <div class="flex justify-end gap-4 pt-4">
+                        <Link
+                            href="/admin/testimoni"
+                            class="px-5 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-800 font-medium rounded-xl transition shadow-sm"
+                        >
+                            Batal
+                        </Link>
+
+                        <button
+                            type="submit"
+                            :disabled="form.processing"
+                            class="px-7 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl shadow-md transition disabled:opacity-50 disabled:cursor-not-allowed"
+                        >
+                            {{
+                                form.processing
+                                    ? "Menyimpan..."
+                                    : "Simpan Testimoni"
+                            }}
+                        </button>
+                    </div>
+                </form>
+            </div>
         </div>
     </DashLayouts>
 </template>
@@ -97,7 +121,6 @@ const props = defineProps({
     errors: Object,
 });
 
-// Form data
 const form = useForm({
     url_gambar: null,
     desk_testimoni: "",
@@ -105,7 +128,6 @@ const form = useForm({
 
 const preview = ref(null);
 
-// handle file upload
 const handleFileChange = (e) => {
     const file = e.target.files[0];
     form.url_gambar = file;
@@ -117,18 +139,15 @@ const handleFileChange = (e) => {
     }
 };
 
-// submit form
 const submitForm = () => {
     form.post("/admin/testimoni", {
-        forceFormData: true, // agar dikirim sebagai multipart/form-data
+        forceFormData: true,
         onSuccess: () => {
             Swal.fire({
-                title: "Testimoni Berhasil Ditambahkan!",
+                title: "Berhasil!",
+                text: "Testimoni berhasil ditambahkan.",
                 icon: "success",
             });
-        },
-        onError: (errors) => {
-            console.error(errors);
         },
     });
 };

@@ -7,6 +7,7 @@ use App\Models\Testimonial;
 use App\Models\Faq;
 use App\Models\Tnc;
 use App\Models\MessageTemplate;
+use App\Models\Admin;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -14,8 +15,8 @@ class HomeController extends Controller
 {
     public function index()
     {
-        $cars = Car::with(['rentalPrice', 'specification'])->latest()->take(6)->get();
-        $testimonials = Testimonial::latest()->take(5)->get();
+        $cars = Car::with(['rentalPrice', 'specification'])->inRandomOrder()->take(6)->get();
+        $testimonials = Testimonial::inRandomOrder()->take(5)->get();
         $faqs = Faq::take(5)->get();
 
         return Inertia::render('Home', compact('cars', 'testimonials', 'faqs'));
@@ -44,6 +45,7 @@ class HomeController extends Controller
         // ambil semua mobil kecuali mobil yang sedang dibuka
         $carsRekom = Car::with(['rentalPrice', 'specification'])
             ->where('id_mobil', '!=', $id)
+            ->inRandomOrder()
             ->get();
         return Inertia::render('CarsDetail', compact('cars', 'carsRekom'));
     }
@@ -64,5 +66,11 @@ class HomeController extends Controller
     {
         $faqs = Faq::all();
         return Inertia::render('Faq', compact('faqs'));
+    }
+
+    public function adminName()
+    {
+        $admin = Admin::all();
+        return Inertia::render('Layouts/DashboardLayout', compact('admin'));
     }
 }

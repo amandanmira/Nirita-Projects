@@ -17,6 +17,21 @@
                 </p>
 
                 <div class="space-y-4 text-gray-700">
+                    <div
+                        class="flex items-center gap-6 contact-item"
+                        ref="contactRefs"
+                    >
+                        <h3 class="font-semibold text-gray-900">
+                            Jam <br />Operasional
+                        </h3>
+                        <ul class="space-y-1 text-sm">
+                            <li>Senin - Minggu:</li>
+                            <li>08.00 - 12.00 WIB (Offline)</li>
+                            <li>08.00 - 12.00 WIB (Offline)</li>
+                            <li>08.00 - 12.00 WIB (Offline)</li>
+                        </ul>
+                    </div>
+
                     <!-- Item List -->
                     <div
                         class="flex items-center gap-16 contact-item"

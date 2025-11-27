@@ -3,7 +3,7 @@
         <!-- Judul utama -->
         <div class="grid md:grid-cols-2 gap-16">
             <!-- Kolom Kiri - Paket Layanan -->
-            <div>
+            <div class="left-col">
                 <h2
                     class="text-2xl font-bold text-blue-800 mb-4 inline-block pb-1"
                 >
@@ -12,36 +12,36 @@
 
                 <h3 class="font-semibold mb-2">Paket Layanan Tersedia:</h3>
                 <ul class="list-decimal list-inside space-y-1 leading-relaxed">
-                    <li>
+                    <li class="stagger-item">
                         <strong>Paket Basic</strong> – Include mineral water
                     </li>
-                    <li>
+                    <li class="stagger-item">
                         <strong>Paket Standard</strong> – Include mineral water,
                         soft drink
                     </li>
-                    <li>
+                    <li class="stagger-item">
                         <strong>Paket Plus</strong> – Include mineral water,
                         soft drink, buah
                     </li>
-                    <li>
+                    <li class="stagger-item">
                         <strong>Paket Premium</strong> – Include mineral water,
                         soft drink, buah, snack
                     </li>
-                    <li>
+                    <li class="stagger-item">
                         <strong>Paket Deluxe</strong> – Include mineral water,
                         soft drink, buah, snack, makan siang
                     </li>
-                    <li>
+                    <li class="stagger-item">
                         <strong>Paket Ultimate</strong> – Include mineral water,
                         soft drink, buah, snack, makan siang, oleh-oleh khas
                         kota tersebut
                     </li>
-                    <li>
+                    <li class="stagger-item">
                         <strong>Paket Complete</strong> – Include mineral water,
                         soft drink, buah, snack, makan siang, uang parkir setiap
                         destinasi wisata
                     </li>
-                    <li>
+                    <li class="stagger-item">
                         <strong>Paket All Inclusive</strong> – Include mineral
                         water, soft drink, buah, snack, makan siang, uang parkir
                         setiap destinasi wisata, dan e-tol (untuk luar
@@ -51,9 +51,9 @@
             </div>
 
             <!-- Kolom Kanan - Fasilitas -->
-            <div>
+            <div class="right-col">
                 <h2
-                    class="text-2xl font-bold text-blue-800 mb-4 inline-block pb-1"
+                    class="text-2xl font-bold text-blue-800 mb-4 inline-block pb-1 stagger-item"
                 >
                     Fasilitas
                 </h2>
@@ -61,7 +61,11 @@
                 <h3 class="font-semibold mb-2">Fasilitas Yang Tersedia:</h3>
 
                 <ul class="list-decimal list-inside space-y-1 leading-relaxed">
-                    <li v-for="(item, index) in fasilitasList" :key="index">
+                    <li
+                        v-for="(item, index) in fasilitasList"
+                        :key="index"
+                        class="stagger-item"
+                    >
                         {{ item }}
                     </li>
                 </ul>
@@ -69,7 +73,7 @@
         </div>
 
         <!-- Catatan -->
-        <div class="mt-5">
+        <div class="tips-box mt-5">
             <p class="mt-5 text-lg text-blue-800 font-semibold">Catatan:</p>
             <p class="text-lg">
                 Paket yang lebih tinggi sudah termasuk semua fasilitas dari
@@ -80,7 +84,7 @@
 
         <!-- Tips Pemesanan -->
         <div
-            class="max-w-2xl mx-auto mt-8 bg-blue-50 border border-blue-100 rounded-xl p-6 shadow-sm flex flex-col items-start md:items-center gap-4"
+            class="tips-box max-w-2xl mx-auto mt-8 bg-blue-50 border border-blue-100 rounded-xl p-6 shadow-sm flex flex-col items-start md:items-center gap-4"
         >
             <div class="flex items-center gap-2 text-blue-800 text-3xl">
                 💡
@@ -103,13 +107,71 @@
 </template>
 
 <script setup>
-import { computed } from "vue";
+import { computed, onMounted } from "vue";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+gsap.registerPlugin(ScrollTrigger);
 
 const props = defineProps({
     cars: {
         type: Object,
         required: true,
     },
+});
+
+onMounted(() => {
+    // Kiri
+    gsap.from(".left-col", {
+        opacity: 0,
+        x: -80,
+        duration: 1,
+        ease: "power3.out",
+        scrollTrigger: {
+            trigger: ".left-col",
+            start: "top 80%",
+            toggleActions: "restart none none reset",
+        },
+    });
+
+    // Kanan
+    gsap.from(".right-col", {
+        opacity: 0,
+        x: 80,
+        duration: 1,
+        ease: "power3.out",
+        scrollTrigger: {
+            trigger: ".right-col",
+            start: "top 80%",
+            toggleActions: "restart none none reset",
+        },
+    });
+
+    // Stagger pada list item paket & fasilitas
+    gsap.from(".stagger-item", {
+        opacity: 0,
+        y: 40,
+        duration: 0.6,
+        stagger: 0.15,
+        ease: "power3.out",
+        scrollTrigger: {
+            trigger: ".stagger-item",
+            start: "top 85%",
+            toggleActions: "restart none none reset",
+        },
+    });
+
+    // Box Tips Pemesanan
+    gsap.from(".tips-box", {
+        opacity: 0,
+        scale: 0.9,
+        duration: 0.8,
+        ease: "power3.out",
+        scrollTrigger: {
+            trigger: ".tips-box",
+            start: "top 90%",
+            toggleActions: "restart none none reset",
+        },
+    });
 });
 
 // Parsing fasilitas TEXT → array

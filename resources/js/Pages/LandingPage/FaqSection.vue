@@ -2,10 +2,12 @@
     <section class="bg-white py-18 px-6 md:px-16 lg:px-24">
         <div class="max-w-4xl mx-auto text-center">
             <!-- Header -->
-            <h2 class="text-2xl md:text-3xl font-bold text-gray-900 mb-2">
+            <h2
+                class="faq-title text-2xl md:text-3xl font-bold text-gray-900 mb-2"
+            >
                 FAQ
             </h2>
-            <p class="text-gray-900 text-lg mb-8">
+            <p class="faq-desc text-gray-900 text-lg mb-8">
                 Pertanyaan yang sering diajukan
             </p>
 
@@ -14,7 +16,7 @@
                 <div
                     v-for="(faq, index) in props.faqs"
                     :key="faq.id_faq"
-                    class="border-t first:border-t-0 overflow-hidden transition-all duration-300"
+                    class="faq-item border-t first:border-t-0 overflow-hidden transition-all duration-300"
                 >
                     <!-- Pertanyaan -->
                     <button
@@ -57,13 +59,77 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, computed, onMounted } from "vue";
+import gsap from "gsap";
+import ScrollTrigger from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
 
 const props = defineProps({
     faqs: {
         type: Array,
         default: () => [],
     },
+});
+
+// GSAP animations
+onMounted(() => {
+    // Title animation
+    gsap.fromTo(
+        ".faq-title",
+        { opacity: 0, y: 40 },
+        {
+            opacity: 1,
+            y: 0,
+            duration: 1,
+            ease: "power3.out",
+            scrollTrigger: {
+                trigger: ".faq-title",
+                start: "top 85%",
+                toggleActions: "restart none none reset",
+            },
+        }
+    );
+
+    // Description animation
+    gsap.fromTo(
+        ".faq-desc",
+        { opacity: 0, y: 40 },
+        {
+            opacity: 1,
+            y: 0,
+            duration: 1,
+            delay: 0.15,
+            ease: "power3.out",
+            scrollTrigger: {
+                trigger: ".faq-desc",
+                start: "top 85%",
+                toggleActions: "restart none none reset",
+            },
+        }
+    );
+
+    // Loop each FAQ item
+    const faqItems = gsap.utils.toArray(".faq-item");
+
+    faqItems.forEach((item, i) => {
+        gsap.fromTo(
+            item,
+            { opacity: 0, y: 60 },
+            {
+                opacity: 1,
+                y: 0,
+                duration: 0.5,
+                delay: i * 0.15,
+                ease: "power3.out",
+                scrollTrigger: {
+                    trigger: item,
+                    start: "top 95%",
+                    toggleActions: "restart none none reset",
+                },
+            }
+        );
+    });
 });
 
 // Menyimpan index FAQ yang sedang dibuka

@@ -24,7 +24,7 @@
                     <div
                         v-for="(item, index) in props.testimonials"
                         :key="item.id_testimoni"
-                        class="testiCard bg-gradient-to-t from-[#101B4E] to-[#173A84] p-4 rounded-xl overflow-hidden shadow-md hover:shadow-lg transition transform hover:-translate-y-1 cursor-pointer"
+                        class="testiCard relative group bg-gradient-to-t from-[#101B4E] to-[#173A84] p-4 rounded-xl overflow-hidden shadow-md hover:shadow-lg transition transform hover:-translate-y-1 cursor-pointer"
                         @click="openPreview(`storage/${item.url_gambar}`)"
                     >
                         <img
@@ -32,6 +32,35 @@
                             :alt="item.desk_testimoni"
                             class="w-full h-48 object-cover rounded-lg"
                         />
+
+                        <!-- Overlay gelap -->
+                        <div
+                            class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg"
+                        ></div>
+
+                        <!-- ICON MATA -->
+                        <div
+                            class="absolute inset-0 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition duration-300"
+                        >
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                class="w-10 h-10 text-white"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke-width="1.8"
+                                stroke="currentColor"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    d="M2.25 12s3.75-7.5 9.75-7.5S21.75 12 21.75 12s-3.75 7.5-9.75 7.5S2.25 12 2.25 12z"
+                                />
+                                <circle cx="12" cy="12" r="3" />
+                            </svg>
+                            <p class="text-white text-sm font-semibold">
+                                Lihat Testimoni
+                            </p>
+                        </div>
                     </div>
                 </div>
             </div>

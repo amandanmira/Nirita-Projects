@@ -95,10 +95,12 @@ onMounted(() => {
                     :key="term.id"
                     class="tnc-card efek-hover bg-white rounded-xl p-6 opacity-0"
                 >
-                    <div
-                        v-html="term.deskripsi"
-                        class="text-gray-700 leading-relaxed"
-                    ></div>
+                    <h3 class="text-2xl font-bold text-gray-900 mb-3">
+                        {{ term.judul }}
+                    </h3>
+                    <div class="text-gray-700 leading-relaxed">
+                        <p v-html="term.deskripsi"></p>
+                    </div>
                 </div>
             </div>
         </section>
