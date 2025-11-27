@@ -49,7 +49,7 @@
         <div class="flex-1 flex flex-col">
             <!-- Navbar -->
             <header
-                class="flex justify-between items-center bg-white shadow-md px-6 py-4 sticky top-0 z-10"
+                class="flex justify-between md:justify-end items-center bg-white shadow-md px-6 py-4 sticky top-0 z-10"
             >
                 <!-- Tombol toggle sidebar di mobile -->
                 <button
@@ -59,14 +59,7 @@
                     <i class="fas fa-bars"></i>
                 </button>
 
-                <h2 class="text-lg font-semibold hidden md:block">
-                    Manajemen Kendaraan
-                </h2>
-
                 <div class="flex items-center gap-4">
-                    <!-- Notifikasi -->
-                    <i class="fas fa-bell text-gray-600 text-lg"></i>
-
                     <!-- Profil dropdown -->
                     <div class="relative" ref="dropdownRef">
                         <button
@@ -79,9 +72,11 @@
                                 <i class="fas fa-user"></i>
                             </div>
                             <div class="sm:block text-left">
-                                <p class="text-sm font-medium">Admin</p>
+                                <p class="text-sm font-medium">
+                                    {{ admin?.username }}
+                                </p>
                                 <p class="text-xs text-gray-500">
-                                    admin@niriliza.com
+                                    {{ admin?.email }}
                                 </p>
                             </div>
                             <i
@@ -125,8 +120,12 @@ const sidebarOpen = ref(false);
 const dropdownOpen = ref(false);
 const dropdownRef = ref(null);
 
-
 const page = usePage();
+
+// Data admin otomatis tersedia dari shared props Inertia
+const admin = page.props.admin;
+
+console.log("Admin data:", admin);
 
 const isActive = (path) => page.url.startsWith(path); // cocok juga untuk sub-route
 
@@ -156,22 +155,26 @@ const menus = [
 ];
 
 const logout = () => {
-    dropdownOpen.value = false; 
+    dropdownOpen.value = false;
     router.post("/logout");
 };
 
 const handleClickOutside = (event) => {
-  if (dropdownOpen.value && dropdownRef.value && !dropdownRef.value.contains(event.target)) {
-    dropdownOpen.value = false;
-  }
+    if (
+        dropdownOpen.value &&
+        dropdownRef.value &&
+        !dropdownRef.value.contains(event.target)
+    ) {
+        dropdownOpen.value = false;
+    }
 };
 
 onMounted(() => {
-  document.addEventListener('click', handleClickOutside);
+    document.addEventListener("click", handleClickOutside);
 });
 
 onUnmounted(() => {
-  document.removeEventListener('click', handleClickOutside);
+    document.removeEventListener("click", handleClickOutside);
 });
 </script>
 

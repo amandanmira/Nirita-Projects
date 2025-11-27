@@ -77,8 +77,8 @@ onMounted(() => {
         ease: "power3.out",
         scrollTrigger: {
             trigger: sectionRef.value,
-            start: "top 60%",
-            toggleActions: "play reverse play reverse",
+            start: "top 50%",
+            toggleActions: "restart none none reset",
         },
     });
 
@@ -91,7 +91,7 @@ onMounted(() => {
         scrollTrigger: {
             trigger: sectionRef.value,
             start: "top 90%",
-            toggleActions: "play reverse play reverse",
+            toggleActions: "restart none none reset",
         },
     });
 });

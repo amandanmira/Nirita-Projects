@@ -2,7 +2,7 @@
 import { ref, onMounted } from "vue";
 import { usePage } from "@inertiajs/vue3";
 import { gsap } from "gsap";
-import alphardImage from "../Assets/hero-mobil.png";
+import alphardImage from "../Assets/Toyota Alphard HEV 1.png";
 import PesanSekarangBtn from "../Components/PesanSekarangBtn.vue";
 
 const page = usePage();
@@ -30,7 +30,7 @@ onMounted(() => {
 
 <template>
     <section
-        class="bg-gradient-to-t from-[#101B4E] to-blue-700 text-white py-12 px-5 md:px-16 lg:px-18"
+        class="min-h-screen flex justify-center items-center bg-gradient-to-t from-[#101B4E] to-blue-700 text-white px-5 md:px-16 lg:px-18"
     >
         <div class="max-w-7xl mx-auto w-full">
             <div
@@ -56,11 +56,6 @@ onMounted(() => {
                         >
                             <a href="/about">Selengkapnya</a>
                         </button>
-                        <!-- <button
-                            class="bg-blue-500 text-white font-semibold px-6 py-2 rounded-full hover:bg-blue-600 transition"
-                        >
-                            Pesan Sekarang
-                        </button> -->
                         <PesanSekarangBtn
                             :templates="waTemplates"
                             :templateId="3"

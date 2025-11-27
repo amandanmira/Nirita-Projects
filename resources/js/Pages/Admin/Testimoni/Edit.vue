@@ -1,74 +1,113 @@
 <template>
     <DashLayout>
-        <div class="max-w-3xl mx-auto bg-white shadow-lg rounded-xl p-8">
-            <h1 class="text-3xl font-bold mb-6 text-gray-800">
-                Edit Testimoni
-            </h1>
-
-            <form
-                @submit.prevent="updateTestimoni"
-                enctype="multipart/form-data"
-                class="space-y-6"
+        <div class="max-w-3xl mx-auto mt-4">
+            <div
+                class="bg-white/60 backdrop-blur-xl p-10 rounded-3xl shadow-xl border border-gray-200/70 transition-all"
             >
-                <div>
-                    <label class="block font-semibold text-gray-700 mb-2"
-                        >Foto Saat Ini</label
+                <!-- Header -->
+                <div class="mb-10">
+                    <h1
+                        class="text-3xl font-bold text-gray-900 flex items-center gap-2"
                     >
-                    <img
-                        v-if="testimoni.url_gambar"
-                        :src="getImageUrl(testimoni.url_gambar)"
-                        alt="Foto Testimoni"
-                        class="w-64 h-40 object-cover rounded-lg shadow"
-                    />
-                </div>
-
-                <div>
-                    <label class="block font-semibold text-gray-700 mb-2"
-                        >Ganti Foto (Opsional)</label
-                    >
-                    <input
-                        type="file"
-                        @change="handleFileChange"
-                        accept="image/*"
-                        class="w-full ..."
-                    />
-                    <p
-                        v-if="errors.url_gambar"
-                        class="text-red-500 text-sm mt-1"
-                    >
-                        {{ errors.url_gambar }}
+                        <i class="fa-solid fa-pen-to-square text-blue-600"></i>
+                        Edit Testimoni
+                    </h1>
+                    <p class="text-gray-500 text-sm mt-1">
+                        Perbarui foto atau deskripsi testimoni pelanggan.
                     </p>
                 </div>
 
-                <div>
-                    <label class="block font-semibold text-gray-700 mb-2"
-                        >Deskripsi Testimoni</label
-                    >
-                    <textarea
-                        v-model="form.desk_testimoni"
-                        rows="4"
-                        class="w-full ..."
-                        placeholder="Tulis deskripsi testimoni..."
-                    ></textarea>
-                    <p
-                        v-if="errors.desk_testimoni"
-                        class="text-red-500 text-sm mt-1"
-                    >
-                        {{ errors.desk_testimoni }}
-                    </p>
-                </div>
+                <!-- Form -->
+                <form
+                    @submit.prevent="updateTestimoni"
+                    enctype="multipart/form-data"
+                    class="space-y-8"
+                >
+                    <!-- Gambar saat ini -->
+                    <div>
+                        <label class="block text-gray-700 font-semibold mb-2">
+                            Foto Saat Ini
+                        </label>
 
-                <div class="flex justify-between mt-6">
-                    <Link
-                        href="/admin/testimoni"
-                        class="px-4 py-2 bg-gray-500 ..."
-                        >Kembali</Link
-                    >
-                    <button type="submit" class="px-6 py-2 bg-blue-600 ...">
-                        Simpan Perubahan
-                    </button>
-                </div>
-            </form>
+                        <div
+                            class="rounded-xl overflow-hidden shadow-md border border-gray-200"
+                        >
+                            <img
+                                v-if="testimoni.url_gambar"
+                                :src="getImageUrl(testimoni.url_gambar)"
+                                alt="Foto Testimoni"
+                                class="w-full max-h-60 object-cover"
+                            />
+                        </div>
+                    </div>
+
+                    <!-- Upload baru -->
+                    <div>
+                        <label class="block text-gray-700 font-semibold mb-2">
+                            Ganti Foto (Opsional)
+                        </label>
+
+                        <div
+                            class="border-2 border-dashed border-gray-300 rounded-2xl p-6 text-center hover:border-blue-500 hover:bg-blue-50/40 transition cursor-pointer"
+                        >
+                            <input
+                                type="file"
+                                accept="image/*"
+                                @change="handleFileChange"
+                                class="w-full text-sm text-gray-700"
+                            />
+                            <p class="text-gray-400 text-sm mt-2">
+                                Format: JPG, PNG — Max 5MB
+                            </p>
+                        </div>
+
+                        <p
+                            v-if="errors.url_gambar"
+                            class="text-red-500 text-sm mt-2"
+                        >
+                            {{ errors.url_gambar }}
+                        </p>
+                    </div>
+
+                    <!-- Deskripsi -->
+                    <div>
+                        <label class="block text-gray-700 font-semibold mb-2">
+                            Deskripsi Testimoni
+                        </label>
+
+                        <textarea
+                            v-model="form.desk_testimoni"
+                            rows="4"
+                            placeholder="Tulis deskripsi testimoni..."
+                            class="w-full rounded-2xl border border-gray-300 px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition shadow-sm"
+                        ></textarea>
+
+                        <p
+                            v-if="errors.desk_testimoni"
+                            class="text-red-500 text-sm mt-2"
+                        >
+                            {{ errors.desk_testimoni }}
+                        </p>
+                    </div>
+
+                    <!-- Tombol -->
+                    <div class="flex justify-end gap-4 pt-4">
+                        <Link
+                            href="/admin/testimoni"
+                            class="px-5 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-800 font-medium rounded-xl transition shadow-sm"
+                        >
+                            Kembali
+                        </Link>
+
+                        <button
+                            type="submit"
+                            class="px-7 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl shadow-md transition"
+                        >
+                            Simpan Perubahan
+                        </button>
+                    </div>
+                </form>
+            </div>
         </div>
     </DashLayout>
 </template>

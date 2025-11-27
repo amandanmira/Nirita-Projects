@@ -2,12 +2,16 @@
     <section class="bg-white py-16 px-6 md:px-12 lg:px-20">
         <div class="max-w-7xl mx-auto text-center">
             <!-- Judul -->
-            <h2 class="text-2xl md:text-3xl font-extrabold text-gray-900 mb-3">
+            <h2
+                class="text-2xl md:text-3xl font-extrabold text-gray-900 mb-3 opacity-0 translate-y-5 titleAnim"
+            >
                 Testimoni Pelanggan
             </h2>
 
             <!-- Deskripsi -->
-            <p class="text-gray-700 text-lg max-w-3xl mx-auto mb-10">
+            <p
+                class="text-gray-700 text-lg max-w-3xl mx-auto mb-10 opacity-0 translate-y-5 descAnim"
+            >
                 Lihatlah apa yang pelanggan kami katakan tentang layanan kami.
                 Kepuasan Anda adalah prioritas utama kami.
             </p>
@@ -18,9 +22,9 @@
                     class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
                 >
                     <div
-                        v-for="item in props.testimonials"
+                        v-for="(item, index) in props.testimonials"
                         :key="item.id_testimoni"
-                        class="bg-gradient-to-t from-[#101B4E] to-[#173A84] p-4 rounded-xl overflow-hidden shadow-md hover:shadow-lg transition transform hover:-translate-y-1 cursor-pointer"
+                        class="testiCard relative group bg-gradient-to-t from-[#101B4E] to-[#173A84] p-4 rounded-xl overflow-hidden shadow-md hover:shadow-lg transition transform hover:-translate-y-1 cursor-pointer"
                         @click="openPreview(`storage/${item.url_gambar}`)"
                     >
                         <img
@@ -28,6 +32,35 @@
                             :alt="item.desk_testimoni"
                             class="w-full h-48 object-cover rounded-lg"
                         />
+
+                        <!-- Overlay gelap -->
+                        <div
+                            class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg"
+                        ></div>
+
+                        <!-- ICON MATA -->
+                        <div
+                            class="absolute inset-0 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition duration-300"
+                        >
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                class="w-10 h-10 text-white"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke-width="1.8"
+                                stroke="currentColor"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    d="M2.25 12s3.75-7.5 9.75-7.5S21.75 12 21.75 12s-3.75 7.5-9.75 7.5S2.25 12 2.25 12z"
+                                />
+                                <circle cx="12" cy="12" r="3" />
+                            </svg>
+                            <p class="text-white text-sm font-semibold">
+                                Lihat Testimoni
+                            </p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -69,8 +102,11 @@
 </template>
 
 <script setup>
+import { onMounted } from "vue";
+import gsap from "gsap";
+import ScrollTrigger from "gsap/ScrollTrigger";
+gsap.registerPlugin(ScrollTrigger);
 import { ref } from "vue";
-// import reviews from "../data/testimoni.js";
 
 const props = defineProps({
     testimonials: {
@@ -79,6 +115,62 @@ const props = defineProps({
     },
 });
 
+onMounted(() => {
+    // Judul animasi
+    gsap.fromTo(
+        ".titleAnim",
+        { opacity: 0, y: 30 },
+        {
+            opacity: 1,
+            y: 0,
+            duration: 1,
+            ease: "power3.out",
+            scrollTrigger: {
+                trigger: ".titleAnim",
+                start: "top 85%",
+                toggleActions: "restart none none reset",
+            },
+        }
+    );
+
+    // Deskripsi animasi
+    gsap.fromTo(
+        ".descAnim",
+        { opacity: 0, y: 30 },
+        {
+            opacity: 1,
+            y: 0,
+            duration: 1,
+            delay: 0.2,
+            ease: "power3.out",
+            scrollTrigger: {
+                trigger: ".descAnim",
+                start: "top 85%",
+                toggleActions: "restart none none reset",
+            },
+        }
+    );
+
+    // Card testimonial animasi stagger
+    gsap.utils.toArray(".testiCard").forEach((card, i) => {
+        gsap.fromTo(
+            card,
+            { opacity: 0, scale: 0.9 },
+            {
+                opacity: 1,
+                scale: 1,
+                duration: 1,
+                delay: i * 0.15,
+                ease: "power3.out",
+                scrollTrigger: {
+                    trigger: card,
+                    start: "top 90%",
+                    toggleActions: "restart none none reset",
+                },
+            }
+        );
+    });
+});
 const previewImage = ref(null);
 
 const openPreview = (imageUrl) => {
@@ -96,3 +188,9 @@ const getImage = (path) => {
     return new URL(path, import.meta.url).href;
 };
 </script>
+
+<style scoped>
+section {
+    scroll-margin-top: 80px;
+}
+</style>

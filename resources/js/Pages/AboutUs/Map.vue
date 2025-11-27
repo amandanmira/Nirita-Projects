@@ -1,21 +1,42 @@
 <template>
-    <section class="bg-gray-200 py-12 md:px-14">
+    <section class="bg-gray-200 py-12 md:px-14" ref="sectionRef">
         <div
             class="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-10 items-center"
         >
             <!-- Left Side: Contact Info -->
             <div>
-                <h2 class="text-2xl font-semibold mb-2 text-gray-900">
+                <h2
+                    class="text-2xl font-semibold mb-2 text-gray-900"
+                    ref="titleRef"
+                >
                     Contact Us
                 </h2>
-                <p class="text-gray-600 mb-6">
+                <p class="text-gray-600 mb-6" ref="descRef">
                     Siap merencanakan perjalanan Anda? Hubungi atau Temukan kami
                     untuk penawaran terbaik.
                 </p>
 
                 <div class="space-y-4 text-gray-700">
-                    <!-- Phone -->
-                    <div class="flex items-center gap-16">
+                    <div
+                        class="flex items-center gap-6 contact-item"
+                        ref="contactRefs"
+                    >
+                        <h3 class="font-semibold text-gray-900">
+                            Jam <br />Operasional
+                        </h3>
+                        <ul class="space-y-1 text-sm">
+                            <li>Senin - Minggu:</li>
+                            <li>08.00 - 12.00 WIB (Offline)</li>
+                            <li>08.00 - 12.00 WIB (Offline)</li>
+                            <li>08.00 - 12.00 WIB (Offline)</li>
+                        </ul>
+                    </div>
+
+                    <!-- Item List -->
+                    <div
+                        class="flex items-center gap-16 contact-item"
+                        ref="contactRefs"
+                    >
                         <h3 class="font-semibold text-gray-900">Phone</h3>
                         <ul class="space-y-1 text-sm">
                             <li>• +62 813-9360-4105</li>
@@ -23,16 +44,20 @@
                         </ul>
                     </div>
 
-                    <!-- Email -->
-                    <div class="flex items-center gap-18">
+                    <div
+                        class="flex items-center gap-18 contact-item"
+                        ref="contactRefs"
+                    >
                         <h3 class="font-semibold text-gray-900">Email</h3>
                         <p class="text-sm">
                             Niritatransport.solution@gmail.com
                         </p>
                     </div>
 
-                    <!-- Address -->
-                    <div class="flex items-center gap-14">
+                    <div
+                        class="flex items-center gap-14 contact-item"
+                        ref="contactRefs"
+                    >
                         <h3 class="font-semibold text-gray-900">Address</h3>
                         <p class="text-sm leading-relaxed">
                             Perum Gumpang Agung 1, Jl. Nuri 2B, Kel. Gumpang,
@@ -45,7 +70,8 @@
 
             <!-- Right Side: Google Maps -->
             <div
-                class="w-full h-[350px] md:h-[400px] rounded-xl overflow-hidden shadow-md"
+                class="w-full h-[350px] md:h-[400px] rounded-xl overflow-hidden shadow-md map-wrapper"
+                ref="mapRef"
             >
                 <iframe
                     src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3079.5961744746246!2d110.7561023736799!3d-7.567711892446361!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e7a14ff6bbd1dc9%3A0xead4029d576f04e4!2sNirita%20Transport%20%26%20Bakmi%20Jowo%20bu%20Hari!5e1!3m2!1sid!2sid!4v1761795625494!5m2!1sid!2sid"
@@ -62,12 +88,79 @@
 </template>
 
 <script setup>
-// Tidak perlu logic khusus, ini hanya section statis
+import { ref, onMounted, nextTick } from "vue";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+gsap.registerPlugin(ScrollTrigger);
+
+// Refs
+const sectionRef = ref(null);
+const titleRef = ref(null);
+const descRef = ref(null);
+const contactRefs = ref([]);
+const mapRef = ref(null);
+
+onMounted(async () => {
+    await nextTick();
+
+    ScrollTrigger.refresh();
+
+    const tl = gsap.timeline({
+        scrollTrigger: {
+            trigger: sectionRef.value,
+            start: "top 85%",
+            toggleActions: "restart none none reset",
+        },
+    });
+
+    // Judul
+    tl.from(titleRef.value, {
+        opacity: 0,
+        y: 30,
+        duration: 0.7,
+        ease: "power3.out",
+    });
+
+    // Deskripsi
+    tl.from(
+        descRef.value,
+        {
+            opacity: 0,
+            y: 25,
+            duration: 0.6,
+        },
+        "-=0.4"
+    );
+
+    // Kontak (Phone, Email, Address)
+    tl.from(
+        contactRefs.value,
+        {
+            opacity: 0,
+            y: 35,
+            stagger: 0.25,
+            duration: 0.7,
+            ease: "power3.out",
+        },
+        "-=0.2"
+    );
+
+    // Google Maps
+    tl.from(
+        mapRef.value,
+        {
+            opacity: 0,
+            scale: 0.9,
+            duration: 0.9,
+            ease: "power3.out",
+        },
+        "-=0.1"
+    );
+});
 </script>
 
 <style scoped>
-/* Tambahan opsional agar tampilan lembut */
 section {
-    scroll-margin-top: 80px; /* jika ada navbar */
+    scroll-margin-top: 80px;
 }
 </style>

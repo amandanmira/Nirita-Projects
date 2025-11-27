@@ -1,11 +1,13 @@
 <template>
     <section class="max-w-4xl mx-auto my-9 px-6">
-        <h2 class="text-2xl font-bold text-center text-blue-800 mb-6">
+        <h2
+            class="kalkulasi-box text-2xl font-bold text-center text-blue-800 mb-6"
+        >
             Kalkulasi Sewa
         </h2>
 
         <div
-            class="bg-blue-50 rounded-xl shadow-lg p-8 flex flex-col gap-8 md:flex-row justify-between items-center"
+            class="kalkulasi-box bg-blue-50 rounded-xl shadow-lg p-8 flex flex-col gap-8 md:flex-row justify-between items-center"
         >
             <!-- Kolom Kiri -->
             <div class="flex-1 w-full space-y-4">
@@ -89,10 +91,27 @@
 </template>
 
 <script setup>
-import { ref, computed } from "vue";
+import { ref, computed, onMounted } from "vue";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+gsap.registerPlugin(ScrollTrigger);
 
 const props = defineProps({
     cars: Object,
+});
+
+onMounted(() => {
+    gsap.from(".kalkulasi-box", {
+        opacity: 0,
+        scale: 0.9,
+        duration: 0.8,
+        ease: "power3.out",
+        scrollTrigger: {
+            trigger: ".kalkulasi-box",
+            start: "top 90%",
+            toggleActions: "restart none none reset",
+        },
+    });
 });
 
 // === Harga dari backend ===

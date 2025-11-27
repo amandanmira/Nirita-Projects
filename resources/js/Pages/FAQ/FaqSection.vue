@@ -1,8 +1,8 @@
 <template>
     <section class="bg-white py-16 px-6 md:px-12 lg:px-18">
         <div class="max-w-6xl mx-auto text-center">
-            <h2 class="text-3xl font-bold mb-2">FAQ</h2>
-            <p class="text-black text-lg mb-12">
+            <h2 class="faq-title text-3xl font-bold mb-2 opacity-0">FAQ</h2>
+            <p class="faq-desc text-black text-lg mb-12 opacity-0">
                 Pertanyaan yang sering diajukan
             </p>
 
@@ -13,7 +13,7 @@
                     <div
                         v-for="(faq, index) in leftFaqs"
                         :key="faq.id_faq"
-                        class="bg-[#0E1A47] text-white mb-2.5 rounded-2xl shadow-lg overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
+                        class="faq-item bg-[#0E1A47] text-white mb-2.5 rounded-2xl shadow-lg overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-xl opacity-0"
                     >
                         <button
                             class="w-full flex justify-between items-center text-left px-6 py-5 font-semibold text-lg"
@@ -60,7 +60,7 @@
                     <div
                         v-for="(faq, index) in rightFaqs"
                         :key="faq.id_faq"
-                        class="bg-[#0E1A47] text-white mb-2.5 rounded-2xl shadow-lg overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
+                        class="faq-item bg-[#0E1A47] text-white mb-2.5 rounded-2xl shadow-lg overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-xl opacity-0"
                     >
                         <button
                             class="w-full flex justify-between items-center text-left px-6 py-5 font-semibold text-lg"
@@ -110,7 +110,11 @@
 </template>
 
 <script setup>
-import { ref, computed } from "vue";
+import { ref, computed, onMounted } from "vue";
+import gsap from "gsap";
+import ScrollTrigger from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
 
 const props = defineProps({
     faqs: {
@@ -119,7 +123,7 @@ const props = defineProps({
     },
 });
 
-// Bagi data asli menjadi 2 kolom
+// Split FAQ data
 const leftFaqs = computed(() =>
     props.faqs.slice(0, Math.ceil(props.faqs.length / 2))
 );
@@ -127,7 +131,7 @@ const rightFaqs = computed(() =>
     props.faqs.slice(Math.ceil(props.faqs.length / 2))
 );
 
-// State untuk expand
+// Expand state
 const activeLeft = ref(null);
 const activeRight = ref(null);
 
@@ -135,26 +139,81 @@ const toggleLeft = (index) => {
     activeRight.value = null;
     activeLeft.value = activeLeft.value === index ? null : index;
 };
-
 const toggleRight = (index) => {
     activeLeft.value = null;
     activeRight.value = activeRight.value === index ? null : index;
 };
 
-// Animasi transisi tinggi
+// Height transition
 const onEnter = (el) => {
     el.style.height = "0";
     el.offsetHeight;
     el.style.height = el.scrollHeight + "px";
 };
-const onAfterEnter = (el) => {
-    el.style.height = "auto";
-};
+const onAfterEnter = (el) => (el.style.height = "auto");
 const onLeave = (el) => {
     el.style.height = el.scrollHeight + "px";
     el.offsetHeight;
     el.style.height = "0";
 };
+
+// GSAP animations
+onMounted(() => {
+    // Title animation
+    gsap.fromTo(
+        ".faq-title",
+        { opacity: 0, y: 40 },
+        {
+            opacity: 1,
+            y: 0,
+            duration: 1,
+            ease: "power3.out",
+            scrollTrigger: {
+                trigger: ".faq-title",
+                start: "top 85%",
+                toggleActions: "restart none none reset",
+            },
+        }
+    );
+
+    // Description animation
+    gsap.fromTo(
+        ".faq-desc",
+        { opacity: 0, y: 40 },
+        {
+            opacity: 1,
+            y: 0,
+            duration: 1,
+            delay: 0.15,
+            ease: "power3.out",
+            scrollTrigger: {
+                trigger: ".faq-desc",
+                start: "top 85%",
+                toggleActions: "restart none none reset",
+            },
+        }
+    );
+
+    // FAQ items animation
+    gsap.utils.toArray(".faq-item").forEach((item, i) => {
+        gsap.fromTo(
+            item,
+            { opacity: 0, y: 50 },
+            {
+                opacity: 1,
+                y: 0,
+                duration: 1,
+                delay: i * 0.15,
+                ease: "power3.out",
+                scrollTrigger: {
+                    trigger: item,
+                    start: "top 95%",
+                    toggleActions: "restart none none reset",
+                },
+            }
+        );
+    });
+});
 </script>
 
 <style scoped>
@@ -163,6 +222,7 @@ const onLeave = (el) => {
     transition: height 0.3s ease-in-out;
     overflow: hidden;
 }
+
 .faq-slide-enter-from,
 .faq-slide-leave-to {
     height: 0;
