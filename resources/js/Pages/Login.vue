@@ -44,10 +44,10 @@
                 </div>
                 <button
                     type="submit"
-                    class="cursor-pointer w-full bg-blue-500 text-white font-semibold py-2 px-4 rounded-lg hover:bg-blue-600 transition duration-300"
+                    class="w-full bg-blue-500 text-white font-semibold py-2 px-4 rounded-lg hover:bg-blue-600 transition duration-300 disabled:bg-gray-400 disabled:cursor-not-allowed"
                     :disabled="form.processing"
                 >
-                    Login
+                    {{ form.processing ? "Processing..." : "Login" }}
                 </button>
             </form>
         </div>
@@ -56,7 +56,7 @@
 
 <script setup>
 import Logo from "./Assets/Logo Nirita Rentals.png";
-import { useForm } from "@inertiajs/vue3";
+import { useForm, router } from "@inertiajs/vue3";
 
 const form = useForm({
     email: "",
@@ -67,7 +67,7 @@ const form = useForm({
 const submit = () => {
     form.post("/login", {
         onSuccess: () => {
-            // Redirect handled by Laravel controller
+            router.push("/admin/mobil");
         },
     });
 };

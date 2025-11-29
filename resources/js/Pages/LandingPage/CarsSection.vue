@@ -66,7 +66,7 @@
 
                             <CallBtnMobil
                                 :templates="waTemplates"
-                                :templateId="4"
+                                :templateId="2"
                                 :carName="car.nama_mobil"
                             />
                         </div>

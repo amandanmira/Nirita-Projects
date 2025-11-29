@@ -41,9 +41,9 @@ Route::get('/check', function () {
 });
 
 Route::prefix('admin')->name('admin.')->middleware(['auth', 'verified'])->group(function () {
-    Route::get('/dashboard/mobil', function () {
-        return Inertia::render('Layouts/DashboardLayouts');
-    })->name('dashboard');
+    Route::get('/mobil', function () {
+        return Inertia::render('Admin/Mobil/Index');
+    })->name('mobil.index');
     Route::resource('template-pesan', App\Http\Controllers\Admin\MessageTemplateController::class);
     Route::resource('faq', App\Http\Controllers\Admin\FaqController::class);
     Route::resource('snk', App\Http\Controllers\Admin\TncController::class);
