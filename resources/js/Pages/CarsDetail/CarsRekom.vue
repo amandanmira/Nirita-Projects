@@ -59,7 +59,7 @@
 
                                     <CallBtnMobil
                                         :templates="waTemplates"
-                                        :templateId="4"
+                                        :templateId="2"
                                         :carName="unit.nama_mobil"
                                     />
                                 </div>

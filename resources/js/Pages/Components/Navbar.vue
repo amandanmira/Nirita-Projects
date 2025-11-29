@@ -87,7 +87,7 @@ const toggleMenu = () => (menuOpen.value = !menuOpen.value);
             <div class="hidden md:block">
                 <NavContactUsBtn
                     :templates="waTemplates"
-                    :templateId="3"
+                    :templateId="1"
                     label="Contact Us"
                 />
             </div>
@@ -140,7 +140,7 @@ const toggleMenu = () => (menuOpen.value = !menuOpen.value);
                 <NavContactUsBtn
                     class="mt-2 w-full text-center"
                     :templates="waTemplates"
-                    :templateId="3"
+                    :templateId="1"
                     label="Contact Us"
                 />
             </div>

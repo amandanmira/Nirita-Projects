@@ -179,9 +179,9 @@ const resetFilter = () => {
                     class="w-full border border-gray-300 rounded-lg px-3 py-2 mb-3"
                 >
                     <option>Semua</option>
-                    <option value="5">5</option>
-                    <option value="8">8</option>
-                    <option value="14">14</option>
+                    <option value="5">5 - 8</option>
+                    <option value="8">8 - 14</option>
+                    <option value="14">14+</option>
                 </select>
 
                 <!-- Transmisi -->
@@ -271,7 +271,7 @@ const resetFilter = () => {
 
                             <CallBtnMobil
                                 :templates="waTemplates"
-                                :templateId="4"
+                                :templateId="2"
                                 :carName="car.nama_mobil"
                             />
                         </div>
