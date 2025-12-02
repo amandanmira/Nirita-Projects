@@ -15,7 +15,8 @@ class BillDetail extends Model
         'tanggal_sewa',
         'lokasi_sewa',
         'tanggal_akhir_sewa',
-        'deskripsi_kegiatan'
+        'deskripsi_kegiatan',
+        'tujuan',
     ];
 
     public function bills()

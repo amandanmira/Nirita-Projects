@@ -73,6 +73,29 @@
                     </p>
                 </div>
 
+                <div>
+                    <label class="font-semibold">Perusahaan</label>
+                    <input
+                        type="text"
+                        v-model="form.perusahaan"
+                        class="w-full border rounded p-2"
+                    />
+                    <p class="text-red-500 text-sm" v-if="errors.perusahaan">
+                        {{ errors.perusahaan }}
+                    </p>
+                </div>
+
+                <div>
+                    <label class="font-semibold">Catatan</label>
+                    <textarea
+                        v-model="form.catatan"
+                        class="w-full border rounded p-2"
+                    ></textarea>
+                    <p class="text-red-500 text-sm" v-if="errors.catatan">
+                        {{ errors.catatan }}
+                    </p>
+                </div>
+
                 <!-- Total Pembayaran -->
                 <div>
                     <label class="font-semibold">Total Pembayaran</label>
@@ -208,6 +231,14 @@
                                 class="w-full border rounded p-2"
                             ></textarea>
                         </div>
+
+                        <div>
+                            <label class="font-semibold">Tujuan</label>
+                            <textarea
+                                v-model="d.tujuan"
+                                class="w-full border rounded p-2"
+                            ></textarea>
+                        </div>
                     </div>
 
                     <button
@@ -287,6 +318,8 @@ const form = useForm({
     lokasi_invoice: props.bill.lokasi_invoice,
     tanggal_invoice: props.bill.tanggal_invoice,
     total_pembayaran: props.bill.total_pembayaran,
+    catatan: props.bill.catatan,
+    perusahaan: props.bill.perusahaan,
     detail: props.bill.bill_details.map((d) => ({
         id: d.id,
         id_mobil: d.id_mobil,
@@ -294,6 +327,7 @@ const form = useForm({
         tanggal_sewa: d.tanggal_sewa,
         tanggal_akhir_sewa: d.tanggal_akhir_sewa,
         deskripsi_kegiatan: d.deskripsi_kegiatan,
+        tujuan: d.tujuan,
         harga_terpilih: getPrice(
             d.id_mobil,
             d.lokasi_sewa,
@@ -312,6 +346,7 @@ const addDetail = () => {
         tanggal_sewa: "",
         tanggal_akhir_sewa: "",
         deskripsi_kegiatan: "",
+        tujuan: "",
         harga_terpilih: 0,
     });
 };
@@ -357,7 +392,7 @@ const submitForm = () => {
     form.put(`/admin/invoice/${props.bill.id_nota}`, {
         preserveScroll: true,
         onSuccess: () => {
-            cSwal.fire({
+            Swal.fire({
                 title: "Invoice Berhasil Diperbarui!",
                 icon: "success",
             });

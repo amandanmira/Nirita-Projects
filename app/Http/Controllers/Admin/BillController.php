@@ -64,6 +64,8 @@ class BillController extends Controller
                 'total_pembayaran',
                 'lokasi_invoice',
                 'tanggal_invoice',
+                'catatan',
+                'perusahaan',
             ]));
 
             foreach ($request->detail as $d) {
@@ -74,6 +76,7 @@ class BillController extends Controller
                     'tanggal_akhir_sewa' => $d['tanggal_akhir_sewa'],
                     'lokasi_sewa' => $d['lokasi_sewa'],
                     'deskripsi_kegiatan' => $d['deskripsi_kegiatan'] ?? null,
+                    'tujuan' => $d['tujuan'] ?? null,
                 ]);
             }
         });
@@ -146,6 +149,7 @@ class BillController extends Controller
                         'tanggal_sewa' => $d['tanggal_sewa'],
                         'tanggal_akhir_sewa' => $d['tanggal_akhir_sewa'],
                         'deskripsi_kegiatan' => $d['deskripsi_kegiatan'],
+                        'tujuan' => $d['tujuan'],
                     ]);
                 }
             } else {
@@ -156,6 +160,7 @@ class BillController extends Controller
                     'tanggal_sewa' => $d['tanggal_sewa'],
                     'tanggal_akhir_sewa' => $d['tanggal_akhir_sewa'],
                     'deskripsi_kegiatan' => $d['deskripsi_kegiatan'],
+                    'tujuan' => $d['tujuan'],
                 ]);
             }
         }
@@ -167,6 +172,8 @@ class BillController extends Controller
             'total_pembayaran',
             'lokasi_invoice',
             'tanggal_invoice',
+            'catatan',
+            'perusahaan',
         ]));
 
         return redirect()->route('admin.invoice.index')->with('success', 'Invoice berhasil diperbarui.');
@@ -214,17 +221,19 @@ class BillController extends Controller
                 return [
                     'nama' => $detail->cars->nama_mobil,
                     'periode' => self::formatTanggal($detail->tanggal_sewa),
-                    'tujuan' => $detail->deskripsi_kegiatan,
+                    'tujuan' => $detail->tujuan,
+                    'kegiatan' => $detail->deskripsi_kegiatan,
                     'harga' => $harga,
                 ];
             }),
             'total' => $total,
             'terbilang' => self::terbilang($total) . ' RUPIAH',
+            'catatan' => $bill->catatan,
             'driver' => $bill->driver,
             'lokasi' => $bill->lokasi_invoice,
             'tanggal' => self::formatTanggal($bill->tanggal_invoice ?? now()),
             'penanggungJawab' => 'Hari Suryono',
-            'perusahaan' => 'Nirta Transport'
+            'perusahaan' => $bill->perusahaan,
         ]);
 
         return $pdf->stream("invoice_{$bill->id_nota}.pdf");

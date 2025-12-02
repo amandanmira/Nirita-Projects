@@ -72,9 +72,7 @@
                                                 :value="c.id_mobil"
                                                 :key="c.id_mobil"
                                             >
-                                                {{ c.nama_mobil }} ({{
-                                                    c.plat_nomor
-                                                }})
+                                                {{ c.nama_mobil }}
                                             </option>
                                         </select>
                                     </div>
@@ -142,6 +140,18 @@
                                         >
                                         <textarea
                                             v-model="item.deskripsi_kegiatan"
+                                            rows="2"
+                                            class="mt-1 block w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                                        ></textarea>
+                                    </div>
+
+                                    <div>
+                                        <label
+                                            class="block text-sm font-medium text-gray-700"
+                                            >Tujuan</label
+                                        >
+                                        <textarea
+                                            v-model="item.tujuan"
                                             rows="2"
                                             class="mt-1 block w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
                                         ></textarea>
@@ -246,6 +256,7 @@
                             <input
                                 type="text"
                                 v-model="form.lokasi_invoice"
+                                placeholder="Solo"
                                 class="mt-1 block w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
                             />
                         </div>
@@ -260,6 +271,31 @@
                                 v-model="form.tanggal_invoice"
                                 class="mt-1 block w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
                             />
+                        </div>
+
+                        <div>
+                            <label
+                                class="block text-sm font-medium text-gray-700"
+                                >Perusahaan</label
+                            >
+                            <input
+                                type="text"
+                                v-model="form.perusahaan"
+                                placeholder="Nirita Transport"
+                                class="mt-1 block w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                            />
+                        </div>
+
+                        <div>
+                            <label
+                                class="block text-sm font-medium text-gray-700"
+                                >Catatan</label
+                            >
+                            <textarea
+                                v-model="form.catatan"
+                                rows="2"
+                                class="mt-1 block w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                            ></textarea>
                         </div>
                     </div>
 
@@ -318,6 +354,8 @@ const form = useForm({
     lokasi_invoice: "",
     tanggal_invoice: "",
     total_pembayaran: 0,
+    catatan: "",
+    perusahaan: "",
     detail: [
         {
             id_mobil: "",
@@ -325,6 +363,7 @@ const form = useForm({
             tanggal_sewa: "",
             tanggal_akhir_sewa: "",
             deskripsi_kegiatan: "",
+            tujuan: "",
             harga_terpilih: 0,
         },
     ],
@@ -338,6 +377,7 @@ const addRow = () => {
         tanggal_sewa: "",
         tanggal_akhir_sewa: "",
         deskripsi_kegiatan: "",
+        tujuan: "",
         harga_terpilih: 0,
     });
 };

@@ -17,6 +17,8 @@ class Bill extends Model
         'total_pembayaran',
         'lokasi_invoice',
         'tanggal_invoice',
+        'perusahaan',
+        'catatan',
     ];
 
     public function billDetails()

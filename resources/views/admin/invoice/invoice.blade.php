@@ -139,7 +139,8 @@
                     <th style="width:4%;">No</th>
                     <th style="width:14%">Nama Kendaraan</th>
                     <th style="width:15%">Periode</th>
-                    <th style="width:42%">Tujuan/Kegiatan</th>
+                    <th style="width:30%">Tujuan</th>
+                    <th style="width:42%">Kegiatan</th>
                     <th style="width:25%">Harga</th>
                 </tr>
             </thead>
@@ -150,22 +151,27 @@
                         <td>{{ $item['nama'] ?? '' }}</td>
                         <td>{{ $item['periode'] ?? '' }}</td>
                         <td>{{ $item['tujuan'] ?? '' }}</td>
+                        <td>{{ $item['kegiatan'] ?? '' }}</td>
                         <td class="harga">{{ number_format($item['harga'] ?? 0, 0, ',', '.') }}</td>
                     </tr>
                 @endforeach
                 <tr class="total-section">
                     <td class="bold-border" colspan="2">TOTAL:</td>
-                    <td class="bold-border" colspan="2"></td>
+                    <td class="bold-border" colspan="3"></td>
                     <td class="harga bold-border">{{ number_format($total ?? 0, 0, ',', '.') }}</td>
                 </tr>
                 <tr>
                     <td class="bold-border" colspan="2"><strong>TERBILANG:</strong></td>
-                    <td class="bold-border" colspan="3" style="text-align: center">
+                    <td class="bold-border" colspan="4" style="text-align: center">
                         <strong>{{ $terbilang ?? '' }}</strong>
                     </td>
                 </tr>
             </tbody>
         </table>
+
+        @if (isset($catatan))
+            <p><strong>NB: </strong>{{ $catatan ?? '' }}</p>
+        @endif
 
         <p class="driver"><strong>Driver:</strong><br>{{ $driver ?? '' }}</p>
 
