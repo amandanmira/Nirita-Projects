@@ -14,6 +14,18 @@
                         class="w-[18rem] h-auto mx-auto"
                     />
                 </div>
+
+                <!-- Alert error umum (jika ada) -->
+                <div
+                    v-if="form.errors.email || form.errors.password"
+                    class="mb-4 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg"
+                >
+                    <p class="font-semibold">Login Gagal!</p>
+                    <p class="text-sm">
+                        Email atau password yang Anda masukkan salah.
+                    </p>
+                </div>
+
                 <div class="mb-6">
                     <label
                         for="email"
@@ -24,9 +36,20 @@
                         v-model="form.email"
                         type="email"
                         id="email"
-                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        :class="[
+                            'w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2',
+                            form.errors.email
+                                ? 'border-red-500 focus:ring-red-500'
+                                : 'border-gray-300 focus:ring-blue-500',
+                        ]"
                         placeholder="niritaadmin@gmail.com"
                     />
+                    <p
+                        v-if="form.errors.email"
+                        class="text-red-500 text-sm mt-1"
+                    >
+                        {{ form.errors.email }}
+                    </p>
                 </div>
                 <div class="mb-6">
                     <label
@@ -38,9 +61,20 @@
                         v-model="form.password"
                         type="password"
                         id="password"
-                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        :class="[
+                            'w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2',
+                            form.errors.password
+                                ? 'border-red-500 focus:ring-red-500'
+                                : 'border-gray-300 focus:ring-blue-500',
+                        ]"
                         placeholder="masukkan kata sandi Anda"
                     />
+                    <p
+                        v-if="form.errors.password"
+                        class="text-red-500 text-sm mt-1"
+                    >
+                        {{ form.errors.password }}
+                    </p>
                 </div>
                 <button
                     type="submit"

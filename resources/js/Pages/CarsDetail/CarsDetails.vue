@@ -12,7 +12,7 @@
             >
                 <!-- Carousel Foto -->
                 <div
-                    class="relative w-full h-72 md:h-96 rounded-xl flex justify-center items-center overflow-hidden"
+                    class="relative w-full h-72 md:h-[26rem] rounded-xl flex justify-center items-center overflow-hidden"
                 >
                     <img
                         :src="photos[currentIndex]"
