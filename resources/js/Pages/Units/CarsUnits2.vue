@@ -112,6 +112,9 @@ const filteredUnits = computed(() => {
             (filters.value.price === "murah" && rp.harga_solo < 1000000) ||
             (filters.value.price === "sedang" &&
                 rp.harga_solo >= 1000000 &&
+                rp.harga_solo < 2000000) ||
+            (filters.value.price === "agak-mahal" &&
+                rp.harga_solo >= 2000000 &&
                 rp.harga_solo < 3000000) ||
             (filters.value.price === "mahal" && rp.harga_solo >= 3000000);
 
@@ -203,7 +206,10 @@ const resetFilter = () => {
                 >
                     <option>Semua</option>
                     <option value="murah">&lt; Rp 1.000.000</option>
-                    <option value="sedang">Rp 1.000.000 - Rp 3.000.000</option>
+                    <option value="sedang">Rp 1.000.000 - Rp 2.000.000</option>
+                    <option value="agak-mahal">
+                        Rp 2.000.000 - Rp 3.000.000
+                    </option>
                     <option value="mahal">&gt; Rp 3.000.000</option>
                 </select>
 

@@ -27,7 +27,7 @@
                 >
                     <!-- Gambar -->
                     <div
-                        class="w-full h-52 bg-gray-100 flex items-center justify-center overflow-hidden"
+                        class="w-full h-48 bg-gray-100 flex items-center justify-center overflow-hidden"
                     >
                         <img
                             :src="getFirstPhoto(car.url_foto_mobil)"
