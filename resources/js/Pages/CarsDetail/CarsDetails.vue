@@ -158,14 +158,19 @@
                         </span>
                     </div>
 
-                    <a
+                    <!-- <a
                         :href="`https://wa.me/6281393604105?text=Halo,%20saya%20ingin%20menyewa%20${cars.nama_mobil}`"
                         target="_blank"
                         class="bg-blue-600 px-5 py-3 rounded-lg flex items-center justify-center hover:bg-blue-700"
                     >
                         <i class="fa-solid fa-phone text-2xl mr-2"></i>
                         Hubungi
-                    </a>
+                    </a> -->
+                    <CarsDetailBtn
+                        :templates="waTemplates"
+                        :templateId="2"
+                        :carName="cars.nama_mobil"
+                    />
                 </div>
             </div>
         </div>
@@ -177,10 +182,15 @@
 </template>
 
 <script setup>
+import CarsDetailBtn from "../Components/CarsDetailBtn.vue";
+import { usePage } from "@inertiajs/vue3";
 import { ref, computed, onMounted } from "vue";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 gsap.registerPlugin(ScrollTrigger);
+
+const page = usePage();
+const waTemplates = page.props.waTemplates;
 
 const props = defineProps({
     cars: Object,

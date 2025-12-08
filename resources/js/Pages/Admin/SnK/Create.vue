@@ -58,7 +58,7 @@
                         :disabled="form.processing"
                         class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition font-medium shadow-md"
                     >
-                        {{ form.processing ? "Menyimpan..." : "Simpan Mobil" }}
+                        {{ form.processing ? "Menyimpan..." : "Simpan Snk" }}
                     </button>
                 </div>
             </form>
