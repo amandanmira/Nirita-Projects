@@ -99,7 +99,7 @@ onMounted(() => {
                         {{ term.judul }}
                     </h3>
                     <div class="text-gray-700 leading-relaxed">
-                        <p v-html="term.deskripsi"></p>
+                        <div v-html="term.deskripsi" class="cke_editable"></div>
                     </div>
                 </div>
             </div>
@@ -112,5 +112,86 @@ onMounted(() => {
     transform: translateY(-5px);
     transition: all 0.3s ease;
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.25);
+}
+
+/* CKEditor Content Styling - Scoped hanya untuk konten FAQ */
+/* Override Tailwind CSS reset untuk list styles */
+:deep(.cke_editable) {
+    color: #374151;
+
+    /* Text formatting */
+    strong,
+    b {
+        font-weight: 700;
+        color: #1f2937;
+    }
+
+    em,
+    i {
+        font-style: italic;
+    }
+
+    u {
+        text-decoration: underline;
+    }
+
+    s,
+    strike {
+        text-decoration: line-through;
+    }
+
+    /* Lists - Override Tailwind reset */
+    ul,
+    ol {
+        display: block;
+        /* margin: 1rem 0; */
+        padding-left: 2rem;
+    }
+
+    ul {
+        list-style-type: disc;
+        list-style-position: outside;
+    }
+
+    ol {
+        list-style-type: decimal;
+        list-style-position: outside;
+    }
+
+    li {
+        display: list-item;
+        /* margin: 0.5rem 0; */
+        line-height: 1.6;
+    }
+
+    /* Nested lists */
+    ul ul {
+        list-style-type: circle;
+        /* margin: 0.5rem 0; */
+    }
+
+    ol ol {
+        list-style-type: lower-alpha;
+        /* margin: 0.5rem 0; */
+    }
+
+    ul ol {
+        list-style-type: lower-roman;
+        /* margin: 0.5rem 0; */
+    }
+
+    /* Paragraphs */
+    p {
+        /* margin: 0.75rem 0; */
+        line-height: 1.6;
+    }
+
+    p:first-child {
+        margin-top: 0;
+    }
+
+    p:last-child {
+        margin-bottom: 0;
+    }
 }
 </style>

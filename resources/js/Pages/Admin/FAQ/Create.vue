@@ -36,7 +36,7 @@
                             <div class="mt-1">
                                 <textarea
                                     id="jawaban"
-                                    v-model="form.jawaban"
+                                    ref="editorElement"
                                     rows="4"
                                     class="block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                                 ></textarea>
@@ -68,13 +68,82 @@
 <script setup>
 import DashLayouts from "../../Layouts/DashboardLayouts.vue";
 import { useForm, Link } from "@inertiajs/vue3";
+import { ref, onMounted, onBeforeUnmount } from "vue";
+
+const editorElement = ref(null);
+let editorInstance = null;
 
 const form = useForm({
     pertanyaan: "",
     jawaban: "",
 });
 
+onMounted(() => {
+    // CKEditor sudah dimuat dari app.blade.php
+    initializeCKEditor();
+});
+
+const initializeCKEditor = () => {
+    if (editorElement.value && window.CKEDITOR) {
+        editorInstance = window.CKEDITOR.replace("jawaban", {
+            extraPlugins: "indent,removeformat",
+            toolbar: [
+                {
+                    name: "basicstyles",
+                    items: [
+                        "RemoveFormat",
+                        "-",
+                        "Bold",
+                        "Italic",
+                        "Underline",
+                        "Strike",
+                    ],
+                },
+                {
+                    name: "paragraph",
+                    items: [
+                        "NumberedList",
+                        "BulletedList",
+                        "-",
+                        "Outdent",
+                        "Indent",
+                    ],
+                },
+                { name: "clipboard", items: ["Undo", "Redo"] },
+            ],
+            removePlugins:
+                "image,link,table,about,styles,sourcearea,update-notifier",
+        });
+
+        // Sync CKEditor content with form
+        editorInstance.on("change", () => {
+            form.jawaban = editorInstance.getData();
+        });
+
+        // Remove notification
+        const observer = new MutationObserver(() => {
+            const notif = document.getElementById(
+                "cke_notifications_area_jawaban"
+            );
+            if (notif) notif.remove();
+        });
+        observer.observe(document.body, { childList: true, subtree: true });
+    }
+};
+
+onBeforeUnmount(() => {
+    // Cleanup CKEditor instance
+    if (editorInstance) {
+        editorInstance.destroy();
+    }
+});
+
 const submit = () => {
+    // Update form.jawaban with latest CKEditor content before submit
+    if (editorInstance) {
+        form.jawaban = editorInstance.getData();
+    }
+
     form.post("/admin/faq", {
         forceFormData: true,
         onSuccess: () => {
