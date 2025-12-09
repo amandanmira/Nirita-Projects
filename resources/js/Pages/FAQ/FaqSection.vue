@@ -48,7 +48,7 @@
                             >
                                 <div
                                     v-html="faq.jawaban"
-                                    class="px-6 py-5 text-gray-700 text-base leading-relaxed bg-white"
+                                    class="cke_editable px-6 py-5 text-gray-700 text-base leading-relaxed bg-white"
                                 ></div>
                             </div>
                         </transition>
@@ -98,7 +98,7 @@
                             >
                                 <div
                                     v-html="faq.jawaban"
-                                    class="px-6 py-5 text-gray-700 text-base leading-relaxed bg-white"
+                                    class="cke_editable px-6 py-5 text-gray-700 text-base leading-relaxed bg-white"
                                 ></div>
                             </div>
                         </transition>
@@ -226,5 +226,86 @@ onMounted(() => {
 .faq-slide-enter-from,
 .faq-slide-leave-to {
     height: 0;
+}
+
+/* CKEditor Content Styling - Scoped hanya untuk konten FAQ */
+/* Override Tailwind CSS reset untuk list styles */
+:deep(.cke_editable) {
+    color: #374151;
+
+    /* Text formatting */
+    strong,
+    b {
+        font-weight: 700;
+        color: #1f2937;
+    }
+
+    em,
+    i {
+        font-style: italic;
+    }
+
+    u {
+        text-decoration: underline;
+    }
+
+    s,
+    strike {
+        text-decoration: line-through;
+    }
+
+    /* Lists - Override Tailwind reset */
+    ul,
+    ol {
+        display: block;
+        margin: 1rem 0;
+        padding-left: 2rem;
+    }
+
+    ul {
+        list-style-type: disc;
+        list-style-position: outside;
+    }
+
+    ol {
+        list-style-type: decimal;
+        list-style-position: outside;
+    }
+
+    li {
+        display: list-item;
+        margin: 0.5rem 0;
+        line-height: 1.6;
+    }
+
+    /* Nested lists */
+    ul ul {
+        list-style-type: circle;
+        margin: 0.5rem 0;
+    }
+
+    ol ol {
+        list-style-type: lower-alpha;
+        margin: 0.5rem 0;
+    }
+
+    ul ol {
+        list-style-type: lower-roman;
+        margin: 0.5rem 0;
+    }
+
+    /* Paragraphs */
+    p {
+        margin: 0.75rem 0;
+        line-height: 1.6;
+    }
+
+    p:first-child {
+        margin-top: 0;
+    }
+
+    p:last-child {
+        margin-bottom: 0;
+    }
 }
 </style>

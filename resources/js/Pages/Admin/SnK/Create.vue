@@ -12,12 +12,14 @@
             >
                 <section>
                     <div class="space-y-4">
+                        <!-- JUDUL -->
                         <div>
                             <label
                                 for="judul"
                                 class="block text-sm font-medium text-gray-700"
-                                >Judul</label
                             >
+                                Judul
+                            </label>
                             <div class="mt-1">
                                 <textarea
                                     id="judul"
@@ -27,16 +29,18 @@
                             </div>
                         </div>
 
+                        <!-- DESKRIPSI (CKEDITOR) -->
                         <div>
                             <label
                                 for="deskripsi"
                                 class="block text-sm font-medium text-gray-700"
-                                >Deskripsi</label
                             >
+                                Deskripsi
+                            </label>
                             <div class="mt-1">
                                 <textarea
                                     id="deskripsi"
-                                    v-model="form.deskripsi"
+                                    ref="editorDeskripsi"
                                     rows="4"
                                     class="block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                                 ></textarea>
@@ -53,6 +57,7 @@
                     >
                         Kembali
                     </Link>
+
                     <button
                         type="submit"
                         :disabled="form.processing"
@@ -65,16 +70,83 @@
         </div>
     </DashLayouts>
 </template>
+
 <script setup>
 import DashLayouts from "../../Layouts/DashboardLayouts.vue";
 import { useForm, Link } from "@inertiajs/vue3";
+import { ref, onMounted, onBeforeUnmount } from "vue";
 
 const form = useForm({
     judul: "",
     deskripsi: "",
 });
 
+const editorDeskripsi = ref(null);
+let editorInstance = null;
+
+onMounted(() => {
+    initializeCKEditor();
+});
+
+const initializeCKEditor = () => {
+    if (editorDeskripsi.value && window.CKEDITOR) {
+        editorInstance = window.CKEDITOR.replace("deskripsi", {
+            extraPlugins: "indent,removeformat",
+            toolbar: [
+                {
+                    name: "basicstyles",
+                    items: [
+                        "RemoveFormat",
+                        "-",
+                        "Bold",
+                        "Italic",
+                        "Underline",
+                        "Strike",
+                    ],
+                },
+                {
+                    name: "paragraph",
+                    items: [
+                        "NumberedList",
+                        "BulletedList",
+                        "-",
+                        "Outdent",
+                        "Indent",
+                    ],
+                },
+                { name: "clipboard", items: ["Undo", "Redo"] },
+            ],
+            removePlugins:
+                "image,link,table,about,styles,sourcearea,update-notifier",
+        });
+
+        // Sync ke form
+        editorInstance.on("change", () => {
+            form.deskripsi = editorInstance.getData();
+        });
+
+        // Hilangkan notifikasi CKEditor yang mengganggu
+        const observer = new MutationObserver(() => {
+            const notif = document.getElementById(
+                "cke_notifications_area_deskripsi"
+            );
+            if (notif) notif.remove();
+        });
+        observer.observe(document.body, { childList: true, subtree: true });
+    }
+};
+
+onBeforeUnmount(() => {
+    if (editorInstance) {
+        editorInstance.destroy();
+    }
+});
+
 const submit = () => {
+    if (editorInstance) {
+        form.deskripsi = editorInstance.getData();
+    }
+
     form.post("/admin/snk", {
         forceFormData: true,
         onSuccess: () => {
